@@ -1,0 +1,100 @@
+{
+  "timestamp": "2026-01-28T02:30:27.295258",
+  "base_url": "https://checkpoint-revert.preview.emergentagent.com/api",
+  "admin_email": "admin_023025@test.com",
+  "tests_run": 18,
+  "tests_passed": 17,
+  "success_rate": 94.44444444444444,
+  "test_results": [
+    {
+      "test": "API Health Check",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Admin Setup",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Admin Login",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Auth Protection (No Token)",
+      "success": false,
+      "details": "Endpoint not properly protected"
+    },
+    {
+      "test": "Auth Protection (Invalid Token)",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Get Current User",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Create Tour",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Get All Tours",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Get Single Tour",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Update Tour",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Create Stop",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Get Tour Stops",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Update Stop",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Reorder Stops",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Duplicate Tour",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Delete Stop",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Delete Tour",
+      "success": true,
+      "details": ""
+    },
+    {
+      "test": "Delete Duplicate Tour",
+      "success": true,
+      "details": ""
+    }
+  ]
+}
