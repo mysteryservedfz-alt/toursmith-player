@@ -52,10 +52,8 @@ class Page(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     title: str = ""
     content: str = ""
-    unlockMode: Optional[str] = None  # None = inherit from stop, "none", "password", "answer"
-    unlockPassword: Optional[str] = None
-    unlockQuestion: Optional[str] = None
-    unlockAnswer: Optional[str] = None
+    unlockMode: Optional[str] = None  # None = inherit from stop, "continue", "answer_required", "whiteboard"
+    answer: Optional[str] = None
     audioUrl: Optional[str] = None
     order: int = 0
 
@@ -63,10 +61,8 @@ class Stop(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     title: str = ""
     description: str = ""
-    unlockMode: str = "none"  # "none", "password", "answer"
-    unlockPassword: Optional[str] = None
-    unlockQuestion: Optional[str] = None
-    unlockAnswer: Optional[str] = None
+    unlockMode: str = "continue"  # "continue", "answer_required", "whiteboard"
+    answer: Optional[str] = None
     pages: List[Page] = []
     order: int = 0
 
