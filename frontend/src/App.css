@@ -395,6 +395,11 @@
   color: var(--color-text-dark);
 }
 
+.helper-text {
+  margin-bottom: var(--spacing-lg);
+  font-style: italic;
+}
+
 .content-textarea {
   min-height: 220px;
 }
