@@ -862,24 +862,24 @@ const TourPlayer = () => {
               <div className="card-body">
                 <Icons.Lock />
                 <h2>This content is locked</h2>
-                {unlockData.mode === "password" && (
-                  <p className="unlock-prompt">Enter the password to continue</p>
+                {unlockData.mode === "answer_required" && (
+                  <p className="unlock-prompt">Enter the answer to continue</p>
                 )}
-                {unlockData.mode === "answer" && (
-                  <p className="unlock-prompt">{unlockData.question || "Answer the question to continue"}</p>
+                {unlockData.mode === "whiteboard" && (
+                  <p className="unlock-prompt">Write anything to continue</p>
                 )}
                 <input
                   type="text"
                   className={`input ${unlockError ? "input-error" : ""}`}
                   value={unlockInput}
                   onChange={(e) => { setUnlockInput(e.target.value); setUnlockError(""); }}
-                  placeholder={unlockData.mode === "password" ? "Enter password" : "Your answer"}
+                  placeholder={unlockData.mode === "whiteboard" ? "Type anything..." : "Your answer"}
                   onKeyDown={(e) => e.key === "Enter" && handleUnlock()}
                   data-testid="unlock-input"
                 />
                 {unlockError && <p className="error-message">{unlockError}</p>}
                 <button onClick={handleUnlock} className="btn btn-primary" data-testid="unlock-submit">
-                  Unlock
+                  Continue
                 </button>
               </div>
             </div>
