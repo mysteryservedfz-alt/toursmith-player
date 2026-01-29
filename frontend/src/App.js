@@ -803,10 +803,11 @@ const TourPlayer = () => {
     const inputLower = unlockInput.toLowerCase().trim();
     let correct = false;
     
-    if (unlockData.mode === "password") {
-      correct = inputLower === (unlockData.password || "").toLowerCase().trim();
-    } else if (unlockData.mode === "answer") {
+    if (unlockData.mode === "answer_required") {
       correct = inputLower === (unlockData.answer || "").toLowerCase().trim();
+    } else if (unlockData.mode === "whiteboard") {
+      // Whiteboard mode - always allow (user just needs to interact)
+      correct = unlockInput.trim().length > 0;
     }
     
     if (correct) {
