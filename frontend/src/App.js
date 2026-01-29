@@ -785,7 +785,7 @@ const TourPlayer = () => {
   const pageKey = `${currentStop?.id}-${currentPage?.id}`;
   const isUnlocked = unlockedPages.has(pageKey);
   const unlockData = getUnlockData(currentPage, currentStop);
-  const needsUnlock = unlockData && unlockData.mode !== "none" && !isUnlocked;
+  const needsUnlock = unlockData && unlockData.mode !== "continue" && !isUnlocked;
 
   useEffect(() => {
     // Disable transitions for unlock gates
