@@ -654,79 +654,78 @@ const StopEditor = ({ stop, onUpdate, onDelete }) => (
   </div>
 );
 
-const PageEditor = ({ page, stopUnlockMode, onUpdate, onDelete }) => (
-  <div className="content-editor" data-testid="page-editor">
-    <div className="editor-section">
-      <h2>Edit Page</h2>
-      <div className="form-group">
-        <label className="form-label">Title</label>
-        <input type="text" className="input" value={page.title} onChange={(e) => onUpdate({ title: e.target.value })} placeholder="Page title" data-testid="page-title-input" />
-      </div>
-      <div className="form-group">
-        <label className="form-label">Content</label>
-        <textarea className="input content-textarea" value={page.content} onChange={(e) => onUpdate({ content: e.target.value })} placeholder="Page content (supports basic text)" data-testid="page-content-input" />
-      </div>
-    </div>
+const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete }) => {
+  const getDisplayUnlockMode = (mode) => {
+    switch(mode) {
+      case "continue": return "Continue";
+      case "answer_required": return "Answer Required";
+      case "whiteboard": return "Whiteboard";
+      default: return mode;
+    }
+  };
 
-    <div className="divider" />
-
-    <div className="editor-section">
-      <h3>Audio (Optional)</h3>
-      <div className="form-group">
-        <label className="form-label">Audio URL</label>
-        <input type="url" className="input" value={page.audioUrl || ""} onChange={(e) => onUpdate({ audioUrl: e.target.value })} placeholder="https://example.com/audio.mp3" data-testid="page-audio-url-input" />
-        <p className="text-small">Leave empty for no audio</p>
-      </div>
-      {page.audioUrl && (
-        <div className="audio-preview">
-          <audio controls src={page.audioUrl} />
-        </div>
-      )}
-    </div>
-
-    <div className="divider" />
-
-    <div className="editor-section">
-      <h3>Unlock Settings</h3>
-      <p className="text-small">Inherits from stop ({stopUnlockMode}) unless overridden</p>
-      <div className="form-group">
-        <label className="form-label">Override Unlock Mode</label>
-        <select className="input" value={page.unlockMode || ""} onChange={(e) => onUpdate({ unlockMode: e.target.value || null })} data-testid="page-unlock-mode">
-          <option value="">Inherit from stop</option>
-          <option value="none">None (always accessible)</option>
-          <option value="password">Password</option>
-          <option value="answer">Question & Answer</option>
-        </select>
-      </div>
-      {page.unlockMode === "password" && (
+  return (
+    <div className="content-editor" data-testid="page-editor">
+      <div className="editor-section">
+        <h2>Edit Page</h2>
         <div className="form-group">
-          <label className="form-label">Password</label>
-          <input type="text" className="input" value={page.unlockPassword || ""} onChange={(e) => onUpdate({ unlockPassword: e.target.value })} placeholder="Enter password" data-testid="page-password-input" />
+          <label className="form-label">Title</label>
+          <input type="text" className="input" value={page.title} onChange={(e) => onUpdate({ title: e.target.value })} placeholder="Page title" data-testid="page-title-input" />
         </div>
-      )}
-      {page.unlockMode === "answer" && (
-        <>
-          <div className="form-group">
-            <label className="form-label">Question</label>
-            <input type="text" className="input" value={page.unlockQuestion || ""} onChange={(e) => onUpdate({ unlockQuestion: e.target.value })} placeholder="Enter question" data-testid="page-question-input" />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Answer</label>
-            <input type="text" className="input" value={page.unlockAnswer || ""} onChange={(e) => onUpdate({ unlockAnswer: e.target.value })} placeholder="Enter answer" data-testid="page-answer-input" />
-          </div>
-        </>
-      )}
-    </div>
+        <div className="form-group">
+          <label className="form-label">Content</label>
+          <textarea className="input content-textarea" value={page.content} onChange={(e) => onUpdate({ content: e.target.value })} placeholder="Page content (supports basic text)" data-testid="page-content-input" />
+        </div>
+      </div>
 
-    <div className="divider" />
+      <div className="divider" />
 
-    <div className="editor-actions">
-      <button onClick={onDelete} className="btn btn-danger" data-testid="delete-page-btn">
-        <Icons.Trash /> Delete Page
-      </button>
+      <div className="editor-section">
+        <h3>Audio (Optional)</h3>
+        <div className="form-group">
+          <label className="form-label">Audio URL</label>
+          <input type="url" className="input" value={page.audioUrl || ""} onChange={(e) => onUpdate({ audioUrl: e.target.value })} placeholder="https://example.com/audio.mp3" data-testid="page-audio-url-input" />
+          <p className="text-small">Leave empty for no audio</p>
+        </div>
+        {page.audioUrl && (
+          <div className="audio-preview">
+            <audio controls src={page.audioUrl} />
+          </div>
+        )}
+      </div>
+
+      <div className="divider" />
+
+      <div className="editor-section">
+        <h3>Unlock Settings</h3>
+        <p className="text-small helper-text">Overrides the stop unlock for this page only.</p>
+        <div className="form-group">
+          <label className="form-label">Page Unlock Mode</label>
+          <select className="input" value={page.unlockMode || ""} onChange={(e) => onUpdate({ unlockMode: e.target.value || null })} data-testid="page-unlock-mode">
+            <option value="">Inherit from stop ({getDisplayUnlockMode(stopUnlockMode)})</option>
+            <option value="continue">Continue</option>
+            <option value="answer_required">Answer Required</option>
+            <option value="whiteboard">Whiteboard</option>
+          </select>
+        </div>
+        {page.unlockMode === "answer_required" && (
+          <div className="form-group">
+            <label className="form-label">Page Answer</label>
+            <input type="text" className="input" value={page.answer || ""} onChange={(e) => onUpdate({ answer: e.target.value })} placeholder="Enter the answer visitors must provide" data-testid="page-answer-input" />
+          </div>
+        )}
+      </div>
+
+      <div className="divider" />
+
+      <div className="editor-actions">
+        <button onClick={onDelete} className="btn btn-danger" data-testid="delete-page-btn">
+          <Icons.Trash /> Delete Page
+        </button>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 // ==================== PLAYER ====================
 const TourPlayer = () => {
