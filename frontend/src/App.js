@@ -801,6 +801,10 @@ const StopEditor = ({ stop, onUpdate, onDelete }) => {
 };
 
 const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete }) => {
+  const [showMedia, setShowMedia] = useState(!!(page.imageUrl || (page.galleryUrls && page.galleryUrls.length > 0)));
+  const [showEmbed, setShowEmbed] = useState(!!page.embedUrl);
+  const [showCta, setShowCta] = useState(!!(page.ctaLabel || page.ctaUrl));
+
   const getDisplayUnlockMode = (mode) => {
     switch(mode) {
       case "continue": return "Continue";
@@ -812,38 +816,125 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete }) =>
 
   return (
     <div className="content-editor" data-testid="page-editor">
+      {/* TEXT SECTION */}
       <div className="editor-section">
         <h2>Edit Page</h2>
+        <h3 className="section-label">Text</h3>
         <div className="form-group">
           <label className="form-label">Title</label>
-          <input type="text" className="input" value={page.title} onChange={(e) => onUpdate({ title: e.target.value })} placeholder="Page title" data-testid="page-title-input" />
+          <input type="text" className="input" value={page.title || ""} onChange={(e) => onUpdate({ title: e.target.value })} placeholder="Page title" data-testid="page-title-input" />
         </div>
         <div className="form-group">
-          <label className="form-label">Content</label>
-          <textarea className="input content-textarea" value={page.content} onChange={(e) => onUpdate({ content: e.target.value })} placeholder="Page content (supports basic text)" data-testid="page-content-input" />
+          <label className="form-label">Subtitle</label>
+          <input type="text" className="input" value={page.subtitle || ""} onChange={(e) => onUpdate({ subtitle: e.target.value || null })} placeholder="Optional subtitle" data-testid="page-subtitle-input" />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Body</label>
+          <textarea className="input content-textarea" value={page.content || ""} onChange={(e) => onUpdate({ content: e.target.value })} placeholder="Main body text" data-testid="page-content-input" />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Body 2</label>
+          <textarea className="input" value={page.body2 || ""} onChange={(e) => onUpdate({ body2: e.target.value || null })} placeholder="Optional secondary body text" data-testid="page-body2-input" />
         </div>
       </div>
 
       <div className="divider" />
 
+      {/* MEDIA SECTION */}
       <div className="editor-section">
-        <h3>Audio (Optional)</h3>
-        <div className="form-group">
-          <label className="form-label">Audio URL</label>
-          <input type="url" className="input" value={page.audioUrl || ""} onChange={(e) => onUpdate({ audioUrl: e.target.value })} placeholder="https://example.com/audio.mp3" data-testid="page-audio-url-input" />
-          <p className="text-small">Leave empty for no audio</p>
+        <div className="section-header-toggle">
+          <h3 className="section-label">Media</h3>
+          {!showMedia && (
+            <button type="button" onClick={() => setShowMedia(true)} className="btn btn-secondary btn-sm">
+              <Icons.Plus /> Add Media
+            </button>
+          )}
         </div>
-        {page.audioUrl && (
-          <div className="audio-preview">
-            <audio controls src={page.audioUrl} />
-          </div>
+        {showMedia && (
+          <>
+            <div className="form-group">
+              <label className="form-label">Image URL</label>
+              <input type="url" className="input" value={page.imageUrl || ""} onChange={(e) => onUpdate({ imageUrl: e.target.value || null })} placeholder="https://example.com/image.jpg" data-testid="page-image-url-input" />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Image Alt Text</label>
+              <input type="text" className="input" value={page.imageAlt || ""} onChange={(e) => onUpdate({ imageAlt: e.target.value || null })} placeholder="Describe the image" data-testid="page-image-alt-input" />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Gallery Images</label>
+              <GalleryUrlsEditor urls={page.galleryUrls} onChange={(urls) => onUpdate({ galleryUrls: urls })} />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Audio URL</label>
+              <input type="url" className="input" value={page.audioUrl || ""} onChange={(e) => onUpdate({ audioUrl: e.target.value || null })} placeholder="https://example.com/audio.mp3" data-testid="page-audio-url-input" />
+            </div>
+            {page.audioUrl && (
+              <div className="audio-preview">
+                <audio controls src={page.audioUrl} />
+              </div>
+            )}
+          </>
         )}
       </div>
 
       <div className="divider" />
 
+      {/* EMBED SECTION */}
       <div className="editor-section">
-        <h3>Unlock Settings</h3>
+        <div className="section-header-toggle">
+          <h3 className="section-label">Embed</h3>
+          {!showEmbed && (
+            <button type="button" onClick={() => setShowEmbed(true)} className="btn btn-secondary btn-sm">
+              <Icons.Plus /> Add Embed
+            </button>
+          )}
+        </div>
+        {showEmbed && (
+          <>
+            <div className="form-group">
+              <label className="form-label">Embed URL</label>
+              <input type="url" className="input" value={page.embedUrl || ""} onChange={(e) => onUpdate({ embedUrl: e.target.value || null })} placeholder="YouTube, Vimeo, or Google Maps URL" data-testid="page-embed-url-input" />
+              <p className="text-small">Allowed: YouTube, Vimeo, Google Maps. Other URLs will show as links.</p>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Embed Caption</label>
+              <input type="text" className="input" value={page.embedCaption || ""} onChange={(e) => onUpdate({ embedCaption: e.target.value || null })} placeholder="Optional caption" data-testid="page-embed-caption-input" />
+            </div>
+          </>
+        )}
+      </div>
+
+      <div className="divider" />
+
+      {/* CTA SECTION */}
+      <div className="editor-section">
+        <div className="section-header-toggle">
+          <h3 className="section-label">Call to Action</h3>
+          {!showCta && (
+            <button type="button" onClick={() => setShowCta(true)} className="btn btn-secondary btn-sm">
+              <Icons.Plus /> Add CTA
+            </button>
+          )}
+        </div>
+        {showCta && (
+          <>
+            <div className="form-group">
+              <label className="form-label">Button Label</label>
+              <input type="text" className="input" value={page.ctaLabel || ""} onChange={(e) => onUpdate({ ctaLabel: e.target.value || null })} placeholder="Learn More" data-testid="page-cta-label-input" />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Button URL</label>
+              <input type="url" className="input" value={page.ctaUrl || ""} onChange={(e) => onUpdate({ ctaUrl: e.target.value || null })} placeholder="https://example.com" data-testid="page-cta-url-input" />
+            </div>
+          </>
+        )}
+      </div>
+
+      <div className="divider" />
+
+      {/* UNLOCK SECTION */}
+      <div className="editor-section">
+        <h3 className="section-label">Unlock Settings</h3>
         <p className="text-small helper-text">Overrides the stop unlock for this page only.</p>
         <div className="form-group">
           <label className="form-label">Page Unlock Mode</label>
