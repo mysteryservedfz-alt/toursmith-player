@@ -5,29 +5,31 @@
   align-items: center;
   justify-content: center;
   padding: var(--spacing-xl);
-  background: linear-gradient(135deg, var(--color-bg-light) 0%, #e2e8f0 100%);
+  background: linear-gradient(160deg, var(--color-bg-light) 0%, var(--color-primary-light) 50%, var(--color-calm-light) 100%);
 }
 
 .auth-card {
   width: 100%;
-  max-width: 420px;
+  max-width: 440px;
 }
 
 .auth-title {
   text-align: center;
   margin-bottom: var(--spacing-xs);
+  color: var(--color-text-dark);
 }
 
 .auth-subtitle {
   text-align: center;
   color: var(--color-text-light);
   margin-bottom: var(--spacing-xl);
+  font-size: 1.0625rem;
 }
 
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
 }
 
 .form-group {
@@ -37,8 +39,9 @@
 }
 
 .form-label {
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
   color: var(--color-text-dark);
 }
 
@@ -52,8 +55,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.125rem;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
   color: var(--color-text-medium);
+  background-color: var(--color-bg-light);
 }
 
 /* ==================== ADMIN LAYOUT ==================== */
@@ -63,9 +69,9 @@
 }
 
 .admin-header {
-  background-color: var(--color-bg-white);
-  border-bottom: 1px solid var(--border-color);
-  padding: var(--spacing-md) var(--spacing-xl);
+  background-color: var(--color-bg-card);
+  border-bottom: 2px solid var(--border-color);
+  padding: var(--spacing-lg) var(--spacing-xl);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -80,51 +86,57 @@
 }
 
 .admin-header h1 {
-  font-size: 1.375rem;
+  font-size: 1.5rem;
   margin: 0;
+  color: var(--color-primary);
 }
 
 .admin-header-actions {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
 }
 
 .admin-username {
-  font-size: 0.875rem;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
   color: var(--color-text-medium);
 }
 
 .admin-main {
   max-width: 1400px;
   margin: 0 auto;
-  padding: var(--spacing-2xl) var(--spacing-xl);
+  padding: var(--spacing-3xl) var(--spacing-xl);
 }
 
 .tours-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
 }
 
 .tours-header h2 {
   margin: 0;
+  color: var(--color-text-dark);
 }
 
 /* ==================== TOURS GRID ==================== */
 .tours-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: var(--spacing-lg);
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: var(--spacing-xl);
 }
 
 .tour-card {
   transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  background: linear-gradient(145deg, var(--color-bg-card) 0%, var(--color-bg-warm) 100%);
 }
 
 .tour-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
 }
 
 .tour-card-header {
@@ -137,11 +149,12 @@
 
 .tour-card-header h3 {
   margin: 0;
-  font-size: 1.125rem;
+  font-size: 1.25rem;
+  color: var(--color-text-dark);
 }
 
 .tour-card-desc {
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   color: var(--color-text-medium);
   margin-bottom: var(--spacing-sm);
   display: -webkit-box;
@@ -151,28 +164,32 @@
 }
 
 .tour-card-meta {
-  font-size: 0.75rem;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
   color: var(--color-text-light);
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
 }
 
 .tour-card-actions {
   display: flex;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
   flex-wrap: wrap;
 }
 
 .text-danger {
-  color: var(--color-error) !important;
+  color: var(--color-accent) !important;
 }
 
 .empty-state {
   text-align: center;
-  padding: var(--spacing-2xl);
+  padding: var(--spacing-3xl);
+  background: linear-gradient(145deg, var(--color-bg-card) 0%, var(--color-primary-light) 100%);
 }
 
 .empty-state p {
   color: var(--color-text-light);
+  font-size: 1.125rem;
 }
 
 /* ==================== EDITOR LAYOUT ==================== */
@@ -184,12 +201,12 @@
 }
 
 .editor-header {
-  background-color: var(--color-bg-white);
-  border-bottom: 1px solid var(--border-color);
-  padding: var(--spacing-sm) var(--spacing-lg);
+  background-color: var(--color-bg-card);
+  border-bottom: 2px solid var(--border-color);
+  padding: var(--spacing-md) var(--spacing-xl);
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -199,39 +216,45 @@
   flex: 1;
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
 }
 
 .editor-title-input {
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.375rem;
+  font-weight: 700;
   border: none;
   background: transparent;
-  padding: var(--spacing-xs);
-  border-radius: var(--border-radius-sm);
-  max-width: 400px;
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-md);
+  max-width: 420px;
+  color: var(--color-text-dark);
 }
 
 .editor-title-input:hover,
 .editor-title-input:focus {
-  background-color: var(--color-bg-light);
+  background-color: var(--color-primary-light);
   outline: none;
 }
 
 .editor-header-actions {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
 }
 
 .saving-indicator {
-  font-size: 0.75rem;
-  color: var(--color-text-light);
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-calm);
 }
 
 .status-select {
   width: auto;
-  min-width: 120px;
+  min-width: 130px;
+  border-radius: var(--border-radius-full);
+  padding: 0.5rem 1rem;
 }
 
 .editor-body {
@@ -242,62 +265,66 @@
 
 /* ==================== EDITOR SIDEBARS ==================== */
 .editor-sidebar {
-  width: 240px;
-  background-color: var(--color-bg-white);
-  border-right: 1px solid var(--border-color);
+  width: 260px;
+  background-color: var(--color-bg-card);
+  border-right: 2px solid var(--border-color);
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
 .panel-header {
-  padding: var(--spacing-md) var(--spacing-lg);
-  border-bottom: 1px solid var(--border-color);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-bottom: 2px solid var(--border-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background: linear-gradient(135deg, var(--color-bg-card) 0%, var(--color-primary-light) 100%);
 }
 
 .panel-header h3 {
   margin: 0;
-  font-size: 0.9375rem;
+  font-size: 1rem;
+  color: var(--color-text-dark);
 }
 
 .stops-list,
 .pages-list {
   flex: 1;
   overflow-y: auto;
-  padding: var(--spacing-sm);
+  padding: var(--spacing-md);
 }
 
 .stop-item,
 .page-item {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-sm) var(--spacing-md);
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-lg);
   border-radius: var(--border-radius-md);
   cursor: pointer;
   transition: all var(--transition-fast);
-  margin-bottom: var(--spacing-xs);
-  background-color: var(--color-bg-white);
-  border: 1px solid transparent;
+  margin-bottom: var(--spacing-sm);
+  background-color: var(--color-bg-warm);
+  border: 2px solid transparent;
 }
 
 .stop-item:hover,
 .page-item:hover {
-  background-color: var(--color-bg-light);
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary);
 }
 
 .stop-item.active,
 .page-item.active {
-  background-color: var(--color-primary-light);
+  background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-calm-light) 100%);
   border-color: var(--color-primary);
 }
 
 .stop-item.dragging,
 .page-item.dragging {
   box-shadow: var(--shadow-lg);
+  border-color: var(--color-accent);
 }
 
 .drag-handle {
@@ -308,30 +335,36 @@
 
 .drag-handle:active {
   cursor: grabbing;
+  color: var(--color-primary);
 }
 
 .stop-title,
 .page-title {
   flex: 1;
-  font-size: 0.875rem;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: var(--color-text-dark);
 }
 
 .stop-page-count {
+  font-family: 'Quicksand', sans-serif;
   font-size: 0.75rem;
-  color: var(--color-text-light);
-  background-color: var(--color-bg-light);
-  padding: 2px 8px;
-  border-radius: 9999px;
+  font-weight: 700;
+  color: var(--color-calm);
+  background-color: var(--color-calm-light);
+  padding: 4px 10px;
+  border-radius: var(--border-radius-full);
 }
 
 /* ==================== EDITOR MAIN ==================== */
 .editor-main {
   flex: 1;
   overflow-y: auto;
-  padding: var(--spacing-2xl);
+  padding: var(--spacing-3xl);
 }
 
 .editor-empty {
@@ -340,31 +373,34 @@
   justify-content: center;
   height: 100%;
   color: var(--color-text-light);
+  font-size: 1.125rem;
 }
 
 .content-editor {
-  max-width: 700px;
+  max-width: 720px;
   margin: 0 auto;
 }
 
 .editor-section {
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
 }
 
 .editor-section h2 {
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+  color: var(--color-text-dark);
 }
 
 .editor-section h3 {
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-dark);
 }
 
 .content-textarea {
-  min-height: 200px;
+  min-height: 220px;
 }
 
 .audio-preview {
-  margin-top: var(--spacing-md);
+  margin-top: var(--spacing-lg);
 }
 
 .audio-preview audio {
@@ -372,7 +408,7 @@
 }
 
 .editor-actions {
-  padding-top: var(--spacing-lg);
+  padding-top: var(--spacing-xl);
 }
 
 /* ==================== PLAYER LAYOUT ==================== */
@@ -380,7 +416,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: var(--color-bg-white);
+  background: linear-gradient(180deg, var(--color-bg-light) 0%, var(--color-bg-warm) 100%);
 }
 
 .player-loading,
@@ -389,23 +425,29 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.125rem;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
   color: var(--color-text-medium);
+  background-color: var(--color-bg-light);
 }
 
 .player-header {
   text-align: center;
-  padding: var(--spacing-2xl) var(--spacing-lg) var(--spacing-lg);
-  border-bottom: 1px solid var(--border-color);
-  background-color: var(--color-bg-light);
+  padding: var(--spacing-3xl) var(--spacing-xl) var(--spacing-xl);
+  background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-calm-light) 100%);
+  border-bottom: 2px solid var(--border-color);
 }
 
 .player-header h1 {
-  margin-bottom: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text-dark);
 }
 
 .player-progress {
-  font-size: 0.875rem;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 600;
   color: var(--color-text-light);
   margin: 0;
 }
@@ -419,31 +461,34 @@
 
 .player-content {
   flex: 1;
-  max-width: 720px;
+  max-width: 760px;
   width: 100%;
   margin: 0 auto;
-  padding: var(--spacing-2xl) var(--spacing-lg);
+  padding: var(--spacing-3xl) var(--spacing-xl);
 }
 
 .player-stop-title {
-  font-size: 0.8125rem;
-  font-weight: 600;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
   color: var(--color-primary);
   margin-bottom: var(--spacing-sm);
 }
 
 .player-page-title {
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+  color: var(--color-text-dark);
 }
 
 .player-page-content {
-  line-height: 1.8;
+  line-height: 1.85;
 }
 
 .player-page-content p {
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text-medium);
 }
 
 .player-page-content p:last-child {
@@ -451,17 +496,19 @@
 }
 
 .page-end-divider {
-  height: 1px;
-  background: linear-gradient(to right, transparent, var(--border-color), transparent);
-  margin-top: var(--spacing-2xl);
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-calm), var(--color-accent));
+  border-radius: 2px;
+  margin-top: var(--spacing-3xl);
+  opacity: 0.5;
 }
 
 .player-footer {
   display: flex;
   justify-content: space-between;
-  padding: var(--spacing-lg) var(--spacing-xl);
-  border-top: 1px solid var(--border-color);
-  background-color: var(--color-bg-white);
+  padding: var(--spacing-xl) var(--spacing-2xl);
+  background-color: var(--color-bg-card);
+  border-top: 2px solid var(--border-color);
 }
 
 /* ==================== UNLOCK GATE ==================== */
@@ -471,33 +518,36 @@
   align-items: center;
   justify-content: center;
   padding: var(--spacing-xl);
-  background-color: var(--color-bg-light);
+  background: linear-gradient(160deg, var(--color-bg-light) 0%, var(--color-accent-light) 50%, var(--color-calm-light) 100%);
 }
 
 .unlock-card {
-  max-width: 400px;
+  max-width: 420px;
   width: 100%;
   text-align: center;
+  background: linear-gradient(145deg, var(--color-bg-card) 0%, var(--color-bg-warm) 100%);
 }
 
 .unlock-card svg {
-  width: 48px;
-  height: 48px;
-  color: var(--color-primary);
-  margin-bottom: var(--spacing-md);
+  width: 56px;
+  height: 56px;
+  color: var(--color-accent);
+  margin-bottom: var(--spacing-lg);
 }
 
 .unlock-card h2 {
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-dark);
 }
 
 .unlock-prompt {
   color: var(--color-text-medium);
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+  font-size: 1.0625rem;
 }
 
 .unlock-card .input {
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
 }
 
 .unlock-card .btn {
@@ -512,9 +562,9 @@
 
   .editor-sidebar {
     width: 100%;
-    max-height: 200px;
+    max-height: 220px;
     border-right: none;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 2px solid var(--border-color);
   }
 
   .stops-list,
@@ -522,8 +572,8 @@
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
-    padding: var(--spacing-sm);
-    gap: var(--spacing-xs);
+    padding: var(--spacing-md);
+    gap: var(--spacing-sm);
   }
 
   .stop-item,
@@ -533,7 +583,7 @@
   }
 
   .editor-main {
-    padding: var(--spacing-lg);
+    padding: var(--spacing-xl);
   }
 
   .tours-grid {
@@ -542,10 +592,14 @@
 
   .admin-header-content {
     flex-wrap: wrap;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-md);
   }
 
   .player-footer {
-    padding: var(--spacing-md);
+    padding: var(--spacing-lg);
+  }
+
+  .player-content {
+    padding: var(--spacing-2xl) var(--spacing-lg);
   }
 }
