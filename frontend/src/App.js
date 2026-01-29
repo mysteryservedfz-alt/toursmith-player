@@ -1089,7 +1089,154 @@ const TourPlayer = () => {
   if (error) return <div className="player-error">{error}</div>;
   if (!tour || !currentStop || !currentPage) return <div className="player-error">No content available</div>;
 
+  // Embed safety check - only allow these domains
+  const isAllowedEmbed = (url) => {
+    if (!url) return false;
+    try {
+      const parsed = new URL(url);
+      const host = parsed.hostname.toLowerCase();
+      return (
+        host.includes('youtube.com') ||
+        host.includes('youtu.be') ||
+        host.includes('youtube-nocookie.com') ||
+        host.includes('vimeo.com') ||
+        host.includes('google.com/maps') ||
+        host.includes('maps.google.com')
+      );
+    } catch {
+      return false;
+    }
+  };
+
+  // Convert YouTube/Vimeo URLs to embed URLs
+  const getEmbedUrl = (url) => {
+    if (!url) return null;
+    try {
+      const parsed = new URL(url);
+      const host = parsed.hostname.toLowerCase();
+      
+      // YouTube
+      if (host.includes('youtube.com') || host.includes('youtu.be') || host.includes('youtube-nocookie.com')) {
+        let videoId = null;
+        if (host.includes('youtu.be')) {
+          videoId = parsed.pathname.slice(1);
+        } else {
+          videoId = parsed.searchParams.get('v');
+        }
+        if (videoId) {
+          return `https://www.youtube-nocookie.com/embed/${videoId}`;
+        }
+      }
+      
+      // Vimeo
+      if (host.includes('vimeo.com')) {
+        const match = parsed.pathname.match(/\/(\d+)/);
+        if (match) {
+          return `https://player.vimeo.com/video/${match[1]}`;
+        }
+      }
+      
+      // Google Maps - if already an embed URL, use as-is
+      if (host.includes('google.com') && url.includes('/embed')) {
+        return url;
+      }
+      
+      return url;
+    } catch {
+      return url;
+    }
+  };
+
+  // Render content helper
+  const renderContent = (data, isStop = false) => {
+    if (!data) return null;
+    
+    return (
+      <>
+        {/* Subtitle */}
+        {data.subtitle && (
+          <p className="player-subtitle">{data.subtitle}</p>
+        )}
+        
+        {/* Body/Intro */}
+        {(data.content || data.description) && (
+          <div className="player-body">
+            {(data.content || data.description || '').split('\n').map((line, i) => (
+              <p key={i}>{line}</p>
+            ))}
+          </div>
+        )}
+        
+        {/* Body2/Intro2 */}
+        {(data.body2 || data.intro2) && (
+          <div className="player-body player-body-secondary">
+            {(data.body2 || data.intro2).split('\n').map((line, i) => (
+              <p key={i}>{line}</p>
+            ))}
+          </div>
+        )}
+        
+        {/* Audio */}
+        {data.audioUrl && (
+          <div className="audio-player" data-testid={isStop ? "stop-audio-player" : "page-audio-player"}>
+            <audio controls src={data.audioUrl}>
+              Your browser does not support audio.
+            </audio>
+          </div>
+        )}
+        
+        {/* Image */}
+        {data.imageUrl && (
+          <div className="player-image">
+            <img src={data.imageUrl} alt={data.imageAlt || ''} />
+          </div>
+        )}
+        
+        {/* Gallery */}
+        {data.galleryUrls && data.galleryUrls.length > 0 && (
+          <div className="player-gallery">
+            {data.galleryUrls.filter(url => url).map((url, i) => (
+              <img key={i} src={url} alt={`Gallery image ${i + 1}`} />
+            ))}
+          </div>
+        )}
+        
+        {/* Embed */}
+        {data.embedUrl && (
+          <div className="player-embed">
+            {isAllowedEmbed(data.embedUrl) ? (
+              <iframe
+                src={getEmbedUrl(data.embedUrl)}
+                title="Embedded content"
+                frameBorder="0"
+                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            ) : (
+              <a href={data.embedUrl} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
+                View External Content
+              </a>
+            )}
+            {data.embedCaption && (
+              <p className="embed-caption">{data.embedCaption}</p>
+            )}
+          </div>
+        )}
+        
+        {/* CTA */}
+        {data.ctaUrl && (
+          <div className="player-cta">
+            <a href={data.ctaUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+              {data.ctaLabel || 'Learn More'}
+            </a>
+          </div>
+        )}
+      </>
+    );
+  };
+
   // Unlock Gate (no transition)
+  if (showUnlock && needsUnlock) {
   if (showUnlock && needsUnlock) {
     return (
       <div className="player-layout" data-testid="player-unlock-gate">
