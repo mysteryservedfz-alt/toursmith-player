@@ -761,28 +761,24 @@ const TourPlayer = () => {
   const currentPage = sortedPages[currentPageIndex];
 
   const getEffectiveUnlock = (page, stop) => {
-    return page?.unlockMode ?? stop?.unlockMode ?? "none";
+    return page?.unlockMode ?? stop?.unlockMode ?? "continue";
   };
 
   const getUnlockData = (page, stop) => {
     const mode = getEffectiveUnlock(page, stop);
-    if (mode === "none") return null;
+    if (mode === "continue") return null;
     
     // If page has override, use page data
     if (page?.unlockMode) {
       return {
         mode,
-        password: page.unlockPassword,
-        question: page.unlockQuestion,
-        answer: page.unlockAnswer
+        answer: page.answer
       };
     }
     // Otherwise use stop data
     return {
       mode,
-      password: stop?.unlockPassword,
-      question: stop?.unlockQuestion,
-      answer: stop?.unlockAnswer
+      answer: stop?.answer
     };
   };
 
