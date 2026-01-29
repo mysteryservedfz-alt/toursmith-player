@@ -559,6 +559,128 @@
   width: 100%;
 }
 
+/* ==================== EDITOR SECTIONS ==================== */
+.section-label {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-dark);
+  margin: 0;
+}
+
+.section-header-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+}
+
+.gallery-urls-editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.gallery-url-row {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+.gallery-url-row .input {
+  flex: 1;
+}
+
+/* ==================== PLAYER CONTENT ELEMENTS ==================== */
+.player-stop-subtitle {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1rem;
+  color: var(--color-text-medium);
+  margin-bottom: var(--spacing-lg);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.player-subtitle {
+  font-size: 1.125rem;
+  color: var(--color-text-medium);
+  margin-bottom: var(--spacing-lg);
+  font-style: italic;
+}
+
+.player-body {
+  line-height: 1.85;
+  margin-bottom: var(--spacing-xl);
+}
+
+.player-body p {
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-medium);
+}
+
+.player-body-secondary {
+  padding: var(--spacing-lg);
+  background-color: var(--color-bg-warm);
+  border-radius: var(--border-radius-md);
+  border-left: 4px solid var(--color-calm);
+}
+
+.player-image {
+  margin: var(--spacing-xl) 0;
+}
+
+.player-image img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.player-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  margin: var(--spacing-xl) 0;
+}
+
+.player-gallery img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-normal);
+}
+
+.player-gallery img:hover {
+  transform: scale(1.02);
+}
+
+.player-embed {
+  margin: var(--spacing-xl) 0;
+}
+
+.player-embed iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.embed-caption {
+  text-align: center;
+  font-size: 0.9375rem;
+  color: var(--color-text-light);
+  margin-top: var(--spacing-md);
+  font-style: italic;
+}
+
+.player-cta {
+  margin: var(--spacing-xl) 0;
+  text-align: center;
+}
+
 /* ==================== RESPONSIVE ==================== */
 @media (max-width: 768px) {
   .editor-body {
