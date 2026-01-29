@@ -1,34 +1,551 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+/* ==================== AUTH STYLES ==================== */
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  background: linear-gradient(135deg, var(--color-bg-light) 0%, #e2e8f0 100%);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+.auth-card {
+  width: 100%;
+  max-width: 420px;
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
+.auth-title {
+  text-align: center;
+  margin-bottom: var(--spacing-xs);
+}
+
+.auth-subtitle {
+  text-align: center;
+  color: var(--color-text-light);
+  margin-bottom: var(--spacing-xl);
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-dark);
+}
+
+.w-full {
+  width: 100%;
+}
+
+/* ==================== LOADING ==================== */
+.loading-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+  color: var(--color-text-medium);
+}
+
+/* ==================== ADMIN LAYOUT ==================== */
+.admin-layout {
+  min-height: 100vh;
+  background-color: var(--color-bg-light);
+}
+
+.admin-header {
+  background-color: var(--color-bg-white);
+  border-bottom: 1px solid var(--border-color);
+  padding: var(--spacing-md) var(--spacing-xl);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.admin-header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-header h1 {
+  font-size: 1.375rem;
+  margin: 0;
+}
+
+.admin-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.admin-username {
+  font-size: 0.875rem;
+  color: var(--color-text-medium);
+}
+
+.admin-main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--spacing-2xl) var(--spacing-xl);
+}
+
+.tours-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-xl);
+}
+
+.tours-header h2 {
+  margin: 0;
+}
+
+/* ==================== TOURS GRID ==================== */
+.tours-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.tour-card {
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.tour-card:hover {
+  transform: translateY(-2px);
+}
+
+.tour-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.tour-card-header h3 {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+.tour-card-desc {
+  font-size: 0.875rem;
+  color: var(--color-text-medium);
+  margin-bottom: var(--spacing-sm);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tour-card-meta {
+  font-size: 0.75rem;
+  color: var(--color-text-light);
+  margin-bottom: var(--spacing-md);
+}
+
+.tour-card-actions {
+  display: flex;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+}
+
+.text-danger {
+  color: var(--color-error) !important;
+}
+
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-2xl);
+}
+
+.empty-state p {
+  color: var(--color-text-light);
+}
+
+/* ==================== EDITOR LAYOUT ==================== */
+.editor-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg-light);
+}
+
+.editor-header {
+  background-color: var(--color-bg-white);
+  border-bottom: 1px solid var(--border-color);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.editor-header-center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.editor-title-input {
+  font-size: 1.25rem;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  padding: var(--spacing-xs);
+  border-radius: var(--border-radius-sm);
+  max-width: 400px;
+}
+
+.editor-title-input:hover,
+.editor-title-input:focus {
+  background-color: var(--color-bg-light);
+  outline: none;
+}
+
+.editor-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.saving-indicator {
+  font-size: 0.75rem;
+  color: var(--color-text-light);
+}
+
+.status-select {
+  width: auto;
+  min-width: 120px;
+}
+
+.editor-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* ==================== EDITOR SIDEBARS ==================== */
+.editor-sidebar {
+  width: 240px;
+  background-color: var(--color-bg-white);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.panel-header {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panel-header h3 {
+  margin: 0;
+  font-size: 0.9375rem;
+}
+
+.stops-list,
+.pages-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-sm);
+}
+
+.stop-item,
+.page-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-bottom: var(--spacing-xs);
+  background-color: var(--color-bg-white);
+  border: 1px solid transparent;
+}
+
+.stop-item:hover,
+.page-item:hover {
+  background-color: var(--color-bg-light);
+}
+
+.stop-item.active,
+.page-item.active {
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary);
+}
+
+.stop-item.dragging,
+.page-item.dragging {
+  box-shadow: var(--shadow-lg);
+}
+
+.drag-handle {
+  color: var(--color-text-light);
+  cursor: grab;
+  display: flex;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.stop-title,
+.page-title {
+  flex: 1;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stop-page-count {
+  font-size: 0.75rem;
+  color: var(--color-text-light);
+  background-color: var(--color-bg-light);
+  padding: 2px 8px;
+  border-radius: 9999px;
+}
+
+/* ==================== EDITOR MAIN ==================== */
+.editor-main {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-2xl);
+}
+
+.editor-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--color-text-light);
+}
+
+.content-editor {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.editor-section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.editor-section h2 {
+  margin-bottom: var(--spacing-lg);
+}
+
+.editor-section h3 {
+  margin-bottom: var(--spacing-sm);
+}
+
+.content-textarea {
+  min-height: 200px;
+}
+
+.audio-preview {
+  margin-top: var(--spacing-md);
+}
+
+.audio-preview audio {
+  width: 100%;
+}
+
+.editor-actions {
+  padding-top: var(--spacing-lg);
+}
+
+/* ==================== PLAYER LAYOUT ==================== */
+.player-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg-white);
+}
+
+.player-loading,
+.player-error {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+  color: var(--color-text-medium);
+}
+
+.player-header {
+  text-align: center;
+  padding: var(--spacing-2xl) var(--spacing-lg) var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--color-bg-light);
+}
+
+.player-header h1 {
+  margin-bottom: var(--spacing-xs);
+}
+
+.player-progress {
+  font-size: 0.875rem;
+  color: var(--color-text-light);
+  margin: 0;
+}
+
+.player-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.player-content {
+  flex: 1;
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+}
+
+.player-stop-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.player-page-title {
+  margin-bottom: var(--spacing-lg);
+}
+
+.player-page-content {
+  line-height: 1.8;
+}
+
+.player-page-content p {
+  margin-bottom: var(--spacing-md);
+}
+
+.player-page-content p:last-child {
+  margin-bottom: 0;
+}
+
+.page-end-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border-color), transparent);
+  margin-top: var(--spacing-2xl);
+}
+
+.player-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-top: 1px solid var(--border-color);
+  background-color: var(--color-bg-white);
+}
+
+/* ==================== UNLOCK GATE ==================== */
+.unlock-gate {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  background-color: var(--color-bg-light);
+}
+
+.unlock-card {
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.unlock-card svg {
+  width: 48px;
+  height: 48px;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+.unlock-card h2 {
+  margin-bottom: var(--spacing-sm);
+}
+
+.unlock-prompt {
+  color: var(--color-text-medium);
+  margin-bottom: var(--spacing-lg);
+}
+
+.unlock-card .input {
+  margin-bottom: var(--spacing-md);
+}
+
+.unlock-card .btn {
+  width: 100%;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+  .editor-body {
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
-}
+  }
 
-.App-link {
-    color: #61dafb;
-}
+  .editor-sidebar {
+    width: 100%;
+    max-height: 200px;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+  .stops-list,
+  .pages-list {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: var(--spacing-sm);
+    gap: var(--spacing-xs);
+  }
+
+  .stop-item,
+  .page-item {
+    flex-shrink: 0;
+    margin-bottom: 0;
+  }
+
+  .editor-main {
+    padding: var(--spacing-lg);
+  }
+
+  .tours-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-header-content {
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
+
+  .player-footer {
+    padding: var(--spacing-md);
+  }
 }
