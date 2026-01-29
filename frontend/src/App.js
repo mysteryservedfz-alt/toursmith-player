@@ -401,7 +401,7 @@ const TourEditor = () => {
       id: crypto.randomUUID(),
       title: `Stop ${(tour.stops?.length || 0) + 1}`,
       description: "",
-      unlockMode: "none",
+      unlockMode: "continue",
       pages: [],
       order: tour.stops?.length || 0
     };
