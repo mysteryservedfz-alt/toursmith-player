@@ -601,7 +601,7 @@ const TourEditor = () => {
           ) : !activePageId ? (
             <StopEditor stop={activeStop} onUpdate={(u) => updateStop(activeStopId, u)} onDelete={() => deleteStop(activeStopId)} />
           ) : (
-            <PageEditor page={activePage} stopUnlockMode={activeStop.unlockMode} onUpdate={(u) => updatePage(activeStopId, activePageId, u)} onDelete={() => deletePage(activeStopId, activePageId)} />
+            <PageEditor page={activePage} stopUnlockMode={activeStop.unlockMode} stopAnswer={activeStop.answer} onUpdate={(u) => updatePage(activeStopId, activePageId, u)} onDelete={() => deletePage(activeStopId, activePageId)} />
           )}
         </main>
       </div>
