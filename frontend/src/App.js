@@ -579,7 +579,7 @@ const TourEditor = () => {
                             <span {...provided.dragHandleProps} className="drag-handle"><Icons.Grip /></span>
                             <span className="page-title">{page.title || "Untitled Page"}</span>
                             {page.audioUrl && <Icons.Audio />}
-                            {page.unlockMode && page.unlockMode !== "none" && <Icons.Lock />}
+                            {page.unlockMode && page.unlockMode !== "continue" && <Icons.Lock />}
                           </div>
                         )}
                       </Draggable>
