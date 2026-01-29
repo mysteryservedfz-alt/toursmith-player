@@ -627,32 +627,20 @@ const StopEditor = ({ stop, onUpdate, onDelete }) => (
 
     <div className="editor-section">
       <h3>Unlock Settings</h3>
-      <p className="text-small">Pages will inherit this setting unless overridden</p>
+      <p className="text-small helper-text">Applies to all pages in this stop unless a page overrides it.</p>
       <div className="form-group">
-        <label className="form-label">Unlock Mode</label>
-        <select className="input" value={stop.unlockMode} onChange={(e) => onUpdate({ unlockMode: e.target.value })} data-testid="stop-unlock-mode">
-          <option value="none">None (always accessible)</option>
-          <option value="password">Password</option>
-          <option value="answer">Question & Answer</option>
+        <label className="form-label">Stop Unlock Mode</label>
+        <select className="input" value={stop.unlockMode || "continue"} onChange={(e) => onUpdate({ unlockMode: e.target.value })} data-testid="stop-unlock-mode">
+          <option value="continue">Continue</option>
+          <option value="answer_required">Answer Required</option>
+          <option value="whiteboard">Whiteboard</option>
         </select>
       </div>
-      {stop.unlockMode === "password" && (
+      {stop.unlockMode === "answer_required" && (
         <div className="form-group">
-          <label className="form-label">Password</label>
-          <input type="text" className="input" value={stop.unlockPassword || ""} onChange={(e) => onUpdate({ unlockPassword: e.target.value })} placeholder="Enter password" data-testid="stop-password-input" />
+          <label className="form-label">Stop Answer</label>
+          <input type="text" className="input" value={stop.answer || ""} onChange={(e) => onUpdate({ answer: e.target.value })} placeholder="Enter the answer visitors must provide" data-testid="stop-answer-input" />
         </div>
-      )}
-      {stop.unlockMode === "answer" && (
-        <>
-          <div className="form-group">
-            <label className="form-label">Question</label>
-            <input type="text" className="input" value={stop.unlockQuestion || ""} onChange={(e) => onUpdate({ unlockQuestion: e.target.value })} placeholder="Enter question" data-testid="stop-question-input" />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Answer</label>
-            <input type="text" className="input" value={stop.unlockAnswer || ""} onChange={(e) => onUpdate({ unlockAnswer: e.target.value })} placeholder="Enter answer" data-testid="stop-answer-input" />
-          </div>
-        </>
       )}
     </div>
 
