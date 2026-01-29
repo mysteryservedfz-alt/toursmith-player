@@ -1303,16 +1303,6 @@ const TourPlayer = () => {
               {renderContent(currentPage, false)}
 
               <div className="page-end-divider" />
-              
-              {currentPage.audioUrl && (
-                <div className="audio-player" data-testid="page-audio-player">
-                  <audio controls src={currentPage.audioUrl}>
-                    Your browser does not support audio.
-                  </audio>
-                </div>
-              )}
-
-              <div className="page-end-divider" />
             </div>
           </CSSTransition>
         </TransitionGroup>
