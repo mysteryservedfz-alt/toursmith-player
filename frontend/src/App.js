@@ -1237,7 +1237,6 @@ const TourPlayer = () => {
 
   // Unlock Gate (no transition)
   if (showUnlock && needsUnlock) {
-  if (showUnlock && needsUnlock) {
     return (
       <div className="player-layout" data-testid="player-unlock-gate">
         <div className="player-container">
@@ -1287,17 +1286,23 @@ const TourPlayer = () => {
         <TransitionGroup component={null}>
           <CSSTransition
             key={pageKey}
-            timeout={transitionEnabled ? 250 : 0}
+            timeout={transitionEnabled ? 380 : 0}
             classNames={transitionEnabled ? "page" : ""}
           >
             <div className="player-content">
+              {/* Stop Title */}
               <div className="player-stop-title">{currentStop.title}</div>
+              {currentStop.subtitle && (
+                <p className="player-stop-subtitle">{currentStop.subtitle}</p>
+              )}
+              
+              {/* Page Title */}
               <h2 className="player-page-title">{currentPage.title}</h2>
-              <div className="player-page-content">
-                {currentPage.content.split('\n').map((line, i) => (
-                  <p key={i}>{line}</p>
-                ))}
-              </div>
+              
+              {/* Page Content */}
+              {renderContent(currentPage, false)}
+
+              <div className="page-end-divider" />
               
               {currentPage.audioUrl && (
                 <div className="audio-player" data-testid="page-audio-player">
