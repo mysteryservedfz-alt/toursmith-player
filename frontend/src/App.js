@@ -359,6 +359,7 @@ const TourEditor = () => {
   const [saving, setSaving] = useState(false);
   const [activeStopId, setActiveStopId] = useState(null);
   const [activePageId, setActivePageId] = useState(null);
+  const [showWelcome, setShowWelcome] = useState(false);
   const { token, logout } = useAuth();
   const navigate = useNavigate();
   const api = authAxios(token);
@@ -368,7 +369,10 @@ const TourEditor = () => {
       try {
         const res = await api.get(`/tours/${tourId}`);
         setTour(res.data);
-        if (res.data.stops?.length > 0) {
+        // Show welcome editor if welcome fields exist, otherwise show first stop
+        if (res.data.welcomeTitle || res.data.welcomeBody) {
+          setShowWelcome(true);
+        } else if (res.data.stops?.length > 0) {
           setActiveStopId(res.data.stops[0].id);
         }
       } catch (err) {
