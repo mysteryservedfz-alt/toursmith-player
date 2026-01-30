@@ -613,7 +613,9 @@ const TourEditor = () => {
 
         {/* Editor Main */}
         <main className="editor-main">
-          {!activeStop ? (
+          {showWelcome ? (
+            <WelcomeEditor tour={tour} onUpdate={updateField} />
+          ) : !activeStop ? (
             <div className="editor-empty">
               <p>Add a stop to get started</p>
             </div>
@@ -623,6 +625,84 @@ const TourEditor = () => {
             <PageEditor page={activePage} stopUnlockMode={activeStop.unlockMode} stopAnswer={activeStop.answer} onUpdate={(u) => updatePage(activeStopId, activePageId, u)} onDelete={() => deletePage(activeStopId, activePageId)} />
           )}
         </main>
+      </div>
+    </div>
+  );
+};
+
+// ==================== WELCOME EDITOR ====================
+const WelcomeEditor = ({ tour, onUpdate }) => {
+  return (
+    <div className="content-editor" data-testid="welcome-editor">
+      <div className="editor-section main-text-section">
+        <h2>Welcome Screen</h2>
+        <p className="text-small helper-text">Shown before the tour starts. Leave empty to skip.</p>
+        <div className="form-group">
+          <label className="form-label">Welcome Title</label>
+          <input 
+            type="text" 
+            className="input" 
+            value={tour.welcomeTitle || ""} 
+            onChange={(e) => onUpdate("welcomeTitle", e.target.value || null)} 
+            placeholder="Welcome to the tour!" 
+            data-testid="welcome-title-input" 
+          />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Welcome Message</label>
+          <textarea 
+            className="input body-textarea" 
+            value={tour.welcomeBody || ""} 
+            onChange={(e) => onUpdate("welcomeBody", e.target.value || null)} 
+            placeholder="Describe what visitors will experience..." 
+            data-testid="welcome-body-input" 
+          />
+          <p className="text-small">Supports HTML formatting</p>
+        </div>
+        <div className="form-group">
+          <label className="form-label">Welcome Image URL</label>
+          <input 
+            type="url" 
+            className="input" 
+            value={tour.welcomeImageUrl || ""} 
+            onChange={(e) => onUpdate("welcomeImageUrl", e.target.value || null)} 
+            placeholder="https://example.com/welcome-image.jpg" 
+            data-testid="welcome-image-input" 
+          />
+        </div>
+        {tour.welcomeImageUrl && (
+          <div className="image-preview">
+            <img src={tour.welcomeImageUrl} alt="Welcome preview" />
+          </div>
+        )}
+        <div className="form-group">
+          <label className="form-label">Audio URL (optional)</label>
+          <input 
+            type="url" 
+            className="input" 
+            value={tour.welcomeAudioUrl || ""} 
+            onChange={(e) => onUpdate("welcomeAudioUrl", e.target.value || null)} 
+            placeholder="https://example.com/welcome-audio.mp3" 
+            data-testid="welcome-audio-input" 
+          />
+        </div>
+        {tour.welcomeAudioUrl && (
+          <div className="audio-preview">
+            <audio controls src={tour.welcomeAudioUrl} />
+          </div>
+        )}
+        <div className="form-group">
+          <label className="form-label">Button Label</label>
+          <input 
+            type="text" 
+            className="input" 
+            value={tour.welcomeButtonLabel || ""} 
+            onChange={(e) => onUpdate("welcomeButtonLabel", e.target.value || null)} 
+            placeholder="Start Tour" 
+            data-testid="welcome-button-label-input" 
+          />
+          <p className="text-small">Default: "Start Tour"</p>
+        </div>
       </div>
     </div>
   );
