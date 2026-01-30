@@ -965,10 +965,37 @@ const StopEditor = ({ stop, onUpdate, onDelete }) => {
 
 const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete }) => {
   const [openSections, setOpenSections] = useState({});
+  const [localTitle, setLocalTitle] = useState(page.title || "");
+  const saveTimeoutRef = useRef(null);
+
+  // Sync local title when page changes
+  useEffect(() => {
+    setLocalTitle(page.title || "");
+  }, [page.id]);
 
   const toggleSection = (section) => {
     setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
   };
+
+  // Debounced save for title
+  const handleTitleChange = (value) => {
+    setLocalTitle(value);
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+    saveTimeoutRef.current = setTimeout(() => {
+      onUpdate({ title: value });
+    }, 300);
+  };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const getDisplayUnlockMode = (mode) => {
     switch(mode) {
@@ -992,7 +1019,14 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete }) =>
         <h2>Edit Page</h2>
         <div className="form-group">
           <label className="form-label">Title</label>
-          <input type="text" className="input" value={page.title || ""} onChange={(e) => onUpdate({ title: e.target.value })} placeholder="Page title" data-testid="page-title-input" />
+          <input 
+            type="text" 
+            className="input" 
+            value={localTitle} 
+            onChange={(e) => handleTitleChange(e.target.value)} 
+            placeholder="Page title" 
+            data-testid="page-title-input" 
+          />
         </div>
         <div className="form-group">
           <label className="form-label">Subtitle</label>
