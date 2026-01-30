@@ -584,9 +584,11 @@
 /* ==================== EDITOR SECTIONS ==================== */
 .section-label {
   font-family: 'Quicksand', sans-serif;
-  font-size: 1rem;
+  font-size: 0.8125rem;
   font-weight: 700;
-  color: var(--color-text-dark);
+  color: #1a1a1a;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   margin: 0;
 }
 
@@ -595,6 +597,8 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .gallery-urls-editor {
