@@ -1342,6 +1342,37 @@ const TourPlayer = () => {
     );
   };
 
+  // Welcome Screen
+  if (showWelcome && hasWelcomeScreen) {
+    return (
+      <div className="player-layout welcome-layout" data-testid="player-welcome">
+        <div className="welcome-screen">
+          <div className="welcome-content">
+            {tour.welcomeImageUrl && (
+              <div className="welcome-image">
+                <img src={tour.welcomeImageUrl} alt={tour.welcomeTitle || 'Welcome'} />
+              </div>
+            )}
+            <h1 className="welcome-title">{tour.welcomeTitle || tour.title}</h1>
+            {tour.welcomeBody && (
+              <div className="welcome-body" dangerouslySetInnerHTML={{ __html: tour.welcomeBody }} />
+            )}
+            {tour.welcomeAudioUrl && (
+              <div className="audio-player welcome-audio">
+                <audio controls src={tour.welcomeAudioUrl}>
+                  Your browser does not support audio.
+                </audio>
+              </div>
+            )}
+            <button onClick={startTour} className="btn btn-primary btn-lg welcome-start-btn" data-testid="start-tour-btn">
+              {tour.welcomeButtonLabel || 'Start Tour'}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Unlock Gate (no transition)
   if (showUnlock && needsUnlock) {
     return (
