@@ -150,35 +150,33 @@ p, .body-text {
 }
 
 .btn-secondary {
-  background-color: var(--color-bg-card);
-  color: var(--color-text-dark);
-  box-shadow: var(--shadow-sm);
+  background-color: #ffffff;
+  color: #1a1a1a;
+  border: 1px solid #e0e0e0;
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background-color: var(--color-bg-warm);
-  box-shadow: var(--shadow-md);
+  background-color: #f5f5f5;
+  border-color: #cccccc;
 }
 
 .btn-ghost {
   background-color: transparent;
-  color: var(--color-text-medium);
+  color: #666666;
 }
 
 .btn-ghost:hover:not(:disabled) {
-  background-color: var(--color-primary-light);
-  color: var(--color-text-dark);
+  background-color: #f0f0f0;
+  color: #1a1a1a;
 }
 
 .btn-danger {
-  background: linear-gradient(135deg, var(--color-accent) 0%, #ec8ba4 100%);
-  color: var(--color-bg-card);
-  box-shadow: 0 4px 14px rgba(232, 108, 141, 0.3);
+  background-color: #dc2626;
+  color: #ffffff;
 }
 
 .btn-danger:hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--color-accent-hover) 0%, var(--color-accent) 100%);
-  transform: translateY(-2px);
+  background-color: #b91c1c;
 }
 
 .btn:disabled {
@@ -187,36 +185,36 @@ p, .body-text {
 }
 
 .btn-sm {
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
+  padding: 0.375rem 0.875rem;
+  font-size: 0.8125rem;
 }
 
 .btn-lg {
-  padding: 1rem 2rem;
-  font-size: 1.0625rem;
+  padding: 0.875rem 1.75rem;
+  font-size: 1rem;
 }
 
-/* ==================== INPUTS - SOFT & WARM ==================== */
+/* ==================== INPUTS ==================== */
 .input {
   width: 100%;
-  padding: 0.875rem 1.125rem;
+  padding: 0.625rem 0.875rem;
   font-family: 'Nunito', sans-serif;
-  font-size: 1rem;
-  border: 2px solid var(--border-color);
-  border-radius: var(--border-radius-md);
-  background-color: var(--color-bg-card);
-  color: var(--color-text-dark);
+  font-size: 0.9375rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #1a1a1a;
   transition: all var(--transition-fast);
 }
 
 .input:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 4px var(--color-primary-light);
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .input::placeholder {
-  color: var(--color-text-light);
+  color: #999999;
 }
 
 .input-error {
