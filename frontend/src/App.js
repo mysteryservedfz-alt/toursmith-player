@@ -511,6 +511,13 @@ const TourEditor = () => {
         </div>
         <div className="editor-header-actions">
           {saving && <span className="saving-indicator">Saving...</span>}
+          <button 
+            onClick={() => saveTour({})} 
+            className="btn btn-save-draft" 
+            data-testid="save-draft-btn"
+          >
+            Save Draft
+          </button>
           <select
             className="input status-select"
             value={tour.status}
