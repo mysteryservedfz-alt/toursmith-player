@@ -1028,6 +1028,8 @@ const StopEditor = ({ stop, onUpdate, onDelete }) => {
 const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete }) => {
   const [openSections, setOpenSections] = useState({});
   const [localTitle, setLocalTitle] = useState(page.title || "");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
   const saveTimeoutRef = useRef(null);
 
   // Sync local title when page changes
@@ -1059,6 +1061,16 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete }) =>
     };
   }, []);
 
+  const handleDelete = () => {
+    setShowMenu(false);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = () => {
+    setShowDeleteModal(false);
+    onDelete();
+  };
+
   const getDisplayUnlockMode = (mode) => {
     switch(mode) {
       case "continue": return "Continue";
@@ -1076,9 +1088,33 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete }) =>
 
   return (
     <div className="content-editor" data-testid="page-editor">
+      {/* Header with overflow menu */}
+      <div className="editor-content-header">
+        <h2>Edit Page</h2>
+        <div className="overflow-menu-container">
+          <button 
+            className="btn btn-ghost btn-sm overflow-trigger" 
+            onClick={() => setShowMenu(!showMenu)}
+            data-testid="page-menu-btn"
+          >
+            ⋯
+          </button>
+          {showMenu && (
+            <div className="overflow-menu">
+              <button 
+                onClick={handleDelete} 
+                className="overflow-menu-item danger"
+                data-testid="delete-page-btn"
+              >
+                <Icons.Trash /> Delete Page
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* MAIN TEXT - Always visible */}
       <div className="editor-section main-text-section">
-        <h2>Edit Page</h2>
         <div className="form-group">
           <label className="form-label">Title</label>
           <input 
