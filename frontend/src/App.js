@@ -1015,11 +1015,12 @@ const StopEditor = ({ stop, onUpdate, onDelete }) => {
         </AccordionSection>
       </div>
 
-      <div className="editor-actions">
-        <button onClick={onDelete} className="btn btn-danger" data-testid="delete-stop-btn">
-          <Icons.Trash /> Delete Stop
-        </button>
-      </div>
+      <DeleteConfirmModal 
+        isOpen={showDeleteModal} 
+        onClose={() => setShowDeleteModal(false)} 
+        onConfirm={confirmDelete}
+        itemType="Stop"
+      />
     </div>
   );
 };
