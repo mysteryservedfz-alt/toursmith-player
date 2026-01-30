@@ -532,6 +532,18 @@ const TourEditor = () => {
               <Icons.Plus />
             </button>
           </div>
+          {/* Welcome Screen Item */}
+          <div className="stops-list-container">
+            <div
+              className={`stop-item welcome-item ${showWelcome ? "active" : ""}`}
+              onClick={() => { setShowWelcome(true); setActiveStopId(null); setActivePageId(null); }}
+              data-testid="welcome-item"
+            >
+              <span className="welcome-icon">👋</span>
+              <span className="stop-title">Welcome Screen</span>
+              {(tour.welcomeTitle || tour.welcomeBody) && <span className="content-dot" />}
+            </div>
+          </div>
           <DragDropContext onDragEnd={(r) => onDragEnd(r, "stops")}>
             <Droppable droppableId="stops">
               {(provided) => (
@@ -542,8 +554,8 @@ const TourEditor = () => {
                         <div
                           ref={provided.innerRef}
                           {...provided.draggableProps}
-                          className={`stop-item ${activeStopId === stop.id ? "active" : ""} ${snapshot.isDragging ? "dragging" : ""}`}
-                          onClick={() => { setActiveStopId(stop.id); setActivePageId(null); }}
+                          className={`stop-item ${activeStopId === stop.id && !showWelcome ? "active" : ""} ${snapshot.isDragging ? "dragging" : ""}`}
+                          onClick={() => { setActiveStopId(stop.id); setActivePageId(null); setShowWelcome(false); }}
                           data-testid={`stop-item-${stop.id}`}
                         >
                           <span {...provided.dragHandleProps} className="drag-handle"><Icons.Grip /></span>
