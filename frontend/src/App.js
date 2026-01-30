@@ -703,6 +703,66 @@ const WelcomeEditor = ({ tour, onUpdate }) => {
           />
           <p className="text-small">Default: "Start Tour"</p>
         </div>
+
+        {/* GPS Section */}
+        <div className="divider" />
+        <h3 className="section-label">GPS Start Location</h3>
+        <p className="text-small helper-text">Used to start the tour at the correct location</p>
+        
+        <div className="form-group">
+          <label className="checkbox-label">
+            <input 
+              type="checkbox" 
+              checked={tour.welcomeGpsEnabled || false} 
+              onChange={(e) => onUpdate("welcomeGpsEnabled", e.target.checked)} 
+              data-testid="welcome-gps-enabled"
+            />
+            <span>Enable GPS location check</span>
+          </label>
+        </div>
+
+        {tour.welcomeGpsEnabled && (
+          <div className="gps-fields">
+            <div className="form-row">
+              <div className="form-group">
+                <label className="form-label">Latitude</label>
+                <input 
+                  type="number" 
+                  step="any"
+                  className="input" 
+                  value={tour.welcomeGpsLat ?? ""} 
+                  onChange={(e) => onUpdate("welcomeGpsLat", e.target.value ? parseFloat(e.target.value) : null)} 
+                  placeholder="e.g. 40.7128" 
+                  data-testid="welcome-gps-lat"
+                />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Longitude</label>
+                <input 
+                  type="number" 
+                  step="any"
+                  className="input" 
+                  value={tour.welcomeGpsLng ?? ""} 
+                  onChange={(e) => onUpdate("welcomeGpsLng", e.target.value ? parseFloat(e.target.value) : null)} 
+                  placeholder="e.g. -74.0060" 
+                  data-testid="welcome-gps-lng"
+                />
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Radius (meters)</label>
+              <input 
+                type="number" 
+                className="input" 
+                value={tour.welcomeGpsRadiusMeters ?? 100} 
+                onChange={(e) => onUpdate("welcomeGpsRadiusMeters", e.target.value ? parseInt(e.target.value) : 100)} 
+                placeholder="100" 
+                data-testid="welcome-gps-radius"
+              />
+              <p className="text-small">How close visitors need to be to the start location</p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
