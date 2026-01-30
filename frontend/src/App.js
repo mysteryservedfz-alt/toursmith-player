@@ -645,18 +645,37 @@ const GalleryUrlsEditor = ({ urls = [], onChange }) => {
   );
 };
 
+// ==================== ACCORDION SECTION ====================
+const AccordionSection = ({ title, icon, isOpen, onToggle, hasContent, children }) => (
+  <div className={`accordion-section ${isOpen ? 'open' : ''} ${hasContent ? 'has-content' : ''}`}>
+    <button type="button" className="accordion-trigger" onClick={onToggle}>
+      <span className="accordion-icon">{icon}</span>
+      <span className="accordion-title">{title}</span>
+      <span className="accordion-indicator">{hasContent && <span className="content-dot" />}{isOpen ? '−' : '+'}</span>
+    </button>
+    {isOpen && <div className="accordion-content">{children}</div>}
+  </div>
+);
+
 // ==================== STOP EDITOR ====================
 const StopEditor = ({ stop, onUpdate, onDelete }) => {
-  const [showMedia, setShowMedia] = useState(!!(stop.imageUrl || stop.audioUrl || (stop.galleryUrls && stop.galleryUrls.length > 0)));
-  const [showEmbed, setShowEmbed] = useState(!!stop.embedUrl);
-  const [showCta, setShowCta] = useState(!!(stop.ctaLabel || stop.ctaUrl));
+  const [openSections, setOpenSections] = useState({});
+
+  const toggleSection = (section) => {
+    setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
+  };
+
+  const hasImage = !!(stop.imageUrl || (stop.galleryUrls && stop.galleryUrls.length > 0));
+  const hasEmbed = !!stop.embedUrl;
+  const hasAudio = !!stop.audioUrl;
+  const hasBroadcast = !!(stop.ctaLabel || stop.ctaUrl);
+  const hasUnlock = stop.unlockMode && stop.unlockMode !== 'continue';
 
   return (
     <div className="content-editor" data-testid="stop-editor">
-      {/* TEXT SECTION */}
-      <div className="editor-section">
+      {/* MAIN TEXT - Always visible */}
+      <div className="editor-section main-text-section">
         <h2>Edit Stop</h2>
-        <h3 className="section-label">Text</h3>
         <div className="form-group">
           <label className="form-label">Title</label>
           <input type="text" className="input" value={stop.title || ""} onChange={(e) => onUpdate({ title: e.target.value })} placeholder="Stop title" data-testid="stop-title-input" />
@@ -667,129 +686,114 @@ const StopEditor = ({ stop, onUpdate, onDelete }) => {
         </div>
         <div className="form-group">
           <label className="form-label">Intro</label>
-          <textarea className="input" value={stop.description || ""} onChange={(e) => onUpdate({ description: e.target.value })} placeholder="Main intro text" data-testid="stop-description-input" />
+          <textarea className="input intro-textarea" value={stop.description || ""} onChange={(e) => onUpdate({ description: e.target.value })} placeholder="Main intro text" data-testid="stop-description-input" />
         </div>
         <div className="form-group">
           <label className="form-label">Intro 2</label>
-          <textarea className="input" value={stop.intro2 || ""} onChange={(e) => onUpdate({ intro2: e.target.value || null })} placeholder="Optional secondary intro text" data-testid="stop-intro2-input" />
+          <textarea className="input" value={stop.intro2 || ""} onChange={(e) => onUpdate({ intro2: e.target.value || null })} placeholder="Optional secondary text" data-testid="stop-intro2-input" />
         </div>
       </div>
 
-      <div className="divider" />
-
-      {/* MEDIA SECTION */}
-      <div className="editor-section">
-        <div className="section-header-toggle">
-          <h3 className="section-label">Media</h3>
-          {!showMedia && (
-            <button type="button" onClick={() => setShowMedia(true)} className="btn btn-secondary btn-sm">
-              <Icons.Plus /> Add Media
-            </button>
-          )}
-        </div>
-        {showMedia && (
-          <>
-            <div className="form-group">
-              <label className="form-label">Image URL</label>
-              <input type="url" className="input" value={stop.imageUrl || ""} onChange={(e) => onUpdate({ imageUrl: e.target.value || null })} placeholder="https://example.com/image.jpg" data-testid="stop-image-url-input" />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Image Alt Text</label>
-              <input type="text" className="input" value={stop.imageAlt || ""} onChange={(e) => onUpdate({ imageAlt: e.target.value || null })} placeholder="Describe the image" data-testid="stop-image-alt-input" />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Gallery Images</label>
-              <GalleryUrlsEditor urls={stop.galleryUrls} onChange={(urls) => onUpdate({ galleryUrls: urls })} />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Audio URL</label>
-              <input type="url" className="input" value={stop.audioUrl || ""} onChange={(e) => onUpdate({ audioUrl: e.target.value || null })} placeholder="https://example.com/audio.mp3" data-testid="stop-audio-url-input" />
-            </div>
-            {stop.audioUrl && (
-              <div className="audio-preview">
-                <audio controls src={stop.audioUrl} />
-              </div>
-            )}
-          </>
-        )}
-      </div>
-
-      <div className="divider" />
-
-      {/* EMBED SECTION */}
-      <div className="editor-section">
-        <div className="section-header-toggle">
-          <h3 className="section-label">Embed</h3>
-          {!showEmbed && (
-            <button type="button" onClick={() => setShowEmbed(true)} className="btn btn-secondary btn-sm">
-              <Icons.Plus /> Add Embed
-            </button>
-          )}
-        </div>
-        {showEmbed && (
-          <>
-            <div className="form-group">
-              <label className="form-label">Embed URL</label>
-              <input type="url" className="input" value={stop.embedUrl || ""} onChange={(e) => onUpdate({ embedUrl: e.target.value || null })} placeholder="YouTube, Vimeo, or Google Maps URL" data-testid="stop-embed-url-input" />
-              <p className="text-small">Allowed: YouTube, Vimeo, Google Maps. Other URLs will show as links.</p>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Embed Caption</label>
-              <input type="text" className="input" value={stop.embedCaption || ""} onChange={(e) => onUpdate({ embedCaption: e.target.value || null })} placeholder="Optional caption" data-testid="stop-embed-caption-input" />
-            </div>
-          </>
-        )}
-      </div>
-
-      <div className="divider" />
-
-      {/* CTA SECTION */}
-      <div className="editor-section">
-        <div className="section-header-toggle">
-          <h3 className="section-label">Call to Action</h3>
-          {!showCta && (
-            <button type="button" onClick={() => setShowCta(true)} className="btn btn-secondary btn-sm">
-              <Icons.Plus /> Add CTA
-            </button>
-          )}
-        </div>
-        {showCta && (
-          <>
-            <div className="form-group">
-              <label className="form-label">Button Label</label>
-              <input type="text" className="input" value={stop.ctaLabel || ""} onChange={(e) => onUpdate({ ctaLabel: e.target.value || null })} placeholder="Learn More" data-testid="stop-cta-label-input" />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Button URL</label>
-              <input type="url" className="input" value={stop.ctaUrl || ""} onChange={(e) => onUpdate({ ctaUrl: e.target.value || null })} placeholder="https://example.com" data-testid="stop-cta-url-input" />
-            </div>
-          </>
-        )}
-      </div>
-
-      <div className="divider" />
-
-      {/* UNLOCK SECTION */}
-      <div className="editor-section">
-        <h3 className="section-label">Unlock Settings</h3>
-        <p className="text-small helper-text">Applies to all pages in this stop unless a page overrides it.</p>
-        <div className="form-group">
-          <label className="form-label">Stop Unlock Mode</label>
-          <select className="input" value={stop.unlockMode || "continue"} onChange={(e) => onUpdate({ unlockMode: e.target.value })} data-testid="stop-unlock-mode">
-            <option value="continue">Continue</option>
-            <option value="answer_required">Answer Required</option>
-            <option value="whiteboard">Whiteboard</option>
-          </select>
-        </div>
-        {stop.unlockMode === "answer_required" && (
+      {/* ACCORDION SECTIONS */}
+      <div className="accordion-container">
+        <AccordionSection
+          title="Add Image / Gallery"
+          icon={<Icons.Image />}
+          isOpen={openSections.image}
+          onToggle={() => toggleSection('image')}
+          hasContent={hasImage}
+        >
           <div className="form-group">
-            <label className="form-label">Stop Answer</label>
-            <input type="text" className="input" value={stop.answer || ""} onChange={(e) => onUpdate({ answer: e.target.value })} placeholder="Enter the answer visitors must provide" data-testid="stop-answer-input" />
+            <label className="form-label">Image URL</label>
+            <input type="url" className="input" value={stop.imageUrl || ""} onChange={(e) => onUpdate({ imageUrl: e.target.value || null })} placeholder="https://example.com/image.jpg" data-testid="stop-image-url-input" />
           </div>
-        )}
-      </div>
+          <div className="form-group">
+            <label className="form-label">Image Alt Text</label>
+            <input type="text" className="input" value={stop.imageAlt || ""} onChange={(e) => onUpdate({ imageAlt: e.target.value || null })} placeholder="Describe the image" data-testid="stop-image-alt-input" />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Gallery Images</label>
+            <GalleryUrlsEditor urls={stop.galleryUrls} onChange={(urls) => onUpdate({ galleryUrls: urls })} />
+          </div>
+        </AccordionSection>
 
-      <div className="divider" />
+        <AccordionSection
+          title="Add Embed (YouTube / Map)"
+          icon={<Icons.Video />}
+          isOpen={openSections.embed}
+          onToggle={() => toggleSection('embed')}
+          hasContent={hasEmbed}
+        >
+          <div className="form-group">
+            <label className="form-label">Embed URL</label>
+            <input type="url" className="input" value={stop.embedUrl || ""} onChange={(e) => onUpdate({ embedUrl: e.target.value || null })} placeholder="YouTube, Vimeo, or Google Maps URL" data-testid="stop-embed-url-input" />
+            <p className="text-small">Allowed: YouTube, Vimeo, Google Maps</p>
+          </div>
+          <div className="form-group">
+            <label className="form-label">Caption</label>
+            <input type="text" className="input" value={stop.embedCaption || ""} onChange={(e) => onUpdate({ embedCaption: e.target.value || null })} placeholder="Optional caption" data-testid="stop-embed-caption-input" />
+          </div>
+        </AccordionSection>
+
+        <AccordionSection
+          title="Add Audio"
+          icon={<Icons.Audio />}
+          isOpen={openSections.audio}
+          onToggle={() => toggleSection('audio')}
+          hasContent={hasAudio}
+        >
+          <div className="form-group">
+            <label className="form-label">Audio URL</label>
+            <input type="url" className="input" value={stop.audioUrl || ""} onChange={(e) => onUpdate({ audioUrl: e.target.value || null })} placeholder="https://example.com/audio.mp3" data-testid="stop-audio-url-input" />
+          </div>
+          {stop.audioUrl && (
+            <div className="audio-preview">
+              <audio controls src={stop.audioUrl} />
+            </div>
+          )}
+        </AccordionSection>
+
+        <AccordionSection
+          title="Broadcast"
+          icon={<Icons.Broadcast />}
+          isOpen={openSections.broadcast}
+          onToggle={() => toggleSection('broadcast')}
+          hasContent={hasBroadcast}
+        >
+          <div className="form-group">
+            <label className="form-label">Button Label</label>
+            <input type="text" className="input" value={stop.ctaLabel || ""} onChange={(e) => onUpdate({ ctaLabel: e.target.value || null })} placeholder="Learn More" data-testid="stop-cta-label-input" />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Button URL</label>
+            <input type="url" className="input" value={stop.ctaUrl || ""} onChange={(e) => onUpdate({ ctaUrl: e.target.value || null })} placeholder="https://example.com" data-testid="stop-cta-url-input" />
+          </div>
+        </AccordionSection>
+
+        <AccordionSection
+          title="Unlock / Password"
+          icon={<Icons.Lock />}
+          isOpen={openSections.unlock}
+          onToggle={() => toggleSection('unlock')}
+          hasContent={hasUnlock}
+        >
+          <p className="text-small helper-text">Applies to all pages unless overridden</p>
+          <div className="form-group">
+            <label className="form-label">Unlock Mode</label>
+            <select className="input" value={stop.unlockMode || "continue"} onChange={(e) => onUpdate({ unlockMode: e.target.value })} data-testid="stop-unlock-mode">
+              <option value="continue">Continue (no lock)</option>
+              <option value="answer_required">Answer Required</option>
+              <option value="whiteboard">Whiteboard</option>
+            </select>
+          </div>
+          {stop.unlockMode === "answer_required" && (
+            <div className="form-group">
+              <label className="form-label">Answer</label>
+              <input type="text" className="input" value={stop.answer || ""} onChange={(e) => onUpdate({ answer: e.target.value })} placeholder="Required answer" data-testid="stop-answer-input" />
+            </div>
+          )}
+        </AccordionSection>
+      </div>
 
       <div className="editor-actions">
         <button onClick={onDelete} className="btn btn-danger" data-testid="delete-stop-btn">
