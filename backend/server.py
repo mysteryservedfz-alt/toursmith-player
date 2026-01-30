@@ -90,6 +90,12 @@ class Tour(BaseModel):
     title: str = "Untitled Tour"
     description: str = ""
     status: str = "draft"  # "draft" or "published"
+    # Welcome screen fields
+    welcomeTitle: Optional[str] = None
+    welcomeBody: Optional[str] = None
+    welcomeImageUrl: Optional[str] = None
+    welcomeAudioUrl: Optional[str] = None
+    welcomeButtonLabel: Optional[str] = None
     stops: List[Stop] = []
     createdAt: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     updatedAt: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
@@ -102,6 +108,11 @@ class TourUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
     status: Optional[str] = None
+    welcomeTitle: Optional[str] = None
+    welcomeBody: Optional[str] = None
+    welcomeImageUrl: Optional[str] = None
+    welcomeAudioUrl: Optional[str] = None
+    welcomeButtonLabel: Optional[str] = None
     stops: Optional[List[Stop]] = None
 
 # ==================== AUTH HELPERS ====================
