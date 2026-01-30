@@ -1424,6 +1424,19 @@ const TourPlayer = () => {
                 </audio>
               </div>
             )}
+            {/* GPS Location Info (display only, no blocking) */}
+            {tour.welcomeGpsEnabled && tour.welcomeGpsLat && tour.welcomeGpsLng && (
+              <div className="welcome-gps-info" data-testid="welcome-gps-info">
+                <div className="gps-icon">📍</div>
+                <div className="gps-details">
+                  <p className="gps-label">Tour Start Location</p>
+                  <p className="gps-coords">{tour.welcomeGpsLat.toFixed(4)}, {tour.welcomeGpsLng.toFixed(4)}</p>
+                  {tour.welcomeGpsRadiusMeters && (
+                    <p className="gps-radius">Within {tour.welcomeGpsRadiusMeters}m</p>
+                  )}
+                </div>
+              </div>
+            )}
             <button onClick={startTour} className="btn btn-primary btn-lg welcome-start-btn" data-testid="start-tour-btn">
               {tour.welcomeButtonLabel || 'Start Tour'}
             </button>
