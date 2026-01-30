@@ -96,6 +96,11 @@ class Tour(BaseModel):
     welcomeImageUrl: Optional[str] = None
     welcomeAudioUrl: Optional[str] = None
     welcomeButtonLabel: Optional[str] = None
+    # GPS fields
+    welcomeGpsEnabled: bool = False
+    welcomeGpsLat: Optional[float] = None
+    welcomeGpsLng: Optional[float] = None
+    welcomeGpsRadiusMeters: Optional[int] = 100
     stops: List[Stop] = []
     createdAt: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     updatedAt: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
@@ -113,6 +118,10 @@ class TourUpdate(BaseModel):
     welcomeImageUrl: Optional[str] = None
     welcomeAudioUrl: Optional[str] = None
     welcomeButtonLabel: Optional[str] = None
+    welcomeGpsEnabled: Optional[bool] = None
+    welcomeGpsLat: Optional[float] = None
+    welcomeGpsLng: Optional[float] = None
+    welcomeGpsRadiusMeters: Optional[int] = None
     stops: Optional[List[Stop]] = None
 
 # ==================== AUTH HELPERS ====================
