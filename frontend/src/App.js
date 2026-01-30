@@ -844,9 +844,21 @@ const AccordionSection = ({ title, icon, isOpen, onToggle, hasContent, children 
 // ==================== STOP EDITOR ====================
 const StopEditor = ({ stop, onUpdate, onDelete }) => {
   const [openSections, setOpenSections] = useState({});
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
 
   const toggleSection = (section) => {
     setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
+  };
+
+  const handleDelete = () => {
+    setShowMenu(false);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = () => {
+    setShowDeleteModal(false);
+    onDelete();
   };
 
   const hasImage = !!(stop.imageUrl || (stop.galleryUrls && stop.galleryUrls.length > 0));
@@ -857,9 +869,33 @@ const StopEditor = ({ stop, onUpdate, onDelete }) => {
 
   return (
     <div className="content-editor" data-testid="stop-editor">
+      {/* Header with overflow menu */}
+      <div className="editor-content-header">
+        <h2>Edit Stop</h2>
+        <div className="overflow-menu-container">
+          <button 
+            className="btn btn-ghost btn-sm overflow-trigger" 
+            onClick={() => setShowMenu(!showMenu)}
+            data-testid="stop-menu-btn"
+          >
+            ⋯
+          </button>
+          {showMenu && (
+            <div className="overflow-menu">
+              <button 
+                onClick={handleDelete} 
+                className="overflow-menu-item danger"
+                data-testid="delete-stop-btn"
+              >
+                <Icons.Trash /> Delete Stop
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* MAIN TEXT - Always visible */}
       <div className="editor-section main-text-section">
-        <h2>Edit Stop</h2>
         <div className="form-group">
           <label className="form-label">Title</label>
           <input type="text" className="input" value={stop.title || ""} onChange={(e) => onUpdate({ title: e.target.value })} placeholder="Stop title" data-testid="stop-title-input" />
