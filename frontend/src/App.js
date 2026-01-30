@@ -1065,6 +1065,7 @@ const TourPlayer = () => {
   const [tour, setTour] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showWelcome, setShowWelcome] = useState(true);
   const [currentStopIndex, setCurrentStopIndex] = useState(0);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [unlockedPages, setUnlockedPages] = useState(new Set());
@@ -1078,6 +1079,9 @@ const TourPlayer = () => {
       try {
         const res = await axios.get(`${API}/public/tours/${tourId}`);
         setTour(res.data);
+        // Check if welcome screen should be shown
+        const hasWelcome = res.data.welcomeTitle || res.data.welcomeBody;
+        setShowWelcome(hasWelcome);
       } catch (err) {
         setError("Tour not found or not published");
       } finally {
@@ -1086,6 +1090,14 @@ const TourPlayer = () => {
     };
     fetchTour();
   }, [tourId]);
+
+  const hasWelcomeScreen = tour?.welcomeTitle || tour?.welcomeBody;
+
+  const startTour = () => {
+    setShowWelcome(false);
+    setCurrentStopIndex(0);
+    setCurrentPageIndex(0);
+  };
 
   const sortedStops = tour?.stops?.sort((a, b) => a.order - b.order) || [];
   const currentStop = sortedStops[currentStopIndex];
