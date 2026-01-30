@@ -581,6 +581,110 @@
   width: 100%;
 }
 
+/* ==================== WELCOME ITEM IN SIDEBAR ==================== */
+.stops-list-container {
+  padding: var(--spacing-sm);
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.welcome-item {
+  background-color: #fff9e6;
+  border: 1px solid #f0e6cc;
+}
+
+.welcome-item:hover {
+  background-color: #fff5d6;
+  border-color: #e6d9b3;
+}
+
+.welcome-item.active {
+  background-color: #e8f4fc;
+  border-color: #2563eb;
+}
+
+.welcome-icon {
+  font-size: 1rem;
+}
+
+/* ==================== WELCOME EDITOR ==================== */
+.image-preview {
+  margin-top: var(--spacing-md);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.image-preview img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+}
+
+/* ==================== WELCOME SCREEN (PLAYER) ==================== */
+.welcome-layout {
+  background: linear-gradient(180deg, var(--color-bg-light) 0%, var(--color-primary-light) 50%, var(--color-calm-light) 100%);
+}
+
+.welcome-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+}
+
+.welcome-content {
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+}
+
+.welcome-image {
+  margin-bottom: var(--spacing-xl);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.welcome-image img {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+}
+
+.welcome-title {
+  font-size: 2.5rem;
+  color: var(--color-text-dark);
+  margin-bottom: var(--spacing-lg);
+}
+
+.welcome-body {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: var(--color-text-medium);
+  margin-bottom: var(--spacing-xl);
+}
+
+.welcome-body p {
+  margin-bottom: var(--spacing-md);
+}
+
+.welcome-audio {
+  margin-bottom: var(--spacing-xl);
+}
+
+.welcome-start-btn {
+  background: linear-gradient(135deg, var(--color-primary) 0%, #f4b84a 100%);
+  color: var(--color-text-dark);
+  box-shadow: 0 4px 20px rgba(246, 166, 35, 0.4);
+  padding: 1rem 3rem;
+  font-size: 1.125rem;
+}
+
+.welcome-start-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(246, 166, 35, 0.5);
+}
+
 /* ==================== ACCORDION STYLES ==================== */
 .accordion-container {
   margin-top: var(--spacing-lg);
