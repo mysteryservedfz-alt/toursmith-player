@@ -1856,3 +1856,36 @@
   border-color: #8b5cf6;
   color: #8b5cf6;
 }
+
+/* Clearable Input */
+.clearable-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.clearable-input-wrapper .input {
+  flex: 1;
+  padding-right: 40px;
+}
+
+.clear-input-btn {
+  position: absolute;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+  border: none;
+  border-radius: 6px;
+  color: #666666;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.clear-input-btn:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
