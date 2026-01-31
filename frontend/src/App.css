@@ -1684,3 +1684,153 @@
     min-width: 80px;
   }
 }
+
+/* ==================== PAGES INSIDE STOP EDITOR ==================== */
+
+/* Pages Accordion Section */
+.pages-accordion {
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: var(--spacing-lg);
+}
+
+.pages-accordion.open {
+  border-color: #8b5cf6;
+}
+
+.pages-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: #f8f9fa;
+  border: none;
+  cursor: pointer;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #1a1a1a;
+  transition: all 0.2s ease;
+}
+
+.pages-trigger:hover {
+  background: #f0f0f0;
+}
+
+.pages-accordion.open .pages-trigger {
+  background: #8b5cf6;
+  color: #ffffff;
+}
+
+.pages-trigger .accordion-indicator {
+  margin-left: auto;
+  font-size: 1.25rem;
+  font-weight: 300;
+}
+
+.pages-content {
+  padding: var(--spacing-md);
+  background: #ffffff;
+}
+
+/* Pages List Inline */
+.pages-list-inline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.page-item-inline {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+.page-item-inline:hover {
+  border-color: #8b5cf6;
+  background: #faf5ff;
+}
+
+.page-item-inline.dragging {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.page-item-inline .drag-handle {
+  color: #999999;
+  cursor: grab;
+}
+
+.page-item-inline .page-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  cursor: pointer;
+}
+
+.page-title-inline {
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #1a1a1a;
+}
+
+.page-badges {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: #666666;
+}
+
+.page-badges .badge-sm {
+  font-size: 0.625rem;
+  padding: 2px 6px;
+  background: #e0f2fe;
+  color: #0369a1;
+  border-radius: 4px;
+}
+
+.page-delete-btn {
+  opacity: 0;
+  color: #dc2626;
+}
+
+.page-item-inline:hover .page-delete-btn {
+  opacity: 1;
+}
+
+.add-page-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Back to Stop Button */
+.btn-back-to-stop {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: transparent;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: #666666;
+  cursor: pointer;
+  margin-bottom: var(--spacing-lg);
+  transition: all 0.2s ease;
+}
+
+.btn-back-to-stop:hover {
+  border-color: #8b5cf6;
+  color: #8b5cf6;
+}
