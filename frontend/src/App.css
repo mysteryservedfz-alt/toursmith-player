@@ -325,7 +325,7 @@
 
 /* ==================== EDITOR SIDEBARS ==================== */
 .editor-sidebar {
-  width: 260px;
+  width: 280px;
   background-color: #ffffff;
   border-right: 1px solid #e0e0e0;
   display: flex;
@@ -349,6 +349,133 @@
   color: #1a1a1a;
 }
 
+/* ==================== TOUR TREE STRUCTURE ==================== */
+.tour-tree {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-sm);
+}
+
+.stops-tree {
+  display: flex;
+  flex-direction: column;
+}
+
+.stop-branch {
+  margin-bottom: var(--spacing-xs);
+}
+
+.stop-branch.dragging {
+  opacity: 0.8;
+}
+
+.tree-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background-color: #fafafa;
+  border: 1px solid transparent;
+}
+
+.tree-item:hover {
+  background-color: #f0f0f0;
+}
+
+.tree-item.active {
+  background-color: #ede9fe;
+  border-color: #8b5cf6;
+}
+
+.tree-item .drag-handle {
+  color: #cccccc;
+  cursor: grab;
+}
+
+.tree-item .drag-handle:hover {
+  color: #666666;
+}
+
+.tree-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.tree-label {
+  flex: 1;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #1a1a1a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tree-item.welcome-item {
+  margin-bottom: var(--spacing-md);
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: var(--spacing-md);
+  border-radius: 8px 8px 0 0;
+}
+
+/* Nested Pages */
+.pages-branch {
+  margin-left: var(--spacing-lg);
+  border-left: 2px solid #e0e0e0;
+  padding-left: var(--spacing-xs);
+}
+
+.pages-branch .tree-item {
+  background: transparent;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  margin-bottom: 2px;
+}
+
+.pages-branch .tree-item:hover {
+  background: #f5f3ff;
+}
+
+.pages-branch .tree-item.active {
+  background: #ede9fe;
+  border-color: #8b5cf6;
+}
+
+.tree-connector {
+  color: #cccccc;
+  font-family: monospace;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.mini-badge {
+  font-size: 0.625rem;
+  font-weight: 700;
+  padding: 2px 5px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  border-radius: 4px;
+}
+
+.pages-branch .tree-item svg {
+  width: 12px;
+  height: 12px;
+  color: #666666;
+}
+
+/* Content indicator dot */
+.content-dot {
+  width: 8px;
+  height: 8px;
+  background: #8b5cf6;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Legacy - keep for backwards compat */
 .stops-list,
 .pages-list {
   flex: 1;
