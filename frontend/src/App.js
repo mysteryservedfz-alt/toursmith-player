@@ -519,12 +519,14 @@ const TourEditor = () => {
         </div>
         <div className="editor-header-actions">
           {saving && <span className="saving-indicator">Saving...</span>}
+          {hasUnsavedChanges && !saving && <span className="unsaved-indicator">Unsaved changes</span>}
           <button 
-            onClick={() => saveTour({})} 
-            className="btn btn-save-draft" 
+            onClick={() => saveTour()} 
+            className={`btn btn-save-draft ${hasUnsavedChanges ? 'has-changes' : ''}`}
+            disabled={saving}
             data-testid="save-draft-btn"
           >
-            Save Draft
+            {saving ? 'Saving...' : 'Save Draft'}
           </button>
           <select
             className="input status-select"
