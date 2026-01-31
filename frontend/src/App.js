@@ -508,6 +508,36 @@ const TourEditor = () => {
 
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Cmd/Ctrl + S to save
+      if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+        e.preventDefault();
+        if (hasUnsavedChanges && !saving) {
+          saveTour();
+        }
+      }
+      // Cmd/Ctrl + N to add new stop
+      if ((e.metaKey || e.ctrlKey) && e.key === 'n') {
+        e.preventDefault();
+        addStop();
+      }
+      // Escape to go back or close
+      if (e.key === 'Escape') {
+        if (activePageId) {
+          setActivePageId(null);
+        } else if (activeStopId) {
+          setActiveStopId(null);
+          setShowWelcome(true);
+        }
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [hasUnsavedChanges, saving, activePageId, activeStopId]);
+
   // Manual save - only called when clicking Save Draft
   const saveTour = async (dataToSave) => {
     setSaving(true);
