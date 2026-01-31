@@ -1391,7 +1391,7 @@ const StopEditor = ({ stop, onUpdate, onDelete, onAddPage, onSelectPage, onDelet
   );
 };
 
-const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete }) => {
+const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onBack }) => {
   const [openSections, setOpenSections] = useState({});
   const [localTitle, setLocalTitle] = useState(page.title || "");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
