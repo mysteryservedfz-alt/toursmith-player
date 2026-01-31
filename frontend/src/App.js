@@ -2348,8 +2348,6 @@ const TourPlayer = () => {
 
               <div className="page-end-divider" />
             </div>
-          </CSSTransition>
-        </TransitionGroup>
       </main>
 
       <footer className="player-footer">
