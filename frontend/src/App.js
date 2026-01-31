@@ -1921,6 +1921,7 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onBa
           isOpen={openSections.image}
           onToggle={() => toggleSection('image')}
           hasContent={hasImage}
+          onClear={() => onUpdate({ imageUrl: null, imageAlt: null, galleryUrls: [] })}
         >
           <div className="form-group">
             <label className="form-label">Background Image (Optional)</label>
