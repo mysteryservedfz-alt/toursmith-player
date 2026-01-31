@@ -1968,7 +1968,14 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onBa
         >
           <div className="form-group">
             <label className="form-label">Audio URL</label>
-            <input type="url" className="input" value={page.audioUrl || ""} onChange={(e) => onUpdate({ audioUrl: e.target.value || null })} placeholder="https://example.com/audio.mp3" data-testid="page-audio-url-input" />
+            <ClearableInput 
+              type="url" 
+              value={page.audioUrl} 
+              onChange={(val) => onUpdate({ audioUrl: val })} 
+              onClear={() => onUpdate({ audioUrl: null })}
+              placeholder="https://example.com/audio.mp3" 
+              data-testid="page-audio-url-input" 
+            />
           </div>
           {page.audioUrl && (
             <div className="audio-preview">
@@ -1983,6 +1990,7 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onBa
           isOpen={openSections.broadcast}
           onToggle={() => toggleSection('broadcast')}
           hasContent={hasBroadcast}
+          onClear={() => onUpdate({ ctaLabel: null, ctaUrl: null })}
         >
           <div className="form-group">
             <label className="form-label">Button Label</label>
@@ -1990,7 +1998,14 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onBa
           </div>
           <div className="form-group">
             <label className="form-label">Button URL</label>
-            <input type="url" className="input" value={page.ctaUrl || ""} onChange={(e) => onUpdate({ ctaUrl: e.target.value || null })} placeholder="https://example.com" data-testid="page-cta-url-input" />
+            <ClearableInput 
+              type="url" 
+              value={page.ctaUrl} 
+              onChange={(val) => onUpdate({ ctaUrl: val })} 
+              onClear={() => onUpdate({ ctaUrl: null })}
+              placeholder="https://example.com" 
+              data-testid="page-cta-url-input" 
+            />
           </div>
         </AccordionSection>
 
