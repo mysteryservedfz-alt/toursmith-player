@@ -108,17 +108,32 @@ Build a tour generator application for creating interactive, location-based expe
 
 ## Pending / Backlog
 
-### P1 - High Priority
-- [ ] Photo upload verification (needs storage decision)
+### P1 - High Priority (Next Up)
+- [ ] Auto-save Recovery (localStorage backup)
+- [ ] Dark Mode Player
 
 ### P2 - Medium Priority
+- [ ] Undo/Redo functionality
+- [ ] Bulk Actions (select multiple stops/pages)
 - [ ] Give Up & Skip option
+- [ ] Timer/Countdown challenges
 
-### P3 - Nice to Have
-- [ ] Export QR codes as printable images
-- [ ] Multi-stop GPS routing visualization
-- [ ] Tour analytics/completion tracking
-- [ ] Social sharing features
+### P3 - Wish List (Future)
+- [ ] Offline Mode (cache tour data)
+- [ ] Drawing/Sketch Answer
+- [ ] Voice Recording answers
+- [ ] AR Integration
+- [ ] Background Music per stop
+- [ ] Preview Mode (test as player)
+- [ ] Version History
+- [ ] Import/Export tours
+- [ ] Paid Tours (Stripe)
+- [ ] Tour Marketplace
+- [ ] Branded Player (custom colors/logo per tour)
+- [ ] Embed Widget
+- [ ] Social Sharing
+- [ ] Collaboration (multiple admins)
+- [ ] Tour Analytics
 
 ---
 
