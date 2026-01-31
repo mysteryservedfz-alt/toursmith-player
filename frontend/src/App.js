@@ -589,45 +589,6 @@ const TourEditor = () => {
           </DragDropContext>
         </aside>
 
-        {/* Pages Panel */}
-        {activeStop && (
-          <aside className="editor-sidebar pages-panel">
-            <div className="panel-header">
-              <h3>Pages</h3>
-              <button onClick={() => addPage(activeStopId)} className="btn btn-primary btn-sm" data-testid="add-page-btn">
-                <Icons.Plus />
-              </button>
-            </div>
-            <DragDropContext onDragEnd={(r) => onDragEnd(r, "pages")}>
-              <Droppable droppableId="pages">
-                {(provided) => (
-                  <div className="pages-list" {...provided.droppableProps} ref={provided.innerRef}>
-                    {activeStop.pages?.sort((a, b) => a.order - b.order).map((page, index) => (
-                      <Draggable key={page.id} draggableId={page.id} index={index}>
-                        {(provided, snapshot) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            className={`page-item ${activePageId === page.id ? "active" : ""} ${snapshot.isDragging ? "dragging" : ""}`}
-                            onClick={() => setActivePageId(page.id)}
-                            data-testid={`page-item-${page.id}`}
-                          >
-                            <span {...provided.dragHandleProps} className="drag-handle"><Icons.Grip /></span>
-                            <span className="page-title">{page.title || "Untitled Page"}</span>
-                            {page.audioUrl && <Icons.Audio />}
-                            {page.unlockMode && page.unlockMode !== "continue" && <Icons.Lock />}
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
-          </aside>
-        )}
-
         {/* Editor Main */}
         <main className="editor-main">
           {showWelcome ? (
@@ -637,9 +598,24 @@ const TourEditor = () => {
               <p>Add a stop to get started</p>
             </div>
           ) : !activePageId ? (
-            <StopEditor stop={activeStop} onUpdate={(u) => updateStop(activeStopId, u)} onDelete={() => deleteStop(activeStopId)} />
+            <StopEditor 
+              stop={activeStop} 
+              onUpdate={(u) => updateStop(activeStopId, u)} 
+              onDelete={() => deleteStop(activeStopId)}
+              onAddPage={() => addPage(activeStopId)}
+              onSelectPage={(pageId) => setActivePageId(pageId)}
+              onDeletePage={(pageId) => deletePage(activeStopId, pageId)}
+              onReorderPages={(pages) => updateStop(activeStopId, { pages })}
+            />
           ) : (
-            <PageEditor page={activePage} stopUnlockMode={activeStop.unlockMode} stopAnswer={activeStop.answer} onUpdate={(u) => updatePage(activeStopId, activePageId, u)} onDelete={() => deletePage(activeStopId, activePageId)} />
+            <PageEditor 
+              page={activePage} 
+              stopUnlockMode={activeStop.unlockMode} 
+              stopAnswer={activeStop.answer} 
+              onUpdate={(u) => updatePage(activeStopId, activePageId, u)} 
+              onDelete={() => { deletePage(activeStopId, activePageId); setActivePageId(null); }}
+              onBack={() => setActivePageId(null)}
+            />
           )}
         </main>
 
