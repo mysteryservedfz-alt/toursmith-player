@@ -2774,6 +2774,14 @@ const TourPlayer = () => {
       <div className="player-layout welcome-layout" data-testid="player-welcome">
         <div className="welcome-screen">
           <div className="welcome-content">
+            {/* Brand Logo */}
+            <div className="welcome-brand-logo">
+              <img 
+                src="https://customer-assets.emergentagent.com/job_ba20b70d-7313-45de-8dec-281984409fc5/artifacts/s0alxsv9_color%20logo.png" 
+                alt="Mystery Served" 
+              />
+            </div>
+            
             {tour.welcomeImageUrl && (
               <div className="welcome-image">
                 <img src={tour.welcomeImageUrl} alt={tour.welcomeTitle || 'Welcome'} />
