@@ -593,6 +593,44 @@ const TourEditor = () => {
     }
   };
 
+  const duplicateStop = (stopId) => {
+    const stop = tour.stops.find(s => s.id === stopId);
+    if (!stop) return;
+    
+    const newStop = {
+      ...stop,
+      id: crypto.randomUUID(),
+      title: `${stop.title} (Copy)`,
+      order: tour.stops.length,
+      pages: stop.pages?.map(p => ({
+        ...p,
+        id: crypto.randomUUID()
+      })) || []
+    };
+    
+    setTour(prev => ({ ...prev, stops: [...prev.stops, newStop] }));
+    setHasUnsavedChanges(true);
+    setActiveStopId(newStop.id);
+    setActivePageId(null);
+  };
+
+  const duplicatePage = (stopId, pageId) => {
+    const stop = tour.stops.find(s => s.id === stopId);
+    const page = stop?.pages?.find(p => p.id === pageId);
+    if (!page) return;
+    
+    const newPage = {
+      ...page,
+      id: crypto.randomUUID(),
+      title: `${page.title} (Copy)`,
+      order: stop.pages.length
+    };
+    
+    const updatedPages = [...stop.pages, newPage];
+    updateStop(stopId, { pages: updatedPages });
+    setActivePageId(newPage.id);
+  };
+
   const addPage = (stopId) => {
     const stop = tour.stops.find(s => s.id === stopId);
     const newPage = {
