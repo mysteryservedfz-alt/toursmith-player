@@ -1902,6 +1902,13 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDu
           {showMenu && (
             <div className="overflow-menu">
               <button 
+                onClick={handleDuplicate} 
+                className="overflow-menu-item"
+                data-testid="duplicate-page-btn"
+              >
+                <Icons.Copy /> Duplicate Page
+              </button>
+              <button 
                 onClick={handleDelete} 
                 className="overflow-menu-item danger"
                 data-testid="delete-page-btn"
