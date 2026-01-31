@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef, createContext, useContext, useCallback } from "react";
 import "@/index.css";
 import "@/App.css";
+import "leaflet/dist/leaflet.css";
 import { BrowserRouter, Routes, Route, Navigate, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import { QRCodeSVG } from "qrcode.react";
+import { MapContainer, TileLayer, Marker, Circle, useMapEvents } from "react-leaflet";
+import L from "leaflet";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
