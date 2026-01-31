@@ -1834,10 +1834,8 @@ const TourPlayer = () => {
   const [showUnlock, setShowUnlock] = useState(false);
   const [unlockInput, setUnlockInput] = useState("");
   const [unlockError, setUnlockError] = useState("");
-  const [transitionEnabled, setTransitionEnabled] = useState(true);
   const [selectedMcOption, setSelectedMcOption] = useState(null);
   const [showHintPage, setShowHintPage] = useState(false);
-  const transitionNodeRef = useRef(null);
 
   useEffect(() => {
     const fetchTour = async () => {
