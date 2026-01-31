@@ -656,11 +656,17 @@ const TourEditor = () => {
 const ShareAssetsPanel = ({ tourId, tourStatus }) => {
   const [copied, setCopied] = useState(false);
   
-  // Use the actual deployed URL, not localhost
-  const baseUrl = process.env.REACT_APP_BACKEND_URL 
-    ? process.env.REACT_APP_BACKEND_URL.replace('/api', '').replace('api.', '')
-    : window.location.origin;
-  const playerUrl = `${baseUrl}/play/${tourId}`;
+  // Build the player URL using the production base
+  const getPlayerUrl = () => {
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
+    if (backendUrl) {
+      // Remove /api suffix if present, use the base domain
+      const baseUrl = backendUrl.replace(/\/api\/?$/, '');
+      return `${baseUrl}/play/${tourId}`;
+    }
+    return `${window.location.origin}/play/${tourId}`;
+  };
+  const playerUrl = getPlayerUrl();
 
   const copyLink = async () => {
     try {
