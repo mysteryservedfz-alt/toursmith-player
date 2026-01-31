@@ -1874,8 +1874,25 @@ const TourPlayer = () => {
     return page?.unlockMode ?? stop?.unlockMode ?? "continue";
   };
 
+  // Normalize unlock mode for backwards compatibility
+  const normalizeUnlockMode = (mode) => {
+    if (!mode) return "continue";
+    const modeMap = {
+      "continue": "continue",
+      "text": "text",
+      "multiple_choice": "multiple_choice",
+      "whiteboard": "whiteboard",
+      // Legacy modes mapping
+      "answer_required": "text",
+      "password": "text",
+      "none": "continue"
+    };
+    return modeMap[mode] || "continue";
+  };
+
   const getUnlockData = (page, stop) => {
-    const mode = getEffectiveUnlock(page, stop);
+    const rawMode = getEffectiveUnlock(page, stop);
+    const mode = normalizeUnlockMode(rawMode);
     if (mode === "continue") return null;
     
     // Use page data if page has override, otherwise use stop data
