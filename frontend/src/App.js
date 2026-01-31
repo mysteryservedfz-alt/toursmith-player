@@ -2309,6 +2309,8 @@ const TourPlayer = () => {
   const [unlockError, setUnlockError] = useState("");
   const [selectedMcOption, setSelectedMcOption] = useState(null);
   const [showHintPage, setShowHintPage] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [tourComplete, setTourComplete] = useState(false);
   
   // GPS state for welcome screen
   const [gpsStatus, setGpsStatus] = useState('idle'); // 'idle', 'checking', 'allowed', 'denied', 'error', 'too_far'
