@@ -1166,7 +1166,14 @@ const StopEditor = ({ stop, onUpdate, onDelete, onAddPage, onSelectPage, onDelet
         >
           <div className="form-group">
             <label className="form-label">Audio URL</label>
-            <input type="url" className="input" value={stop.audioUrl || ""} onChange={(e) => onUpdate({ audioUrl: e.target.value || null })} placeholder="https://example.com/audio.mp3" data-testid="stop-audio-url-input" />
+            <ClearableInput 
+              type="url" 
+              value={stop.audioUrl} 
+              onChange={(val) => onUpdate({ audioUrl: val })} 
+              onClear={() => onUpdate({ audioUrl: null })}
+              placeholder="https://example.com/audio.mp3" 
+              data-testid="stop-audio-url-input" 
+            />
           </div>
           {stop.audioUrl && (
             <div className="audio-preview">
