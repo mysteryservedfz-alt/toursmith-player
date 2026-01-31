@@ -1324,6 +1324,61 @@ const StopEditor = ({ stop, onUpdate, onDelete, onAddPage, onSelectPage, onDelet
             </>
           )}
         </AccordionSection>
+
+        {/* PAGES SECTION */}
+        <div className={`accordion-section pages-accordion ${openSections.pages ? 'open' : ''}`}>
+          <button type="button" className="accordion-trigger pages-trigger" onClick={() => toggleSection('pages')}>
+            <span className="accordion-icon"><Icons.FileText /></span>
+            <span className="accordion-title">Pages ({stop.pages?.length || 0})</span>
+            <span className="accordion-indicator">{openSections.pages ? '−' : '+'}</span>
+          </button>
+          {openSections.pages && (
+            <div className="accordion-content pages-content">
+              <DragDropContext onDragEnd={handlePageDragEnd}>
+                <Droppable droppableId="stop-pages">
+                  {(provided) => (
+                    <div className="pages-list-inline" {...provided.droppableProps} ref={provided.innerRef}>
+                      {(stop.pages || []).sort((a, b) => a.order - b.order).map((page, index) => (
+                        <Draggable key={page.id} draggableId={page.id} index={index}>
+                          {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              className={`page-item-inline ${snapshot.isDragging ? 'dragging' : ''}`}
+                              data-testid={`page-item-${page.id}`}
+                            >
+                              <span {...provided.dragHandleProps} className="drag-handle"><Icons.Grip /></span>
+                              <span className="page-info" onClick={() => onSelectPage(page.id)}>
+                                <span className="page-title-inline">{page.title || 'Untitled Page'}</span>
+                                <span className="page-badges">
+                                  {page.storyMode && <span className="badge badge-sm">Story</span>}
+                                  {page.unlockMode === 'text' && <Icons.Type />}
+                                  {page.unlockMode === 'multiple_choice' && <Icons.ListChecks />}
+                                  {page.unlockMode === 'whiteboard' && <Icons.Edit />}
+                                </span>
+                              </span>
+                              <button 
+                                type="button" 
+                                className="btn btn-ghost btn-sm page-delete-btn"
+                                onClick={(e) => { e.stopPropagation(); onDeletePage(page.id); }}
+                              >
+                                <Icons.Trash />
+                              </button>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+              <button type="button" onClick={onAddPage} className="btn btn-secondary add-page-btn" data-testid="add-page-btn">
+                <Icons.Plus /> Add Page
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       <DeleteConfirmModal 
