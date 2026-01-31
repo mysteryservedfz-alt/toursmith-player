@@ -474,7 +474,6 @@ const TourEditor = () => {
   };
 
   const deletePage = (stopId, pageId) => {
-    if (!window.confirm("Delete this page?")) return;
     const stop = tour.stops.find(s => s.id === stopId);
     const updatedPages = stop.pages.filter(p => p.id !== pageId).map((p, i) => ({ ...p, order: i }));
     updateStop(stopId, { pages: updatedPages });
@@ -489,15 +488,8 @@ const TourEditor = () => {
       const [reordered] = items.splice(result.source.index, 1);
       items.splice(result.destination.index, 0, reordered);
       const updated = items.map((s, i) => ({ ...s, order: i }));
-      setTour({ ...tour, stops: updated });
-      saveTour({ stops: updated });
-    } else if (type === "pages") {
-      const stop = tour.stops.find(s => s.id === activeStopId);
-      const items = Array.from(stop.pages);
-      const [reordered] = items.splice(result.source.index, 1);
-      items.splice(result.destination.index, 0, reordered);
-      const updated = items.map((p, i) => ({ ...p, order: i }));
-      updateStop(activeStopId, { pages: updated });
+      setTour(prev => ({ ...prev, stops: updated }));
+      setHasUnsavedChanges(true);
     }
   };
 
