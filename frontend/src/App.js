@@ -2602,7 +2602,7 @@ const TourPlayer = () => {
         )}
         
         {/* Image */}
-        {data.imageUrl && (
+        {data.imageUrl && data.imageUrl.trim() && (
           <div className="player-image">
             <img src={data.imageUrl} alt={data.imageAlt || ''} />
           </div>
