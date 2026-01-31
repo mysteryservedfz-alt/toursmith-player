@@ -54,6 +54,11 @@ class Page(BaseModel):
     subtitle: Optional[str] = None
     content: str = ""  # body
     body2: Optional[str] = None
+    # On-Site Task / Instructions
+    taskInstructions: Optional[str] = None
+    # Media fields
+    mediaType: Optional[str] = None  # "image", "video", "youtube"
+    mediaUrl: Optional[str] = None
     imageUrl: Optional[str] = None
     imageAlt: Optional[str] = None
     galleryUrls: Optional[List[str]] = None
@@ -62,8 +67,18 @@ class Page(BaseModel):
     audioUrl: Optional[str] = None
     ctaLabel: Optional[str] = None
     ctaUrl: Optional[str] = None
-    unlockMode: Optional[str] = None  # None = inherit from stop, "continue", "answer_required", "whiteboard"
+    # Verification settings
+    unlockMode: Optional[str] = None  # None = inherit, "continue", "text", "multiple_choice", "whiteboard"
     answer: Optional[str] = None
+    caseInsensitive: bool = True  # Case-insensitive answer matching
+    # Multiple choice options
+    mcOptions: Optional[List[str]] = None  # List of options for multiple choice
+    mcCorrectIndex: Optional[int] = None  # Index of correct answer (0-based)
+    # Hint settings
+    hintText: Optional[str] = None
+    autoShowHint: bool = False
+    # Story mode (bypass verification)
+    storyMode: bool = False
     order: int = 0
 
 class Stop(BaseModel):
@@ -72,6 +87,11 @@ class Stop(BaseModel):
     subtitle: Optional[str] = None
     description: str = ""  # intro
     intro2: Optional[str] = None
+    # On-Site Task / Instructions
+    taskInstructions: Optional[str] = None
+    # Media fields
+    mediaType: Optional[str] = None  # "image", "video", "youtube"
+    mediaUrl: Optional[str] = None
     imageUrl: Optional[str] = None
     imageAlt: Optional[str] = None
     galleryUrls: Optional[List[str]] = None
@@ -80,8 +100,18 @@ class Stop(BaseModel):
     audioUrl: Optional[str] = None
     ctaLabel: Optional[str] = None
     ctaUrl: Optional[str] = None
-    unlockMode: str = "continue"  # "continue", "answer_required", "whiteboard"
+    # Verification settings
+    unlockMode: str = "continue"  # "continue", "text", "multiple_choice", "whiteboard"
     answer: Optional[str] = None
+    caseInsensitive: bool = True  # Case-insensitive answer matching
+    # Multiple choice options
+    mcOptions: Optional[List[str]] = None  # List of options for multiple choice
+    mcCorrectIndex: Optional[int] = None  # Index of correct answer (0-based)
+    # Hint settings
+    hintText: Optional[str] = None
+    autoShowHint: bool = False
+    # Story mode (bypass verification)
+    storyMode: bool = False
     pages: List[Page] = []
     order: int = 0
 
