@@ -811,6 +811,7 @@ const TourEditor = () => {
               stop={activeStop} 
               onUpdate={(u) => updateStop(activeStopId, u)} 
               onDelete={() => deleteStop(activeStopId)}
+              onDuplicate={() => duplicateStop(activeStopId)}
               onAddPage={() => addPage(activeStopId)}
               onSelectPage={(pageId) => setActivePageId(pageId)}
               onDeletePage={(pageId) => deletePage(activeStopId, pageId)}
