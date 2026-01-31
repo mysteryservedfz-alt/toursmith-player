@@ -686,8 +686,6 @@ const ShareAssetsPanel = ({ tourId, tourStatus }) => {
       setTimeout(() => setCopied(false), 2000);
     }
   };
-    }
-  };
 
   const openPreview = () => {
     window.open(playerUrl, '_blank');
