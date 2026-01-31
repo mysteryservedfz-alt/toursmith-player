@@ -418,29 +418,39 @@ const ToursList = () => {
           </div>
         ) : (
           <div className="tours-list">
-            {tours.map((tour) => (
-              <div 
-                key={tour.id} 
-                className="tour-list-item" 
-                data-testid={`tour-card-${tour.id}`}
-              >
-                <span className={`list-status-dot status-${tour.status}`} />
-                <span className="list-title">{tour.title || "Untitled"}</span>
-                <span className="list-meta">{tour.stops?.length || 0} stops</span>
-                <span className={`list-badge badge-${tour.status}`}>{tour.status}</span>
-                <div className="list-actions">
-                  <button onClick={() => navigate(`/admin/tour/${tour.id}`)} className="btn btn-secondary btn-sm">
-                    Edit
-                  </button>
-                  <button onClick={() => duplicateTour(tour.id)} className="btn-icon" title="Duplicate">
-                    <Icons.Copy />
-                  </button>
-                  <button onClick={() => deleteTour(tour.id)} className="btn-icon danger" title="Delete">
-                    <Icons.Trash />
-                  </button>
+            {tours.map((tour) => {
+              const totalPages = tour.stops?.reduce((sum, s) => sum + (s.pages?.length || 0), 0) || 0;
+              const hasAudio = tour.stops?.some(s => s.audioUrl || s.pages?.some(p => p.audioUrl));
+              const hasQuiz = tour.stops?.some(s => s.unlockMode === 'multiple_choice' || s.pages?.some(p => p.unlockMode === 'multiple_choice'));
+              return (
+                <div 
+                  key={tour.id} 
+                  className="tour-list-item" 
+                  data-testid={`tour-card-${tour.id}`}
+                >
+                  <span className={`list-status-dot status-${tour.status}`} />
+                  <span className="list-title">{tour.title || "Untitled"}</span>
+                  <span className="list-meta">{tour.stops?.length || 0} stops • {totalPages} pages</span>
+                  <div className="list-features">
+                    {tour.welcomeTitle && <span className="feature-tag">Welcome</span>}
+                    {hasQuiz && <span className="feature-tag">Quiz</span>}
+                    {hasAudio && <span className="feature-tag">Audio</span>}
+                  </div>
+                  <span className={`list-badge badge-${tour.status}`}>{tour.status}</span>
+                  <div className="list-actions">
+                    <button onClick={() => navigate(`/admin/tour/${tour.id}`)} className="btn btn-secondary btn-sm">
+                      Edit
+                    </button>
+                    <button onClick={() => duplicateTour(tour.id)} className="btn-icon" title="Duplicate">
+                      <Icons.Copy />
+                    </button>
+                    <button onClick={() => deleteTour(tour.id)} className="btn-icon danger" title="Delete">
+                      <Icons.Trash />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </main>
