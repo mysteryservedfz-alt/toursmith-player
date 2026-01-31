@@ -569,7 +569,7 @@ const TourEditor = () => {
       title: `Page ${(stop.pages?.length || 0) + 1}`,
       content: "",
       unlockMode: null,
-      audioUrl: "",
+      audioUrl: null,
       order: stop.pages?.length || 0
     };
     const updatedPages = [...(stop.pages || []), newPage];
