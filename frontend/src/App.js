@@ -2133,10 +2133,6 @@ const TourPlayer = () => {
             </audio>
           </div>
         )}
-              Your browser does not support audio.
-            </audio>
-          </div>
-        )}
         
         {/* Image */}
         {data.imageUrl && (
