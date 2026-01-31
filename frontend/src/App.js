@@ -2617,6 +2617,9 @@ const TourPlayer = () => {
 
   // Welcome Screen
   if (showWelcome && hasWelcomeScreen) {
+    const gpsRequired = tour.welcomeGpsEnabled && tour.welcomeGpsLat && tour.welcomeGpsLng;
+    const canStart = !gpsRequired || gpsStatus === 'allowed';
+    
     return (
       <div className="player-layout welcome-layout" data-testid="player-welcome">
         <div className="welcome-screen">
@@ -2637,22 +2640,89 @@ const TourPlayer = () => {
                 </audio>
               </div>
             )}
-            {/* GPS Location Info (display only, no blocking) */}
-            {tour.welcomeGpsEnabled && tour.welcomeGpsLat && tour.welcomeGpsLng && (
-              <div className="welcome-gps-info" data-testid="welcome-gps-info">
-                <div className="gps-icon">📍</div>
-                <div className="gps-details">
-                  <p className="gps-label">Tour Start Location</p>
-                  <p className="gps-coords">{tour.welcomeGpsLat.toFixed(4)}, {tour.welcomeGpsLng.toFixed(4)}</p>
-                  {tour.welcomeGpsRadiusMeters && (
-                    <p className="gps-radius">Within {tour.welcomeGpsRadiusMeters}m</p>
-                  )}
-                </div>
+            
+            {/* GPS Location Check Section */}
+            {gpsRequired && (
+              <div className="gps-check-section" data-testid="gps-check-section">
+                {gpsStatus === 'idle' && (
+                  <div className="gps-prompt">
+                    <div className="gps-icon-large">📍</div>
+                    <p className="gps-message">This tour requires you to be at the starting location</p>
+                    <p className="gps-sublabel">Within {tour.welcomeGpsRadiusMeters || 100}m of the start point</p>
+                    <button 
+                      onClick={checkGpsLocation} 
+                      className="btn btn-secondary gps-check-btn"
+                      data-testid="check-location-btn"
+                    >
+                      <Icons.Navigation /> Check My Location
+                    </button>
+                  </div>
+                )}
+                
+                {gpsStatus === 'checking' && (
+                  <div className="gps-checking">
+                    <div className="gps-spinner"></div>
+                    <p className="gps-message">Getting your location...</p>
+                  </div>
+                )}
+                
+                {gpsStatus === 'allowed' && (
+                  <div className="gps-success">
+                    <div className="gps-icon-large success">✓</div>
+                    <p className="gps-message">You're at the right location!</p>
+                    {gpsDistance !== null && (
+                      <p className="gps-distance">You're {gpsDistance}m from the start point</p>
+                    )}
+                  </div>
+                )}
+                
+                {gpsStatus === 'too_far' && (
+                  <div className="gps-too-far">
+                    <div className="gps-icon-large warning">⚠️</div>
+                    <p className="gps-message">You're too far from the starting location</p>
+                    {gpsDistance !== null && (
+                      <p className="gps-distance">
+                        You're {gpsDistance}m away (need to be within {tour.welcomeGpsRadiusMeters || 100}m)
+                      </p>
+                    )}
+                    <button 
+                      onClick={checkGpsLocation} 
+                      className="btn btn-secondary gps-retry-btn"
+                      data-testid="retry-location-btn"
+                    >
+                      <Icons.Navigation /> Check Again
+                    </button>
+                  </div>
+                )}
+                
+                {(gpsStatus === 'denied' || gpsStatus === 'error') && (
+                  <div className="gps-error">
+                    <div className="gps-icon-large error">⚠️</div>
+                    <p className="gps-message">{gpsError}</p>
+                    <button 
+                      onClick={checkGpsLocation} 
+                      className="btn btn-secondary gps-retry-btn"
+                      data-testid="retry-location-btn"
+                    >
+                      Try Again
+                    </button>
+                  </div>
+                )}
               </div>
             )}
-            <button onClick={startTour} className="btn btn-primary btn-lg welcome-start-btn" data-testid="start-tour-btn">
+            
+            <button 
+              onClick={startTour} 
+              className={`btn btn-primary btn-lg welcome-start-btn ${!canStart ? 'disabled' : ''}`}
+              disabled={!canStart}
+              data-testid="start-tour-btn"
+            >
               {tour.welcomeButtonLabel || 'Start Tour'}
             </button>
+            
+            {!canStart && gpsStatus !== 'idle' && gpsStatus !== 'checking' && (
+              <p className="gps-hint">Complete the location check above to start</p>
+            )}
           </div>
         </div>
       </div>
