@@ -1311,6 +1311,7 @@ const StopEditor = ({ stop, onUpdate, onDelete, onAddPage, onSelectPage, onDelet
           isOpen={openSections.task}
           onToggle={() => toggleSection('task')}
           hasContent={hasTask}
+          onClear={() => onUpdate({ taskInstructions: null })}
         >
           <div className="form-group">
             <label className="form-label">Task Instructions</label>
