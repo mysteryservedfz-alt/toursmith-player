@@ -50,6 +50,7 @@ Build a tour generator application for creating interactive, location-based expe
 - ✅ Audio URL with preview player
 - ✅ CTA Button (label + URL)
 - ✅ Drag-and-drop reordering
+- ✅ **Accordion Clear Buttons** - Trash icon to clear section content when it has data
 
 ### Verification System (Jan 31, 2026)
 - ✅ Story Mode toggle (bypass verification)
