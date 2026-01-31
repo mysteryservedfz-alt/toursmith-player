@@ -395,11 +395,15 @@ const TourEditor = () => {
     fetchTour();
   }, [tourId]);
 
-  const saveTour = async (updates) => {
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+
+  // Manual save - only called when clicking Save Draft
+  const saveTour = async (dataToSave) => {
     setSaving(true);
     try {
-      const res = await api.put(`/tours/${tourId}`, updates);
+      const res = await api.put(`/tours/${tourId}`, dataToSave || tour);
       setTour(res.data);
+      setHasUnsavedChanges(false);
     } catch (err) {
       console.error(err);
     } finally {
@@ -407,10 +411,10 @@ const TourEditor = () => {
     }
   };
 
+  // Update local state only - no auto-save
   const updateField = (field, value) => {
-    const updated = { ...tour, [field]: value };
-    setTour(updated);
-    saveTour({ [field]: value });
+    setTour(prev => ({ ...prev, [field]: value }));
+    setHasUnsavedChanges(true);
   };
 
   const addStop = () => {
@@ -422,26 +426,28 @@ const TourEditor = () => {
       pages: [],
       order: tour.stops?.length || 0
     };
-    const updated = [...(tour.stops || []), newStop];
-    setTour({ ...tour, stops: updated });
-    saveTour({ stops: updated });
+    setTour(prev => ({ ...prev, stops: [...(prev.stops || []), newStop] }));
+    setHasUnsavedChanges(true);
     setActiveStopId(newStop.id);
     setActivePageId(null);
   };
 
   const updateStop = (stopId, updates) => {
-    const updated = tour.stops.map(s => s.id === stopId ? { ...s, ...updates } : s);
-    setTour({ ...tour, stops: updated });
-    saveTour({ stops: updated });
+    setTour(prev => ({
+      ...prev,
+      stops: prev.stops.map(s => s.id === stopId ? { ...s, ...updates } : s)
+    }));
+    setHasUnsavedChanges(true);
   };
 
   const deleteStop = (stopId) => {
-    if (!window.confirm("Delete this stop and all its pages?")) return;
-    const updated = tour.stops.filter(s => s.id !== stopId).map((s, i) => ({ ...s, order: i }));
-    setTour({ ...tour, stops: updated });
-    saveTour({ stops: updated });
+    setTour(prev => ({
+      ...prev,
+      stops: prev.stops.filter(s => s.id !== stopId).map((s, i) => ({ ...s, order: i }))
+    }));
+    setHasUnsavedChanges(true);
     if (activeStopId === stopId) {
-      setActiveStopId(updated[0]?.id || null);
+      setActiveStopId(tour.stops.filter(s => s.id !== stopId)[0]?.id || null);
       setActivePageId(null);
     }
   };
