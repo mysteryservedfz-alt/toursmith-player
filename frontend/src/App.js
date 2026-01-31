@@ -372,26 +372,49 @@ const ToursList = () => {
           </div>
         ) : viewMode === 'grid' ? (
           <div className="tours-grid-compact">
-            {tours.map((tour) => (
-              <div 
-                key={tour.id} 
-                className="tour-card-compact" 
-                data-testid={`tour-card-${tour.id}`}
-                onClick={() => navigate(`/admin/tour/${tour.id}`)}
-              >
-                <span className={`card-status-bar status-${tour.status}`} />
-                <h3 className="card-title">{tour.title || "Untitled"}</h3>
-                <p className="card-meta">{tour.stops?.length || 0} stops</p>
-                <div className="card-actions" onClick={(e) => e.stopPropagation()}>
-                  <button onClick={() => duplicateTour(tour.id)} className="btn-icon" title="Duplicate">
-                    <Icons.Copy />
-                  </button>
-                  <button onClick={() => deleteTour(tour.id)} className="btn-icon danger" title="Delete">
-                    <Icons.Trash />
-                  </button>
+            {tours.map((tour) => {
+              const totalPages = tour.stops?.reduce((sum, s) => sum + (s.pages?.length || 0), 0) || 0;
+              return (
+                <div 
+                  key={tour.id} 
+                  className="tour-card-compact" 
+                  data-testid={`tour-card-${tour.id}`}
+                  onClick={() => navigate(`/admin/tour/${tour.id}`)}
+                >
+                  <div className="card-header-row">
+                    <span className={`badge badge-${tour.status}`}>{tour.status}</span>
+                    <div className="card-actions" onClick={(e) => e.stopPropagation()}>
+                      <button onClick={() => duplicateTour(tour.id)} className="btn-icon" title="Duplicate">
+                        <Icons.Copy />
+                      </button>
+                      <button onClick={() => deleteTour(tour.id)} className="btn-icon danger" title="Delete">
+                        <Icons.Trash />
+                      </button>
+                    </div>
+                  </div>
+                  <h3 className="card-title">{tour.title || "Untitled"}</h3>
+                  {tour.description && (
+                    <p className="card-desc">{tour.description}</p>
+                  )}
+                  <div className="card-stats">
+                    <span className="stat">📍 {tour.stops?.length || 0} stops</span>
+                    <span className="stat">📄 {totalPages} pages</span>
+                  </div>
+                  <div className="card-features">
+                    {tour.welcomeTitle && <span className="feature-tag">Welcome</span>}
+                    {tour.stops?.some(s => s.unlockMode === 'multiple_choice' || s.pages?.some(p => p.unlockMode === 'multiple_choice')) && (
+                      <span className="feature-tag">Quiz</span>
+                    )}
+                    {tour.stops?.some(s => s.audioUrl || s.pages?.some(p => p.audioUrl)) && (
+                      <span className="feature-tag">Audio</span>
+                    )}
+                    {tour.stops?.some(s => s.mediaUrl || s.pages?.some(p => p.mediaUrl)) && (
+                      <span className="feature-tag">Media</span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <div className="tours-list">
