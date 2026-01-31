@@ -1408,6 +1408,7 @@ const StopEditor = ({ stop, onUpdate, onDelete, onAddPage, onSelectPage, onDelet
           isOpen={openSections.embed}
           onToggle={() => toggleSection('embed')}
           hasContent={hasEmbed}
+          onClear={() => onUpdate({ embedUrl: null, embedCaption: null })}
         >
           <div className="form-group">
             <label className="form-label">Embed URL</label>
