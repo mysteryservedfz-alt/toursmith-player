@@ -2242,25 +2242,81 @@ const TourPlayer = () => {
               <div className="card-body">
                 <Icons.Lock />
                 <h2>This content is locked</h2>
-                {unlockData.mode === "answer_required" && (
-                  <p className="unlock-prompt">Enter the answer to continue</p>
+                
+                {/* Text verification */}
+                {unlockData.mode === "text" && (
+                  <>
+                    <p className="unlock-prompt">Enter the password/code to continue</p>
+                    <input
+                      type="text"
+                      className={`input ${unlockError ? "input-error" : ""}`}
+                      value={unlockInput}
+                      onChange={(e) => { setUnlockInput(e.target.value); setUnlockError(""); }}
+                      placeholder="Your answer"
+                      onKeyDown={(e) => e.key === "Enter" && handleUnlock()}
+                      data-testid="unlock-input"
+                    />
+                    {unlockData.caseInsensitive && (
+                      <p className="text-small case-note">Case doesn't matter</p>
+                    )}
+                  </>
                 )}
+                
+                {/* Multiple choice verification */}
+                {unlockData.mode === "multiple_choice" && unlockData.mcOptions && (
+                  <>
+                    <p className="unlock-prompt">Select the correct answer</p>
+                    <div className="mc-options-player">
+                      {unlockData.mcOptions.map((option, index) => (
+                        <button
+                          key={index}
+                          type="button"
+                          className={`mc-option-btn ${selectedMcOption === index ? 'selected' : ''}`}
+                          onClick={() => { setSelectedMcOption(index); setUnlockError(""); }}
+                          data-testid={`mc-option-${index}`}
+                        >
+                          <span className="mc-option-letter">{String.fromCharCode(65 + index)}</span>
+                          <span className="mc-option-text">{option}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
+                
+                {/* Whiteboard verification */}
                 {unlockData.mode === "whiteboard" && (
-                  <p className="unlock-prompt">Write anything to continue</p>
+                  <>
+                    <p className="unlock-prompt">Write anything to continue</p>
+                    <input
+                      type="text"
+                      className={`input ${unlockError ? "input-error" : ""}`}
+                      value={unlockInput}
+                      onChange={(e) => { setUnlockInput(e.target.value); setUnlockError(""); }}
+                      placeholder="Type anything..."
+                      onKeyDown={(e) => e.key === "Enter" && handleUnlock()}
+                      data-testid="unlock-input"
+                    />
+                  </>
                 )}
-                <input
-                  type="text"
-                  className={`input ${unlockError ? "input-error" : ""}`}
-                  value={unlockInput}
-                  onChange={(e) => { setUnlockInput(e.target.value); setUnlockError(""); }}
-                  placeholder={unlockData.mode === "whiteboard" ? "Type anything..." : "Your answer"}
-                  onKeyDown={(e) => e.key === "Enter" && handleUnlock()}
-                  data-testid="unlock-input"
-                />
+                
                 {unlockError && <p className="error-message">{unlockError}</p>}
-                <button onClick={handleUnlock} className="btn btn-primary" data-testid="unlock-submit">
-                  Continue
-                </button>
+                
+                <div className="unlock-actions">
+                  <button onClick={handleUnlock} className="btn btn-primary" data-testid="unlock-submit">
+                    Continue
+                  </button>
+                  
+                  {/* Hint button */}
+                  {unlockData.hintText && !unlockData.autoShowHint && (
+                    <button 
+                      onClick={() => setShowHintPage(true)} 
+                      className="btn btn-hint"
+                      data-testid="show-hint-btn"
+                    >
+                      💡 Need a hint?
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
