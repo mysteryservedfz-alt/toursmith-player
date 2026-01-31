@@ -2171,6 +2171,81 @@ const TourPlayer = () => {
   const [unlockError, setUnlockError] = useState("");
   const [selectedMcOption, setSelectedMcOption] = useState(null);
   const [showHintPage, setShowHintPage] = useState(false);
+  
+  // GPS state for welcome screen
+  const [gpsStatus, setGpsStatus] = useState('idle'); // 'idle', 'checking', 'allowed', 'denied', 'error', 'too_far'
+  const [userLocation, setUserLocation] = useState(null);
+  const [gpsDistance, setGpsDistance] = useState(null);
+  const [gpsError, setGpsError] = useState(null);
+
+  // Calculate distance between two GPS points (Haversine formula)
+  const calculateDistance = (lat1, lng1, lat2, lng2) => {
+    const R = 6371000; // Earth radius in meters
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLng/2) * Math.sin(dLng/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  };
+
+  // Check GPS location
+  const checkGpsLocation = useCallback(() => {
+    if (!tour?.welcomeGpsEnabled || !tour?.welcomeGpsLat || !tour?.welcomeGpsLng) {
+      setGpsStatus('allowed');
+      return;
+    }
+
+    if (!navigator.geolocation) {
+      setGpsError("Your browser doesn't support location services");
+      setGpsStatus('error');
+      return;
+    }
+
+    setGpsStatus('checking');
+    setGpsError(null);
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setUserLocation({ lat: latitude, lng: longitude });
+        
+        const distance = calculateDistance(
+          latitude, longitude,
+          tour.welcomeGpsLat, tour.welcomeGpsLng
+        );
+        setGpsDistance(Math.round(distance));
+        
+        const radius = tour.welcomeGpsRadiusMeters || 100;
+        if (distance <= radius) {
+          setGpsStatus('allowed');
+        } else {
+          setGpsStatus('too_far');
+        }
+      },
+      (error) => {
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            setGpsError("Location access denied. Please enable location permissions in your browser settings.");
+            setGpsStatus('denied');
+            break;
+          case error.POSITION_UNAVAILABLE:
+            setGpsError("Location unavailable. Please check your GPS/location services.");
+            setGpsStatus('error');
+            break;
+          case error.TIMEOUT:
+            setGpsError("Location request timed out. Please try again.");
+            setGpsStatus('error');
+            break;
+          default:
+            setGpsError("Unable to get your location.");
+            setGpsStatus('error');
+        }
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+    );
+  }, [tour]);
 
   useEffect(() => {
     const fetchTour = async () => {
