@@ -1316,10 +1316,36 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete }) =>
   const getDisplayUnlockMode = (mode) => {
     switch(mode) {
       case "continue": return "Continue";
-      case "answer_required": return "Answer Required";
+      case "text": return "Text";
+      case "multiple_choice": return "Multiple Choice";
       case "whiteboard": return "Whiteboard";
       default: return mode;
     }
+  };
+
+  // Add/remove multiple choice option
+  const addMcOption = () => {
+    const currentOptions = page.mcOptions || [];
+    onUpdate({ mcOptions: [...currentOptions, ''] });
+  };
+
+  const updateMcOption = (index, value) => {
+    const newOptions = [...(page.mcOptions || [])];
+    newOptions[index] = value;
+    onUpdate({ mcOptions: newOptions });
+  };
+
+  const removeMcOption = (index) => {
+    const newOptions = (page.mcOptions || []).filter((_, i) => i !== index);
+    let newCorrectIndex = page.mcCorrectIndex;
+    if (newCorrectIndex !== null && newCorrectIndex !== undefined) {
+      if (index === newCorrectIndex) {
+        newCorrectIndex = null;
+      } else if (index < newCorrectIndex) {
+        newCorrectIndex = newCorrectIndex - 1;
+      }
+    }
+    onUpdate({ mcOptions: newOptions.length > 0 ? newOptions : null, mcCorrectIndex: newCorrectIndex });
   };
 
   const hasImage = !!(page.imageUrl || (page.galleryUrls && page.galleryUrls.length > 0));
@@ -1327,6 +1353,9 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete }) =>
   const hasAudio = !!page.audioUrl;
   const hasBroadcast = !!(page.ctaLabel || page.ctaUrl);
   const hasUnlock = page.unlockMode && page.unlockMode !== 'continue' && page.unlockMode !== '';
+  const hasTask = !!page.taskInstructions;
+  const hasHint = !!page.hintText;
+  const hasMedia = !!page.mediaUrl;
 
   return (
     <div className="content-editor" data-testid="page-editor">
@@ -1373,17 +1402,85 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete }) =>
           <input type="text" className="input" value={page.subtitle || ""} onChange={(e) => onUpdate({ subtitle: e.target.value || null })} placeholder="Optional subtitle" data-testid="page-subtitle-input" />
         </div>
         <div className="form-group">
-          <label className="form-label">Body</label>
-          <textarea className="input body-textarea" value={page.content || ""} onChange={(e) => onUpdate({ content: e.target.value })} placeholder="Main body text" data-testid="page-content-input" />
+          <label className="form-label">Story Text</label>
+          <textarea className="input body-textarea" value={page.content || ""} onChange={(e) => onUpdate({ content: e.target.value })} placeholder="The narrative shown to players..." data-testid="page-content-input" />
         </div>
         <div className="form-group">
-          <label className="form-label">Body 2</label>
+          <label className="form-label">Story Text 2</label>
           <textarea className="input" value={page.body2 || ""} onChange={(e) => onUpdate({ body2: e.target.value || null })} placeholder="Optional secondary text" data-testid="page-body2-input" />
         </div>
       </div>
 
       {/* ACCORDION SECTIONS */}
       <div className="accordion-container">
+        {/* On-Site Task / Instructions */}
+        <AccordionSection
+          title="On-Site Task / Instructions"
+          icon={<Icons.FileText />}
+          isOpen={openSections.task}
+          onToggle={() => toggleSection('task')}
+          hasContent={hasTask}
+        >
+          <div className="form-group">
+            <label className="form-label">Task Instructions</label>
+            <textarea 
+              className="input body-textarea" 
+              value={page.taskInstructions || ""} 
+              onChange={(e) => onUpdate({ taskInstructions: e.target.value || null })} 
+              placeholder="e.g. 'Ask the server for the Blue Envelope'..." 
+              data-testid="page-task-input" 
+            />
+            <p className="text-small">Instructions for physical tasks at this location</p>
+          </div>
+        </AccordionSection>
+
+        {/* Media Type */}
+        <AccordionSection
+          title="Media"
+          icon={<Icons.Video />}
+          isOpen={openSections.media}
+          onToggle={() => toggleSection('media')}
+          hasContent={hasMedia}
+        >
+          <div className="form-group">
+            <label className="form-label">Media Type</label>
+            <div className="media-type-buttons">
+              <button 
+                type="button"
+                className={`media-type-btn ${page.mediaType === 'image' ? 'active' : ''}`}
+                onClick={() => onUpdate({ mediaType: 'image' })}
+              >
+                IMAGE
+              </button>
+              <button 
+                type="button"
+                className={`media-type-btn ${page.mediaType === 'video' ? 'active' : ''}`}
+                onClick={() => onUpdate({ mediaType: 'video' })}
+              >
+                VIDEO
+              </button>
+              <button 
+                type="button"
+                className={`media-type-btn ${page.mediaType === 'youtube' ? 'active' : ''}`}
+                onClick={() => onUpdate({ mediaType: 'youtube' })}
+              >
+                YOUTUBE
+              </button>
+            </div>
+          </div>
+          <div className="form-group">
+            <label className="form-label">Media URL</label>
+            <input 
+              type="url" 
+              className="input" 
+              value={page.mediaUrl || ""} 
+              onChange={(e) => onUpdate({ mediaUrl: e.target.value || null })} 
+              placeholder="https://..." 
+              data-testid="page-media-url-input" 
+            />
+          </div>
+        </AccordionSection>
+
         <AccordionSection
           title="Add Image / Gallery"
           icon={<Icons.Image />}
@@ -1392,8 +1489,8 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete }) =>
           hasContent={hasImage}
         >
           <div className="form-group">
-            <label className="form-label">Image URL</label>
-            <input type="url" className="input" value={page.imageUrl || ""} onChange={(e) => onUpdate({ imageUrl: e.target.value || null })} placeholder="https://example.com/image.jpg" data-testid="page-image-url-input" />
+            <label className="form-label">Background Image (Optional)</label>
+            <input type="url" className="input" value={page.imageUrl || ""} onChange={(e) => onUpdate({ imageUrl: e.target.value || null })} placeholder="Custom background URL for this stop..." data-testid="page-image-url-input" />
           </div>
           <div className="form-group">
             <label className="form-label">Image Alt Text</label>
@@ -1458,37 +1555,184 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete }) =>
           </div>
         </AccordionSection>
 
+        {/* Hint Section */}
         <AccordionSection
-          title="Unlock / Password"
+          title="Hint"
+          icon={<Icons.HelpCircle />}
+          isOpen={openSections.hint}
+          onToggle={() => toggleSection('hint')}
+          hasContent={hasHint}
+        >
+          <div className="form-group">
+            <label className="form-label">Hint Text</label>
+            <textarea 
+              className="input body-textarea" 
+              value={page.hintText || ""} 
+              onChange={(e) => onUpdate({ hintText: e.target.value || null })} 
+              placeholder="A helpful hint for players who get stuck..." 
+              data-testid="page-hint-input" 
+            />
+          </div>
+          <div className="form-group">
+            <label className="toggle-label">
+              <input 
+                type="checkbox" 
+                checked={page.autoShowHint || false} 
+                onChange={(e) => onUpdate({ autoShowHint: e.target.checked })} 
+                data-testid="page-auto-hint-toggle"
+              />
+              <span className="toggle-switch"></span>
+              <span>Auto-Show Hints</span>
+            </label>
+            <p className="text-small">Automatically show hint when player arrives</p>
+          </div>
+        </AccordionSection>
+
+        {/* Verification Section */}
+        <AccordionSection
+          title="Verification"
           icon={<Icons.Lock />}
           isOpen={openSections.unlock}
           onToggle={() => toggleSection('unlock')}
           hasContent={hasUnlock}
         >
           <p className="text-small helper-text">Overrides the stop setting for this page only</p>
+          
+          {/* Story Mode Toggle */}
           <div className="form-group">
-            <label className="form-label">Unlock Mode</label>
-            <select className="input" value={page.unlockMode || ""} onChange={(e) => onUpdate({ unlockMode: e.target.value || null })} data-testid="page-unlock-mode">
-              <option value="">Inherit from stop ({getDisplayUnlockMode(stopUnlockMode)})</option>
-              <option value="continue">Continue (no lock)</option>
-              <option value="answer_required">Answer Required</option>
-              <option value="whiteboard">Whiteboard</option>
-            </select>
+            <label className="toggle-label">
+              <input 
+                type="checkbox" 
+                checked={page.storyMode || false} 
+                onChange={(e) => onUpdate({ storyMode: e.target.checked })} 
+                data-testid="page-story-mode-toggle"
+              />
+              <span className="toggle-switch"></span>
+              <span>Story Mode (No Verification)</span>
+            </label>
+            <p className="text-small">Skip verification - players just read and continue</p>
           </div>
-          {page.unlockMode === "answer_required" && (
-            <div className="form-group">
-              <label className="form-label">Answer</label>
-              <input type="text" className="input" value={page.answer || ""} onChange={(e) => onUpdate({ answer: e.target.value })} placeholder="Required answer" data-testid="page-answer-input" />
-            </div>
+
+          {!page.storyMode && (
+            <>
+              <div className="form-group">
+                <label className="form-label">Verification Type</label>
+                <div className="verification-type-buttons">
+                  <button 
+                    type="button"
+                    className={`verification-type-btn ${!page.unlockMode || page.unlockMode === '' ? 'active' : ''}`}
+                    onClick={() => onUpdate({ unlockMode: null })}
+                  >
+                    INHERIT
+                  </button>
+                  <button 
+                    type="button"
+                    className={`verification-type-btn ${page.unlockMode === 'text' ? 'active' : ''}`}
+                    onClick={() => onUpdate({ unlockMode: 'text' })}
+                  >
+                    TEXT
+                  </button>
+                  <button 
+                    type="button"
+                    className={`verification-type-btn ${page.unlockMode === 'multiple_choice' ? 'active' : ''}`}
+                    onClick={() => onUpdate({ unlockMode: 'multiple_choice' })}
+                  >
+                    MULTIPLE CHOICE
+                  </button>
+                  <button 
+                    type="button"
+                    className={`verification-type-btn ${page.unlockMode === 'whiteboard' ? 'active' : ''}`}
+                    onClick={() => onUpdate({ unlockMode: 'whiteboard' })}
+                  >
+                    WHITEBOARD
+                  </button>
+                </div>
+                {(!page.unlockMode || page.unlockMode === '') && (
+                  <p className="text-small">Inheriting from stop: {getDisplayUnlockMode(stopUnlockMode)}</p>
+                )}
+              </div>
+
+              {/* Text verification options */}
+              {page.unlockMode === 'text' && (
+                <>
+                  <div className="form-group">
+                    <label className="form-label">Password / Code</label>
+                    <input 
+                      type="text" 
+                      className="input" 
+                      value={page.answer || ""} 
+                      onChange={(e) => onUpdate({ answer: e.target.value })} 
+                      placeholder="Required answer" 
+                      data-testid="page-answer-input" 
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="toggle-label">
+                      <input 
+                        type="checkbox" 
+                        checked={page.caseInsensitive !== false} 
+                        onChange={(e) => onUpdate({ caseInsensitive: e.target.checked })} 
+                        data-testid="page-case-insensitive-toggle"
+                      />
+                      <span className="toggle-switch"></span>
+                      <span>Case-Insensitive</span>
+                    </label>
+                    <p className="text-small">"PARIS" matches "paris", "Paris", etc.</p>
+                  </div>
+                </>
+              )}
+
+              {/* Multiple choice options */}
+              {page.unlockMode === 'multiple_choice' && (
+                <div className="form-group">
+                  <label className="form-label">Options</label>
+                  <div className="mc-options-editor">
+                    {(page.mcOptions || []).map((option, index) => (
+                      <div key={index} className="mc-option-row">
+                        <label className="mc-correct-radio">
+                          <input 
+                            type="radio" 
+                            name="page-mc-correct" 
+                            checked={page.mcCorrectIndex === index}
+                            onChange={() => onUpdate({ mcCorrectIndex: index })}
+                          />
+                          <span className="radio-indicator"></span>
+                        </label>
+                        <input
+                          type="text"
+                          className="input"
+                          value={option}
+                          onChange={(e) => updateMcOption(index, e.target.value)}
+                          placeholder={`Option ${index + 1}`}
+                        />
+                        <button type="button" onClick={() => removeMcOption(index)} className="btn btn-ghost btn-sm">
+                          <Icons.Trash />
+                        </button>
+                      </div>
+                    ))}
+                    <button type="button" onClick={addMcOption} className="btn btn-secondary btn-sm">
+                      <Icons.Plus /> Add Option
+                    </button>
+                  </div>
+                  <p className="text-small">Select the radio button next to the correct answer</p>
+                </div>
+              )}
+
+              {/* Whiteboard info */}
+              {page.unlockMode === 'whiteboard' && (
+                <p className="text-small helper-text">Players can type anything to proceed - no correct answer required</p>
+              )}
+            </>
           )}
         </AccordionSection>
       </div>
 
-      <div className="editor-actions">
-        <button onClick={onDelete} className="btn btn-danger" data-testid="delete-page-btn">
-          <Icons.Trash /> Delete Page
-        </button>
-      </div>
+      <DeleteConfirmModal 
+        isOpen={showDeleteModal} 
+        onClose={() => setShowDeleteModal(false)} 
+        onConfirm={confirmDelete}
+        itemType="Page"
+      />
     </div>
   );
 };
