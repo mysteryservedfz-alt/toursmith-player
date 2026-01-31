@@ -1964,6 +1964,7 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onBa
           isOpen={openSections.audio}
           onToggle={() => toggleSection('audio')}
           hasContent={hasAudio}
+          onClear={() => onUpdate({ audioUrl: null })}
         >
           <div className="form-group">
             <label className="form-label">Audio URL</label>
