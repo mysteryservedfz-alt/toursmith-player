@@ -637,7 +637,8 @@ const TourEditor = () => {
             disabled={saving}
             data-testid="save-draft-btn"
           >
-            {saving ? 'Saving...' : 'Save Draft'}
+            <Icons.Save />
+            {saving ? 'Saving...' : hasUnsavedChanges ? 'Save Changes' : 'Saved'}
           </button>
           <select
             className="input status-select"
