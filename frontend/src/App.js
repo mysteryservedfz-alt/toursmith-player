@@ -650,6 +650,86 @@ const TourEditor = () => {
   );
 };
 
+// ==================== SHARE ASSETS PANEL ====================
+const ShareAssetsPanel = ({ tourId, tourStatus }) => {
+  const [copied, setCopied] = useState(false);
+  const playerUrl = `${window.location.origin}/play/${tourId}`;
+
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(playerUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
+  const openPreview = () => {
+    window.open(playerUrl, '_blank');
+  };
+
+  return (
+    <aside className="editor-sidebar share-panel" data-testid="share-assets-panel">
+      <div className="panel-header">
+        <h3><Icons.QRCode /> Share Assets</h3>
+      </div>
+      
+      <div className="share-panel-content">
+        {/* QR Code */}
+        <div className="qr-code-container">
+          <div className="qr-code-frame">
+            <QRCodeSVG 
+              value={playerUrl} 
+              size={160} 
+              level="M"
+              includeMargin={true}
+              bgColor="#ffffff"
+              fgColor="#000000"
+            />
+          </div>
+          <p className="qr-label">SCANNABLE TOUR LINK</p>
+          <p className="qr-sublabel">Ready for print materials</p>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="share-actions">
+          <button 
+            onClick={copyLink} 
+            className="btn btn-share-action"
+            data-testid="copy-link-btn"
+          >
+            {copied ? <><Icons.Check /> Copied!</> : <><Icons.Copy /> Copy Tour Link</>}
+          </button>
+          <button 
+            onClick={openPreview} 
+            className="btn btn-share-preview"
+            data-testid="preview-btn"
+            disabled={tourStatus !== 'published'}
+          >
+            <Icons.Eye /> Preview as Player
+          </button>
+        </div>
+
+        {/* Status Info */}
+        {tourStatus !== 'published' && (
+          <div className="share-warning">
+            <p>⚠️ Tour must be published for players to access</p>
+          </div>
+        )}
+
+        {/* Player URL Display */}
+        <div className="player-url-display">
+          <label className="form-label">Player URL</label>
+          <div className="url-box">
+            <code>{playerUrl}</code>
+          </div>
+        </div>
+      </div>
+    </aside>
+  );
+};
+
 // ==================== WELCOME EDITOR ====================
 const WelcomeEditor = ({ tour, onUpdate }) => {
   return (
