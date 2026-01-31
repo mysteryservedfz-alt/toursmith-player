@@ -2593,7 +2593,7 @@ const TourPlayer = () => {
         )}
         
         {/* Audio */}
-        {data.audioUrl && (
+        {data.audioUrl && data.audioUrl.trim() && (
           <div className="audio-player" data-testid={isStop ? "stop-audio-player" : "page-audio-player"}>
             <audio controls src={data.audioUrl}>
               Your browser does not support audio.
