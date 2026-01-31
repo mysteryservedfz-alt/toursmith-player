@@ -1909,10 +1909,9 @@ const TourPlayer = () => {
     setUnlockInput("");
     setUnlockError("");
     
-    // Disable transitions for unlock gates
+    // Handle unlock gates
     if (needsUnlock && !showUnlock) {
       setShowUnlock(true);
-      setTransitionEnabled(false);
     } else if (!needsUnlock && showUnlock) {
       setShowUnlock(false);
     }
@@ -1944,7 +1943,6 @@ const TourPlayer = () => {
       setUnlockInput("");
       setUnlockError("");
       setSelectedMcOption(null);
-      setTransitionEnabled(true);
     } else {
       setUnlockError("Incorrect. Please try again.");
     }
@@ -1952,10 +1950,8 @@ const TourPlayer = () => {
 
   const goNext = () => {
     if (currentPageIndex < sortedPages.length - 1) {
-      setTransitionEnabled(true);
       setCurrentPageIndex(currentPageIndex + 1);
     } else if (currentStopIndex < sortedStops.length - 1) {
-      setTransitionEnabled(true);
       setCurrentStopIndex(currentStopIndex + 1);
       setCurrentPageIndex(0);
     }
@@ -1963,10 +1959,8 @@ const TourPlayer = () => {
 
   const goPrev = () => {
     if (currentPageIndex > 0) {
-      setTransitionEnabled(true);
       setCurrentPageIndex(currentPageIndex - 1);
     } else if (currentStopIndex > 0) {
-      setTransitionEnabled(true);
       const prevStop = sortedStops[currentStopIndex - 1];
       const prevPages = prevStop?.pages?.sort((a, b) => a.order - b.order) || [];
       setCurrentStopIndex(currentStopIndex - 1);
