@@ -1897,6 +1897,17 @@ const TourPlayer = () => {
     
     // Use page data if page has override, otherwise use stop data
     const source = page?.unlockMode ? page : stop;
+    
+    // For multiple_choice, require options to be present
+    if (mode === "multiple_choice" && (!source?.mcOptions || source.mcOptions.length === 0)) {
+      return null; // Treat as "continue" if no options defined
+    }
+    
+    // For text mode, require an answer to be present
+    if (mode === "text" && !source?.answer) {
+      return null; // Treat as "continue" if no answer defined
+    }
+    
     return {
       mode,
       answer: source?.answer,
