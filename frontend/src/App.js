@@ -864,7 +864,71 @@ const ShareAssetsPanel = ({ tourId, tourStatus }) => {
 };
 
 // ==================== WELCOME EDITOR ====================
+// Map click handler component
+const MapClickHandler = ({ onClick }) => {
+  useMapEvents({
+    click: (e) => onClick(e.latlng.lat, e.latlng.lng)
+  });
+  return null;
+};
+
 const WelcomeEditor = ({ tour, onUpdate }) => {
+  const [gettingLocation, setGettingLocation] = useState(false);
+  const [locationError, setLocationError] = useState(null);
+  const mapRef = useRef(null);
+
+  // Default center (NYC) if no coordinates set
+  const defaultCenter = [40.7128, -74.0060];
+  const mapCenter = tour.welcomeGpsLat && tour.welcomeGpsLng 
+    ? [tour.welcomeGpsLat, tour.welcomeGpsLng] 
+    : defaultCenter;
+
+  const handleMapClick = (lat, lng) => {
+    onUpdate("welcomeGpsLat", lat);
+    onUpdate("welcomeGpsLng", lng);
+  };
+
+  const useMyLocation = () => {
+    if (!navigator.geolocation) {
+      setLocationError("Geolocation is not supported by your browser");
+      return;
+    }
+    
+    setGettingLocation(true);
+    setLocationError(null);
+    
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        onUpdate("welcomeGpsLat", latitude);
+        onUpdate("welcomeGpsLng", longitude);
+        setGettingLocation(false);
+        
+        // Pan map to new location
+        if (mapRef.current) {
+          mapRef.current.setView([latitude, longitude], 16);
+        }
+      },
+      (error) => {
+        setGettingLocation(false);
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            setLocationError("Location access denied. Please enable location permissions.");
+            break;
+          case error.POSITION_UNAVAILABLE:
+            setLocationError("Location information unavailable.");
+            break;
+          case error.TIMEOUT:
+            setLocationError("Location request timed out.");
+            break;
+          default:
+            setLocationError("An unknown error occurred.");
+        }
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+  };
+
   return (
     <div className="content-editor" data-testid="welcome-editor">
       <div className="editor-section main-text-section">
@@ -939,8 +1003,8 @@ const WelcomeEditor = ({ tour, onUpdate }) => {
 
         {/* GPS Section */}
         <div className="divider" />
-        <h3 className="section-label">GPS Start Location</h3>
-        <p className="text-small helper-text">Used to start the tour at the correct location</p>
+        <h3 className="section-label"><Icons.MapPin /> GPS Start Location</h3>
+        <p className="text-small helper-text">Require players to be at a specific location to start the tour</p>
         
         <div className="form-group">
           <label className="checkbox-label">
@@ -956,6 +1020,51 @@ const WelcomeEditor = ({ tour, onUpdate }) => {
 
         {tour.welcomeGpsEnabled && (
           <div className="gps-fields">
+            {/* Use My Location Button */}
+            <div className="gps-actions">
+              <button 
+                type="button" 
+                className="btn btn-secondary" 
+                onClick={useMyLocation}
+                disabled={gettingLocation}
+                data-testid="use-my-location-btn"
+              >
+                <Icons.Navigation />
+                {gettingLocation ? "Getting location..." : "Use My Location"}
+              </button>
+            </div>
+            {locationError && (
+              <p className="error-message">{locationError}</p>
+            )}
+
+            {/* Map for selecting location */}
+            <div className="gps-map-container" data-testid="gps-map">
+              <MapContainer 
+                center={mapCenter} 
+                zoom={tour.welcomeGpsLat ? 16 : 12} 
+                style={{ height: '280px', width: '100%', borderRadius: '8px' }}
+                ref={mapRef}
+              >
+                <TileLayer
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <MapClickHandler onClick={handleMapClick} />
+                {tour.welcomeGpsLat && tour.welcomeGpsLng && (
+                  <>
+                    <Marker position={[tour.welcomeGpsLat, tour.welcomeGpsLng]} />
+                    <Circle 
+                      center={[tour.welcomeGpsLat, tour.welcomeGpsLng]} 
+                      radius={tour.welcomeGpsRadiusMeters || 100}
+                      pathOptions={{ color: '#7c3aed', fillColor: '#7c3aed', fillOpacity: 0.2 }}
+                    />
+                  </>
+                )}
+              </MapContainer>
+              <p className="text-small map-hint">Click on the map to set location, or use the button above</p>
+            </div>
+
+            {/* Manual coordinate inputs */}
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">Latitude</label>
@@ -983,16 +1092,18 @@ const WelcomeEditor = ({ tour, onUpdate }) => {
               </div>
             </div>
             <div className="form-group">
-              <label className="form-label">Radius (meters)</label>
+              <label className="form-label">Radius (meters) - Bubble Size</label>
               <input 
                 type="number" 
                 className="input" 
                 value={tour.welcomeGpsRadiusMeters ?? 100} 
                 onChange={(e) => onUpdate("welcomeGpsRadiusMeters", e.target.value ? parseInt(e.target.value) : 100)} 
                 placeholder="100" 
+                min="10"
+                max="5000"
                 data-testid="welcome-gps-radius"
               />
-              <p className="text-small">How close visitors need to be to the start location</p>
+              <p className="text-small">How close players must be to start (10-5000m)</p>
             </div>
           </div>
         )}
