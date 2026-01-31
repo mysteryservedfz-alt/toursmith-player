@@ -476,6 +476,7 @@
   background-color: #ffffff;
   border-bottom: 1px solid #e0e0e0;
   padding: var(--spacing-md) var(--spacing-xl);
+  padding-left: 210px; /* Space for Emergent badge */
   display: flex;
   align-items: center;
   gap: var(--spacing-lg);
