@@ -1944,6 +1944,7 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onBa
           isOpen={openSections.embed}
           onToggle={() => toggleSection('embed')}
           hasContent={hasEmbed}
+          onClear={() => onUpdate({ embedUrl: null, embedCaption: null })}
         >
           <div className="form-group">
             <label className="form-label">Embed URL</label>
