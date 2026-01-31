@@ -642,6 +642,9 @@ const TourEditor = () => {
             <PageEditor page={activePage} stopUnlockMode={activeStop.unlockMode} stopAnswer={activeStop.answer} onUpdate={(u) => updatePage(activeStopId, activePageId, u)} onDelete={() => deletePage(activeStopId, activePageId)} />
           )}
         </main>
+
+        {/* Sharing Assets Panel */}
+        <ShareAssetsPanel tourId={tourId} tourStatus={tour.status} />
       </div>
     </div>
   );
