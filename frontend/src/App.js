@@ -567,52 +567,80 @@ const TourEditor = () => {
       </header>
 
       <div className="editor-body">
-        {/* Stops Panel */}
+        {/* Stops & Pages Tree Panel */}
         <aside className="editor-sidebar stops-panel">
           <div className="panel-header">
-            <h3>Stops</h3>
+            <h3>Tour Structure</h3>
             <button onClick={addStop} className="btn btn-primary btn-sm" data-testid="add-stop-btn">
               <Icons.Plus />
             </button>
           </div>
+          
           {/* Welcome Screen Item */}
-          <div className="stops-list-container">
+          <div className="tour-tree">
             <div
-              className={`stop-item welcome-item ${showWelcome ? "active" : ""}`}
+              className={`tree-item welcome-item ${showWelcome ? "active" : ""}`}
               onClick={() => { setShowWelcome(true); setActiveStopId(null); setActivePageId(null); }}
               data-testid="welcome-item"
             >
-              <span className="welcome-icon">👋</span>
-              <span className="stop-title">Welcome Screen</span>
+              <span className="tree-icon">👋</span>
+              <span className="tree-label">Welcome Screen</span>
               {(tour.welcomeTitle || tour.welcomeBody) && <span className="content-dot" />}
             </div>
+            
+            {/* Stops with nested Pages */}
+            <DragDropContext onDragEnd={(r) => onDragEnd(r, "stops")}>
+              <Droppable droppableId="stops">
+                {(provided) => (
+                  <div className="stops-tree" {...provided.droppableProps} ref={provided.innerRef}>
+                    {tour.stops?.sort((a, b) => a.order - b.order).map((stop, index) => (
+                      <Draggable key={stop.id} draggableId={stop.id} index={index}>
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            className={`stop-branch ${snapshot.isDragging ? "dragging" : ""}`}
+                          >
+                            {/* Stop Item */}
+                            <div
+                              className={`tree-item stop-item ${activeStopId === stop.id && !activePageId && !showWelcome ? "active" : ""}`}
+                              onClick={() => { setActiveStopId(stop.id); setActivePageId(null); setShowWelcome(false); }}
+                              data-testid={`stop-item-${stop.id}`}
+                            >
+                              <span {...provided.dragHandleProps} className="drag-handle"><Icons.Grip /></span>
+                              <span className="tree-icon">📍</span>
+                              <span className="tree-label">{stop.title || "Untitled Stop"}</span>
+                            </div>
+                            
+                            {/* Nested Pages */}
+                            {stop.pages && stop.pages.length > 0 && (
+                              <div className="pages-branch">
+                                {stop.pages.sort((a, b) => a.order - b.order).map((page) => (
+                                  <div
+                                    key={page.id}
+                                    className={`tree-item page-item ${activePageId === page.id ? "active" : ""}`}
+                                    onClick={() => { setActiveStopId(stop.id); setActivePageId(page.id); setShowWelcome(false); }}
+                                    data-testid={`page-item-${page.id}`}
+                                  >
+                                    <span className="tree-connector">└─</span>
+                                    <span className="tree-label">{page.title || "Untitled Page"}</span>
+                                    {page.storyMode && <span className="mini-badge">S</span>}
+                                    {page.unlockMode === 'text' && <Icons.Lock />}
+                                    {page.unlockMode === 'multiple_choice' && <Icons.ListChecks />}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
           </div>
-          <DragDropContext onDragEnd={(r) => onDragEnd(r, "stops")}>
-            <Droppable droppableId="stops">
-              {(provided) => (
-                <div className="stops-list" {...provided.droppableProps} ref={provided.innerRef}>
-                  {tour.stops?.sort((a, b) => a.order - b.order).map((stop, index) => (
-                    <Draggable key={stop.id} draggableId={stop.id} index={index}>
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          className={`stop-item ${activeStopId === stop.id && !showWelcome ? "active" : ""} ${snapshot.isDragging ? "dragging" : ""}`}
-                          onClick={() => { setActiveStopId(stop.id); setActivePageId(null); setShowWelcome(false); }}
-                          data-testid={`stop-item-${stop.id}`}
-                        >
-                          <span {...provided.dragHandleProps} className="drag-handle"><Icons.Grip /></span>
-                          <span className="stop-title">{stop.title || "Untitled Stop"}</span>
-                          <span className="stop-page-count">{stop.pages?.length || 0}</span>
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
         </aside>
 
         {/* Editor Main */}
