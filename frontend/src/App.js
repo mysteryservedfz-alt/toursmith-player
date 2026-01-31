@@ -1851,6 +1851,7 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onBa
           isOpen={openSections.task}
           onToggle={() => toggleSection('task')}
           hasContent={hasTask}
+          onClear={() => onUpdate({ taskInstructions: null })}
         >
           <div className="form-group">
             <label className="form-label">Task Instructions</label>
