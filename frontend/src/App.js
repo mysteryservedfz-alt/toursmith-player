@@ -1837,6 +1837,7 @@ const TourPlayer = () => {
   const [transitionEnabled, setTransitionEnabled] = useState(true);
   const [selectedMcOption, setSelectedMcOption] = useState(null);
   const [showHintPage, setShowHintPage] = useState(false);
+  const transitionNodeRef = useRef(null);
 
   useEffect(() => {
     const fetchTour = async () => {
