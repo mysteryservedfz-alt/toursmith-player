@@ -1264,7 +1264,7 @@ const AccordionSection = ({ title, icon, isOpen, onToggle, hasContent, onClear, 
 );
 
 // ==================== STOP EDITOR ====================
-const StopEditor = ({ stop, onUpdate, onDelete, onAddPage, onSelectPage, onDeletePage, onReorderPages }) => {
+const StopEditor = ({ stop, onUpdate, onDelete, onDuplicate, onAddPage, onSelectPage, onDeletePage, onReorderPages }) => {
   const [openSections, setOpenSections] = useState({ pages: true }); // Pages open by default
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -1276,6 +1276,11 @@ const StopEditor = ({ stop, onUpdate, onDelete, onAddPage, onSelectPage, onDelet
   const handleDelete = () => {
     setShowMenu(false);
     setShowDeleteModal(true);
+  };
+
+  const handleDuplicate = () => {
+    setShowMenu(false);
+    onDuplicate();
   };
 
   const confirmDelete = () => {
