@@ -1333,6 +1333,7 @@ const StopEditor = ({ stop, onUpdate, onDelete, onAddPage, onSelectPage, onDelet
           isOpen={openSections.media}
           onToggle={() => toggleSection('media')}
           hasContent={hasMedia}
+          onClear={() => onUpdate({ mediaUrl: null, mediaType: null })}
         >
           <div className="form-group">
             <label className="form-label">Media Type</label>
@@ -1873,6 +1874,7 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onBa
           isOpen={openSections.media}
           onToggle={() => toggleSection('media')}
           hasContent={hasMedia}
+          onClear={() => onUpdate({ mediaUrl: null, mediaType: null })}
         >
           <div className="form-group">
             <label className="form-label">Media Type</label>
