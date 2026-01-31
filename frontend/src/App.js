@@ -655,7 +655,12 @@ const TourEditor = () => {
 // ==================== SHARE ASSETS PANEL ====================
 const ShareAssetsPanel = ({ tourId, tourStatus }) => {
   const [copied, setCopied] = useState(false);
-  const playerUrl = `${window.location.origin}/play/${tourId}`;
+  
+  // Use the actual deployed URL, not localhost
+  const baseUrl = process.env.REACT_APP_BACKEND_URL 
+    ? process.env.REACT_APP_BACKEND_URL.replace('/api', '').replace('api.', '')
+    : window.location.origin;
+  const playerUrl = `${baseUrl}/play/${tourId}`;
 
   const copyLink = async () => {
     try {
@@ -664,6 +669,17 @@ const ShareAssetsPanel = ({ tourId, tourStatus }) => {
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = playerUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
     }
   };
 
