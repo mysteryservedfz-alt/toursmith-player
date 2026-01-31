@@ -129,7 +129,239 @@
   font-weight: 700;
 }
 
-/* ==================== TOURS GRID ==================== */
+/* ==================== TOURS HEADER ==================== */
+.tours-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-xl);
+}
+
+.tours-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.tours-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+/* View Toggle */
+.view-toggle {
+  display: flex;
+  background: #f3f4f6;
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.view-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  color: #666666;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.view-toggle-btn:hover {
+  color: #1a1a1a;
+}
+
+.view-toggle-btn.active {
+  background: #ffffff;
+  color: #8b5cf6;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* ==================== COMPACT CARDS GRID ==================== */
+.tours-grid-compact {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.tour-card-compact {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: var(--spacing-lg);
+  padding-top: var(--spacing-xl);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  min-height: 140px;
+}
+
+.tour-card-compact:hover {
+  border-color: #8b5cf6;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.15);
+}
+
+.card-status-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  border-radius: 12px 12px 0 0;
+}
+
+.card-status-bar.status-published {
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+}
+
+.card-status-bar.status-draft {
+  background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+.tour-card-compact .card-title {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 var(--spacing-xs) 0;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tour-card-compact .card-meta {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #999999;
+  margin-top: auto;
+}
+
+.tour-card-compact .card-actions {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.tour-card-compact:hover .card-actions {
+  opacity: 1;
+}
+
+.btn-icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: #f3f4f6;
+  border-radius: 6px;
+  color: #666666;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-icon:hover {
+  background: #e5e7eb;
+  color: #1a1a1a;
+}
+
+.btn-icon.danger:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* ==================== LIST VIEW ==================== */
+.tours-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.tour-list-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+
+.tour-list-item:hover {
+  border-color: #8b5cf6;
+  background: #faf5ff;
+}
+
+.list-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.list-status-dot.status-published {
+  background: #22c55e;
+}
+
+.list-status-dot.status-draft {
+  background: #f59e0b;
+}
+
+.list-title {
+  flex: 1;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: #1a1a1a;
+}
+
+.list-meta {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #999999;
+  min-width: 60px;
+}
+
+.list-badge {
+  font-size: 0.625rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.list-badge.badge-published {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.list-badge.badge-draft {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.list-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/* ==================== LEGACY TOURS GRID (keep for backwards compat) ==================== */
 .tours-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
