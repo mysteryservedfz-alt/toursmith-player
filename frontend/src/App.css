@@ -2432,3 +2432,38 @@
     font-size: 1rem;
   }
 }
+
+/* ==================== ACCORDION CLEAR BUTTON ==================== */
+.accordion-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.accordion-header .accordion-trigger {
+  flex: 1;
+}
+
+.accordion-clear-btn {
+  padding: 6px 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.accordion-clear-btn:hover {
+  background: #fee2e2;
+  border-color: #fecaca;
+  color: #dc2626;
+}
+
+.accordion-clear-btn svg {
+  width: 14px;
+  height: 14px;
+}
