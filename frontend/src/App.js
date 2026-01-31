@@ -1823,6 +1823,7 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete }) =>
 // ==================== PLAYER ====================
 const TourPlayer = () => {
   const { tourId } = useParams();
+  const navigate = useNavigate();
   const [tour, setTour] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -1834,6 +1835,8 @@ const TourPlayer = () => {
   const [unlockInput, setUnlockInput] = useState("");
   const [unlockError, setUnlockError] = useState("");
   const [transitionEnabled, setTransitionEnabled] = useState(true);
+  const [selectedMcOption, setSelectedMcOption] = useState(null);
+  const [showHintPage, setShowHintPage] = useState(false);
 
   useEffect(() => {
     const fetchTour = async () => {
@@ -1865,7 +1868,10 @@ const TourPlayer = () => {
   const sortedPages = currentStop?.pages?.sort((a, b) => a.order - b.order) || [];
   const currentPage = sortedPages[currentPageIndex];
 
+  // Get effective unlock settings considering story mode
   const getEffectiveUnlock = (page, stop) => {
+    // Story mode bypasses everything
+    if (page?.storyMode || stop?.storyMode) return "continue";
     return page?.unlockMode ?? stop?.unlockMode ?? "continue";
   };
 
@@ -1873,17 +1879,16 @@ const TourPlayer = () => {
     const mode = getEffectiveUnlock(page, stop);
     if (mode === "continue") return null;
     
-    // If page has override, use page data
-    if (page?.unlockMode) {
-      return {
-        mode,
-        answer: page.answer
-      };
-    }
-    // Otherwise use stop data
+    // Use page data if page has override, otherwise use stop data
+    const source = page?.unlockMode ? page : stop;
     return {
       mode,
-      answer: stop?.answer
+      answer: source?.answer,
+      caseInsensitive: source?.caseInsensitive !== false,
+      mcOptions: source?.mcOptions,
+      mcCorrectIndex: source?.mcCorrectIndex,
+      hintText: source?.hintText || page?.hintText,
+      autoShowHint: source?.autoShowHint || page?.autoShowHint
     };
   };
 
@@ -1892,7 +1897,19 @@ const TourPlayer = () => {
   const unlockData = getUnlockData(currentPage, currentStop);
   const needsUnlock = unlockData && unlockData.mode !== "continue" && !isUnlocked;
 
+  // Handle auto-show hints
   useEffect(() => {
+    if (unlockData?.autoShowHint && unlockData?.hintText && needsUnlock) {
+      setShowHintPage(true);
+    }
+  }, [pageKey]);
+
+  useEffect(() => {
+    // Reset selection when changing pages
+    setSelectedMcOption(null);
+    setUnlockInput("");
+    setUnlockError("");
+    
     // Disable transitions for unlock gates
     if (needsUnlock && !showUnlock) {
       setShowUnlock(true);
@@ -1905,13 +1922,20 @@ const TourPlayer = () => {
   const handleUnlock = () => {
     if (!unlockData) return;
     
-    const inputLower = unlockInput.toLowerCase().trim();
     let correct = false;
     
-    if (unlockData.mode === "answer_required") {
-      correct = inputLower === (unlockData.answer || "").toLowerCase().trim();
+    if (unlockData.mode === "text") {
+      const userAnswer = unlockData.caseInsensitive 
+        ? unlockInput.toLowerCase().trim() 
+        : unlockInput.trim();
+      const correctAnswer = unlockData.caseInsensitive 
+        ? (unlockData.answer || "").toLowerCase().trim()
+        : (unlockData.answer || "").trim();
+      correct = userAnswer === correctAnswer;
+    } else if (unlockData.mode === "multiple_choice") {
+      correct = selectedMcOption === unlockData.mcCorrectIndex;
     } else if (unlockData.mode === "whiteboard") {
-      // Whiteboard mode - always allow (user just needs to interact)
+      // Whiteboard mode - always allow (user just needs to type something)
       correct = unlockInput.trim().length > 0;
     }
     
@@ -1920,6 +1944,7 @@ const TourPlayer = () => {
       setShowUnlock(false);
       setUnlockInput("");
       setUnlockError("");
+      setSelectedMcOption(null);
       setTransitionEnabled(true);
     } else {
       setUnlockError("Incorrect. Please try again.");
@@ -1956,6 +1981,31 @@ const TourPlayer = () => {
   if (loading) return <div className="player-loading">Loading tour...</div>;
   if (error) return <div className="player-error">{error}</div>;
   if (!tour || !currentStop || !currentPage) return <div className="player-error">No content available</div>;
+
+  // Hint page view (full page with back button)
+  if (showHintPage && unlockData?.hintText) {
+    return (
+      <div className="player-layout hint-page-layout" data-testid="player-hint-page">
+        <div className="hint-page">
+          <button 
+            onClick={() => setShowHintPage(false)} 
+            className="btn btn-back"
+            data-testid="hint-back-btn"
+          >
+            <Icons.ChevronLeft /> Back to Challenge
+          </button>
+          <div className="hint-content">
+            <h2>💡 Hint</h2>
+            <div className="hint-text">
+              {unlockData.hintText.split('\n').map((line, i) => (
+                <p key={i}>{line}</p>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Embed safety check - only allow these domains
   const isAllowedEmbed = (url) => {
@@ -2026,6 +2076,14 @@ const TourPlayer = () => {
           <p className="player-subtitle">{data.subtitle}</p>
         )}
         
+        {/* Task Instructions */}
+        {data.taskInstructions && (
+          <div className="player-task-instructions">
+            <div className="task-label">📋 Your Task</div>
+            <p>{data.taskInstructions}</p>
+          </div>
+        )}
+        
         {/* Body/Intro */}
         {(data.content || data.description) && (
           <div className="player-body">
@@ -2044,10 +2102,37 @@ const TourPlayer = () => {
           </div>
         )}
         
+        {/* Media (new media type selector) */}
+        {data.mediaUrl && data.mediaType && (
+          <div className="player-media">
+            {data.mediaType === 'image' && (
+              <img src={data.mediaUrl} alt="Media content" />
+            )}
+            {data.mediaType === 'video' && (
+              <video controls src={data.mediaUrl}>
+                Your browser does not support video.
+              </video>
+            )}
+            {data.mediaType === 'youtube' && isAllowedEmbed(data.mediaUrl) && (
+              <iframe
+                src={getEmbedUrl(data.mediaUrl)}
+                title="YouTube video"
+                frameBorder="0"
+                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            )}
+          </div>
+        )}
+        
         {/* Audio */}
         {data.audioUrl && (
           <div className="audio-player" data-testid={isStop ? "stop-audio-player" : "page-audio-player"}>
             <audio controls src={data.audioUrl}>
+              Your browser does not support audio.
+            </audio>
+          </div>
+        )}
               Your browser does not support audio.
             </audio>
           </div>
