@@ -262,6 +262,31 @@
   color: #10b981;
 }
 
+.btn-save-draft {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: #22c55e;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-save-draft:hover {
+  background: #16a34a;
+  transform: translateY(-1px);
+}
+
+.btn-save-draft:active {
+  transform: translateY(0);
+}
+
 .status-select {
   width: auto;
   min-width: 120px;
