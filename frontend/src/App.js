@@ -1349,6 +1349,13 @@ const StopEditor = ({ stop, onUpdate, onDelete, onDuplicate, onAddPage, onSelect
           {showMenu && (
             <div className="overflow-menu">
               <button 
+                onClick={handleDuplicate} 
+                className="overflow-menu-item"
+                data-testid="duplicate-stop-btn"
+              >
+                <Icons.Copy /> Duplicate Stop
+              </button>
+              <button 
                 onClick={handleDelete} 
                 className="overflow-menu-item danger"
                 data-testid="delete-stop-btn"
