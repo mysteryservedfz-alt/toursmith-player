@@ -275,6 +275,7 @@ const AuthPage = () => {
 const ToursList = () => {
   const [tours, setTours] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
   const { token, logout, username } = useAuth();
   const navigate = useNavigate();
   const api = authAxios(token);
