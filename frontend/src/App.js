@@ -2338,8 +2338,9 @@ const TourPlayer = () => {
             key={pageKey}
             timeout={transitionEnabled ? 380 : 0}
             classNames={transitionEnabled ? "page" : ""}
+            nodeRef={transitionNodeRef}
           >
-            <div className="player-content">
+            <div className="player-content" ref={transitionNodeRef}>
               {/* Stop Title */}
               <div className="player-stop-title">{currentStop.title}</div>
               {currentStop.subtitle && (
