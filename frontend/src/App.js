@@ -729,7 +729,6 @@ const ShareAssetsPanel = ({ tourId, tourStatus }) => {
             onClick={openPreview} 
             className="btn btn-share-preview"
             data-testid="preview-btn"
-            disabled={tourStatus !== 'published'}
           >
             <Icons.Eye /> Preview as Player
           </button>
@@ -738,7 +737,7 @@ const ShareAssetsPanel = ({ tourId, tourStatus }) => {
         {/* Status Info */}
         {tourStatus !== 'published' && (
           <div className="share-warning">
-            <p>⚠️ Tour must be published for players to access</p>
+            <p>⚠️ Draft tour - publish to allow public access</p>
           </div>
         )}
 
