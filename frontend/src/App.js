@@ -1107,11 +1107,11 @@ const StopEditor = ({ stop, onUpdate, onDelete, onAddPage, onSelectPage, onDelet
           </div>
           <div className="form-group">
             <label className="form-label">Media URL</label>
-            <input 
+            <ClearableInput 
               type="url" 
-              className="input" 
-              value={stop.mediaUrl || ""} 
-              onChange={(e) => onUpdate({ mediaUrl: e.target.value || null })} 
+              value={stop.mediaUrl} 
+              onChange={(val) => onUpdate({ mediaUrl: val })} 
+              onClear={() => onUpdate({ mediaUrl: null, mediaType: null })}
               placeholder="https://..." 
               data-testid="stop-media-url-input" 
             />
@@ -1127,7 +1127,14 @@ const StopEditor = ({ stop, onUpdate, onDelete, onAddPage, onSelectPage, onDelet
         >
           <div className="form-group">
             <label className="form-label">Background Image (Optional)</label>
-            <input type="url" className="input" value={stop.imageUrl || ""} onChange={(e) => onUpdate({ imageUrl: e.target.value || null })} placeholder="Custom background URL for this stop..." data-testid="stop-image-url-input" />
+            <ClearableInput 
+              type="url" 
+              value={stop.imageUrl} 
+              onChange={(val) => onUpdate({ imageUrl: val })} 
+              onClear={() => onUpdate({ imageUrl: null })}
+              placeholder="Custom background URL for this stop..." 
+              data-testid="stop-image-url-input" 
+            />
           </div>
           <div className="form-group">
             <label className="form-label">Image Alt Text</label>
@@ -1148,7 +1155,14 @@ const StopEditor = ({ stop, onUpdate, onDelete, onAddPage, onSelectPage, onDelet
         >
           <div className="form-group">
             <label className="form-label">Embed URL</label>
-            <input type="url" className="input" value={stop.embedUrl || ""} onChange={(e) => onUpdate({ embedUrl: e.target.value || null })} placeholder="YouTube, Vimeo, or Google Maps URL" data-testid="stop-embed-url-input" />
+            <ClearableInput 
+              type="url" 
+              value={stop.embedUrl} 
+              onChange={(val) => onUpdate({ embedUrl: val })} 
+              onClear={() => onUpdate({ embedUrl: null, embedCaption: null })}
+              placeholder="YouTube, Vimeo, or Google Maps URL" 
+              data-testid="stop-embed-url-input" 
+            />
             <p className="text-small">Allowed: YouTube, Vimeo, Google Maps</p>
           </div>
           <div className="form-group">
