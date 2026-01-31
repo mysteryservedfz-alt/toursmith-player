@@ -2491,3 +2491,152 @@
   width: 14px;
   height: 14px;
 }
+
+/* ==================== WELCOME BRAND LOGO ==================== */
+.welcome-brand-logo {
+  margin-bottom: var(--spacing-xl);
+  text-align: center;
+}
+
+.welcome-brand-logo img {
+  max-width: 180px;
+  height: auto;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
+}
+
+/* ==================== PROGRESS BAR ==================== */
+.progress-bar-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #7c3aed, #a855f7);
+  transition: width 0.5s ease;
+  border-radius: 0 2px 2px 0;
+}
+
+.player-header {
+  position: relative;
+}
+
+.progress-percent {
+  margin-left: var(--spacing-sm);
+  font-weight: 700;
+  color: #7c3aed;
+}
+
+/* ==================== CONFETTI ==================== */
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: -20px;
+  animation: confetti-fall 4s linear forwards;
+  border-radius: 2px;
+  transform: rotate(45deg);
+}
+
+@keyframes confetti-fall {
+  0% {
+    top: -20px;
+    opacity: 1;
+    transform: rotate(0deg) translateX(0);
+  }
+  100% {
+    top: 100vh;
+    opacity: 0;
+    transform: rotate(720deg) translateX(100px);
+  }
+}
+
+/* ==================== TOUR COMPLETE ==================== */
+.tour-complete-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  animation: fade-in 0.3s ease;
+}
+
+.tour-complete-content {
+  background: #ffffff;
+  padding: var(--spacing-2xl);
+  border-radius: 20px;
+  text-align: center;
+  max-width: 400px;
+  margin: var(--spacing-lg);
+  animation: scale-up 0.4s ease;
+}
+
+@keyframes scale-up {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.complete-icon {
+  font-size: 4rem;
+  margin-bottom: var(--spacing-md);
+  animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.tour-complete-content h2 {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: var(--spacing-sm);
+}
+
+.tour-complete-content p {
+  color: #666666;
+  margin-bottom: var(--spacing-xl);
+}
+
+/* ==================== KEYBOARD SHORTCUT HINTS ==================== */
+.editor-header-actions::after {
+  content: 'Ctrl/⌘+S to save';
+  font-size: 0.65rem;
+  color: #9ca3af;
+  position: absolute;
+  bottom: -14px;
+  right: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.editor-header-actions:hover::after {
+  opacity: 1;
+}
+
+.editor-header-actions {
+  position: relative;
+}
