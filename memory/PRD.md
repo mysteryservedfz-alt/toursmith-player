@@ -16,6 +16,7 @@ Build a tour generator application for creating interactive, location-based expe
 - Rich content editing (text, media, embeds, audio)
 - Multiple verification types
 - QR code generation for sharing
+- GPS location setup with interactive map
 
 ### Player Features  
 - Mobile-responsive tour player
@@ -23,6 +24,7 @@ Build a tour generator application for creating interactive, location-based expe
 - Progressive unlock/verification system
 - Hint support
 - Navigation between stops and pages
+- GPS location lock enforcement
 
 ---
 
@@ -67,8 +69,21 @@ Build a tour generator application for creating interactive, location-based expe
 - ✅ Preview as Player button
 - ✅ Player URL display
 
+### GPS Lock Feature (Jan 31, 2026)
+- ✅ Interactive Leaflet map in admin editor
+- ✅ Click-to-set coordinates on map
+- ✅ "Use My Location" button (browser geolocation)
+- ✅ Manual lat/lng coordinate entry
+- ✅ Configurable radius (10-5000m) - "bubble size"
+- ✅ Visual radius circle on map
+- ✅ GPS enforcement in player (strict mode)
+- ✅ "Check My Location" button in player
+- ✅ Distance calculation (Haversine formula)
+- ✅ Location status states (checking, success, too far, error)
+- ✅ Start Tour button disabled until GPS verified
+
 ### Player (Jan 29-31, 2026)
-- ✅ Welcome screen with GPS info display
+- ✅ Welcome screen with GPS lock enforcement
 - ✅ Progress indicator (Stop X of Y, Page X of Y)
 - ✅ Content rendering (text, media, audio)
 - ✅ TEXT, MULTIPLE CHOICE, WHITEBOARD verification
@@ -85,11 +100,9 @@ Build a tour generator application for creating interactive, location-based expe
 ## Pending / Backlog
 
 ### P1 - High Priority
-- [ ] Interactive Leaflet map for GPS selection (deferred by user)
-- [ ] Photo upload verification (deferred - needs storage decision)
+- [ ] Photo upload verification (needs storage decision)
 
 ### P2 - Medium Priority
-- [ ] GPS enforcement in player (geolocation check)
 - [ ] Give Up & Skip option
 
 ### P3 - Nice to Have
@@ -112,6 +125,7 @@ Build a tour generator application for creating interactive, location-based expe
 - TailwindCSS + Custom CSS variables
 - react-beautiful-dnd for drag-drop
 - qrcode.react for QR generation
+- leaflet + react-leaflet for GPS maps
 
 ### File Structure
 ```
@@ -132,9 +146,10 @@ Build a tour generator application for creating interactive, location-based expe
 
 ### Tour
 - id, title, description, status
-- welcomeTitle, welcomeBody, welcomeImageUrl, welcomeAudioUrl
+- welcomeTitle, welcomeBody, welcomeImageUrl, welcomeAudioUrl, welcomeButtonLabel
 - welcomeGpsEnabled, welcomeGpsLat, welcomeGpsLng, welcomeGpsRadiusMeters
 - stops: List[Stop]
+- createdAt, updatedAt
 
 ### Stop
 - id, title, subtitle, description, intro2
@@ -182,3 +197,4 @@ Build a tour generator application for creating interactive, location-based expe
 ## Known Issues / Limitations
 1. Page transitions removed due to React 19 + react-transition-group incompatibility
 2. Frontend is monolithic single-file (App.js) - user requested no refactoring
+3. GPS feature requires HTTPS in production for geolocation API to work
