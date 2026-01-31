@@ -911,8 +911,8 @@ const AccordionSection = ({ title, icon, isOpen, onToggle, hasContent, children 
 );
 
 // ==================== STOP EDITOR ====================
-const StopEditor = ({ stop, onUpdate, onDelete }) => {
-  const [openSections, setOpenSections] = useState({});
+const StopEditor = ({ stop, onUpdate, onDelete, onAddPage, onSelectPage, onDeletePage, onReorderPages }) => {
+  const [openSections, setOpenSections] = useState({ pages: true }); // Pages open by default
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
 
@@ -928,6 +928,16 @@ const StopEditor = ({ stop, onUpdate, onDelete }) => {
   const confirmDelete = () => {
     setShowDeleteModal(false);
     onDelete();
+  };
+
+  // Handle page reordering within the stop
+  const handlePageDragEnd = (result) => {
+    if (!result.destination) return;
+    const pages = Array.from(stop.pages || []);
+    const [removed] = pages.splice(result.source.index, 1);
+    pages.splice(result.destination.index, 0, removed);
+    const reorderedPages = pages.map((p, idx) => ({ ...p, order: idx }));
+    onReorderPages(reorderedPages);
   };
 
   // Add/remove multiple choice option
