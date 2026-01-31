@@ -2983,10 +2983,49 @@ const TourPlayer = () => {
   // Normal Page View (with transitions)
   return (
     <div className="player-layout" data-testid="tour-player">
+      {/* Confetti Animation */}
+      {showConfetti && (
+        <div className="confetti-container">
+          {[...Array(50)].map((_, i) => (
+            <div 
+              key={i} 
+              className="confetti-piece"
+              style={{
+                left: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 3}s`,
+                backgroundColor: ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff', '#5f27cd'][i % 6]
+              }}
+            />
+          ))}
+        </div>
+      )}
+      
+      {/* Tour Complete Screen */}
+      {tourComplete && (
+        <div className="tour-complete-overlay">
+          <div className="tour-complete-content">
+            <div className="complete-icon">🎉</div>
+            <h2>Tour Complete!</h2>
+            <p>Congratulations! You've completed the {tour.title} tour.</p>
+            <button 
+              className="btn btn-primary"
+              onClick={() => { setTourComplete(false); setShowWelcome(true); }}
+            >
+              Back to Start
+            </button>
+          </div>
+        </div>
+      )}
+      
       <header className="player-header">
+        {/* Progress Bar */}
+        <div className="progress-bar-container">
+          <div className="progress-bar" style={{ width: `${progressPercent}%` }} />
+        </div>
         <h1>{tour.title}</h1>
         <p className="player-progress">
           Stop {currentStopIndex + 1} of {sortedStops.length} • Page {currentPageIndex + 1} of {sortedPages.length}
+          <span className="progress-percent">{progressPercent}%</span>
         </p>
       </header>
 
