@@ -824,6 +824,7 @@ const TourEditor = () => {
               stopAnswer={activeStop.answer} 
               onUpdate={(u) => updatePage(activeStopId, activePageId, u)} 
               onDelete={() => { deletePage(activeStopId, activePageId); setActivePageId(null); }}
+              onDuplicate={() => duplicatePage(activeStopId, activePageId)}
               onBack={() => setActivePageId(null)}
             />
           )}
