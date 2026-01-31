@@ -50,8 +50,10 @@ Build a tour generator application for creating interactive, location-based expe
 - ✅ Audio URL with preview player
 - ✅ CTA Button (label + URL)
 - ✅ Drag-and-drop reordering
-- ✅ **Accordion Clear Buttons** - Trash icon to clear section content when it has data
-- ✅ **Improved Save Button** - Purple gradient with save icon, turns green with glow when unsaved changes exist
+- ✅ **Accordion Clear Buttons** - Trash icon to clear section content
+- ✅ **Improved Save Button** - Purple gradient with save icon, turns green when unsaved
+- ✅ **Keyboard Shortcuts** - Cmd/Ctrl+S (save), Cmd/Ctrl+N (new stop), Escape (back)
+- ✅ **Duplicate Stop/Page** - Copy button in menu to duplicate content
 
 ### Verification System (Jan 31, 2026)
 - ✅ Story Mode toggle (bypass verification)
