@@ -339,9 +339,28 @@ const ToursList = () => {
       <main className="admin-main">
         <div className="tours-header">
           <h2>My Tours</h2>
-          <button onClick={createTour} className="btn btn-primary" data-testid="new-tour-btn">
-            <Icons.Plus /> New Tour
-          </button>
+          <div className="tours-header-actions">
+            {/* View Toggle */}
+            <div className="view-toggle">
+              <button 
+                onClick={() => setViewMode('grid')} 
+                className={`view-toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
+                title="Card View"
+              >
+                <Icons.QRCode />
+              </button>
+              <button 
+                onClick={() => setViewMode('list')} 
+                className={`view-toggle-btn ${viewMode === 'list' ? 'active' : ''}`}
+                title="List View"
+              >
+                <Icons.ListChecks />
+              </button>
+            </div>
+            <button onClick={createTour} className="btn btn-primary" data-testid="new-tour-btn">
+              <Icons.Plus /> New Tour
+            </button>
+          </div>
         </div>
 
         {tours.length === 0 ? (
@@ -350,33 +369,51 @@ const ToursList = () => {
               <p>No tours yet. Create your first tour!</p>
             </div>
           </div>
-        ) : (
-          <div className="tours-grid">
+        ) : viewMode === 'grid' ? (
+          <div className="tours-grid-compact">
             {tours.map((tour) => (
-              <div key={tour.id} className="tour-card card" data-testid={`tour-card-${tour.id}`}>
-                <div className="card-body">
-                  <div className="tour-card-header">
-                    <h3>{tour.title}</h3>
-                    <span className={`badge badge-${tour.status}`}>{tour.status}</span>
-                  </div>
-                  <p className="tour-card-desc">{tour.description || "No description"}</p>
-                  <p className="tour-card-meta">{tour.stops?.length || 0} stops</p>
-                  <div className="tour-card-actions">
-                    <button onClick={() => navigate(`/admin/tour/${tour.id}`)} className="btn btn-secondary btn-sm" data-testid={`edit-tour-${tour.id}`}>
-                      <Icons.Edit /> Edit
-                    </button>
-                    <button onClick={() => duplicateTour(tour.id)} className="btn btn-ghost btn-sm" data-testid={`duplicate-tour-${tour.id}`}>
-                      <Icons.Copy />
-                    </button>
-                    <button onClick={() => deleteTour(tour.id)} className="btn btn-ghost btn-sm text-danger" data-testid={`delete-tour-${tour.id}`}>
-                      <Icons.Trash />
-                    </button>
-                    {tour.status === "published" && (
-                      <button onClick={() => window.open(`/play/${tour.id}`, '_blank')} className="btn btn-ghost btn-sm" data-testid={`preview-tour-${tour.id}`}>
-                        <Icons.Play /> Preview
-                      </button>
-                    )}
-                  </div>
+              <div 
+                key={tour.id} 
+                className="tour-card-compact" 
+                data-testid={`tour-card-${tour.id}`}
+                onClick={() => navigate(`/admin/tour/${tour.id}`)}
+              >
+                <span className={`card-status-bar status-${tour.status}`} />
+                <h3 className="card-title">{tour.title || "Untitled"}</h3>
+                <p className="card-meta">{tour.stops?.length || 0} stops</p>
+                <div className="card-actions" onClick={(e) => e.stopPropagation()}>
+                  <button onClick={() => duplicateTour(tour.id)} className="btn-icon" title="Duplicate">
+                    <Icons.Copy />
+                  </button>
+                  <button onClick={() => deleteTour(tour.id)} className="btn-icon danger" title="Delete">
+                    <Icons.Trash />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="tours-list">
+            {tours.map((tour) => (
+              <div 
+                key={tour.id} 
+                className="tour-list-item" 
+                data-testid={`tour-card-${tour.id}`}
+              >
+                <span className={`list-status-dot status-${tour.status}`} />
+                <span className="list-title">{tour.title || "Untitled"}</span>
+                <span className="list-meta">{tour.stops?.length || 0} stops</span>
+                <span className={`list-badge badge-${tour.status}`}>{tour.status}</span>
+                <div className="list-actions">
+                  <button onClick={() => navigate(`/admin/tour/${tour.id}`)} className="btn btn-secondary btn-sm">
+                    Edit
+                  </button>
+                  <button onClick={() => duplicateTour(tour.id)} className="btn-icon" title="Duplicate">
+                    <Icons.Copy />
+                  </button>
+                  <button onClick={() => deleteTour(tour.id)} className="btn-icon danger" title="Delete">
+                    <Icons.Trash />
+                  </button>
                 </div>
               </div>
             ))}
