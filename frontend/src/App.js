@@ -1483,6 +1483,11 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onBa
 
   return (
     <div className="content-editor" data-testid="page-editor">
+      {/* Back button */}
+      <button onClick={onBack} className="btn btn-back-to-stop" data-testid="back-to-stop-btn">
+        <Icons.ChevronLeft /> Back to Stop
+      </button>
+
       {/* Header with overflow menu */}
       <div className="editor-content-header">
         <h2>Edit Page</h2>
