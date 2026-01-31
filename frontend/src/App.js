@@ -1781,7 +1781,7 @@ const StopEditor = ({ stop, onUpdate, onDelete, onDuplicate, onAddPage, onSelect
   );
 };
 
-const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onBack }) => {
+const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDuplicate, onBack }) => {
   const [openSections, setOpenSections] = useState({});
   const [localTitle, setLocalTitle] = useState(page.title || "");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -1818,6 +1818,16 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onBa
   }, []);
 
   const handleDelete = () => {
+    setShowMenu(false);
+    setShowDeleteModal(true);
+  };
+
+  const handleDuplicate = () => {
+    setShowMenu(false);
+    onDuplicate();
+  };
+
+  const handleDelete2 = () => {
     setShowMenu(false);
     setShowDeleteModal(true);
   };
