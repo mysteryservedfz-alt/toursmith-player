@@ -1380,6 +1380,19 @@
   font-size: 1rem;
   font-weight: 500;
   border-radius: 4px;
+  font-family: 'Questrial', sans-serif;
+  background: var(--crystal-amethyst, #9b8aa8);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(155, 138, 168, 0.25);
+}
+
+.player-theme .unlock-card .btn:hover {
+  background: var(--crystal-amethyst-deep, #7d6b8a);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(155, 138, 168, 0.35);
 }
 
 /* ==================== WELCOME SCREEN - CRYSTAL THEME ==================== */
