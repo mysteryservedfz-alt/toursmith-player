@@ -1619,42 +1619,42 @@
 .player-theme .mc-options {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.625rem;
   margin-bottom: 1.5rem;
 }
 
 .player-theme .mc-option {
-  background: rgba(30, 41, 59, 0.6);
-  border: 2px solid rgba(51, 65, 85, 0.5);
-  border-radius: 12px;
-  padding: 1rem 1.25rem;
-  font-family: 'Manrope', sans-serif;
+  background: var(--crystal-surface-alt, #f5f2ed);
+  border: 1px solid var(--crystal-border, #d4d0c8);
+  border-radius: 4px;
+  padding: 0.875rem 1rem;
+  font-family: 'Questrial', sans-serif;
   font-size: 1rem;
-  color: #cbd5e1;
+  color: var(--crystal-text-medium, #5c5650);
   cursor: pointer;
   transition: all 0.2s ease;
   text-align: left;
 }
 
 .player-theme .mc-option:hover {
-  border-color: #f59e0b;
-  background: rgba(245, 158, 11, 0.1);
+  border-color: var(--crystal-amethyst, #9b8aa8);
+  background: rgba(155, 138, 168, 0.08);
 }
 
 .player-theme .mc-option.selected {
-  border-color: #f59e0b;
-  background: rgba(245, 158, 11, 0.15);
-  color: #f8fafc;
+  border-color: var(--crystal-amethyst, #9b8aa8);
+  background: rgba(155, 138, 168, 0.12);
+  color: var(--crystal-text-dark, #2d2a26);
 }
 
-/* ==================== HINT BUTTON - NOIR THEME ==================== */
+/* ==================== HINT BUTTON - CRYSTAL THEME ==================== */
 .player-theme .hint-trigger {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Questrial', sans-serif;
   font-size: 0.875rem;
-  color: #94a3b8;
+  color: var(--crystal-text-light, #8a847c);
   background: transparent;
   border: none;
   cursor: pointer;
@@ -1664,15 +1664,15 @@
 }
 
 .player-theme .hint-trigger:hover {
-  color: #f59e0b;
+  color: var(--crystal-amethyst, #9b8aa8);
 }
 
-/* ==================== MEDIA ELEMENTS - NOIR THEME ==================== */
+/* ==================== MEDIA ELEMENTS - CRYSTAL THEME ==================== */
 .player-theme .player-image {
   margin-bottom: 1.5rem;
-  border-radius: 12px;
+  border-radius: 4px;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 .player-theme .player-image img {
@@ -1686,15 +1686,14 @@
 
 .player-theme .audio-player audio {
   width: 100%;
-  border-radius: 50px;
-  background: rgba(30, 41, 59, 0.8);
+  border-radius: 4px;
 }
 
 .player-theme .embed-container {
   margin-bottom: 1.5rem;
-  border-radius: 12px;
+  border-radius: 4px;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 .player-theme .embed-container iframe {
@@ -1703,7 +1702,7 @@
   border: none;
 }
 
-/* ==================== CONFETTI - NOIR THEME ==================== */
+/* ==================== CONFETTI - CRYSTAL THEME ==================== */
 .player-theme .confetti-piece {
   position: absolute;
   width: 10px;
