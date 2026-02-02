@@ -1422,8 +1422,8 @@
 }
 
 .player-theme .welcome-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.5rem;
+  font-family: 'Fraunces', serif;
+  font-size: 2.25rem;
   font-weight: 500;
   color: var(--crystal-text-dark, #2a2320);
   margin-bottom: 0.625rem;
