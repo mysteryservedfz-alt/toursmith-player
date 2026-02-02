@@ -2044,7 +2044,14 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDu
         >
           <div className="form-group">
             <label className="form-label">Background Image (Optional)</label>
-            <input type="url" className="input" value={page.imageUrl || ""} onChange={(e) => onUpdate({ imageUrl: e.target.value || null })} placeholder="Custom background URL for this stop..." data-testid="page-image-url-input" />
+            <ClearableInput 
+              type="url" 
+              value={page.imageUrl} 
+              onChange={(val) => onUpdate({ imageUrl: val })} 
+              onClear={() => onUpdate({ imageUrl: null })}
+              placeholder="Custom background URL for this page..." 
+              data-testid="page-image-url-input" 
+            />
           </div>
           <div className="form-group">
             <label className="form-label">Image Alt Text</label>
@@ -2066,7 +2073,14 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDu
         >
           <div className="form-group">
             <label className="form-label">Embed URL</label>
-            <input type="url" className="input" value={page.embedUrl || ""} onChange={(e) => onUpdate({ embedUrl: e.target.value || null })} placeholder="YouTube, Vimeo, or Google Maps URL" data-testid="page-embed-url-input" />
+            <ClearableInput 
+              type="url" 
+              value={page.embedUrl} 
+              onChange={(val) => onUpdate({ embedUrl: val })} 
+              onClear={() => onUpdate({ embedUrl: null })}
+              placeholder="YouTube, Vimeo, or Google Maps URL" 
+              data-testid="page-embed-url-input" 
+            />
             <p className="text-small">Allowed: YouTube, Vimeo, Google Maps</p>
           </div>
           <div className="form-group">
