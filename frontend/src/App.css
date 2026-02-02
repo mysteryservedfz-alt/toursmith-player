@@ -1351,13 +1351,13 @@
 }
 
 .player-theme .unlock-card .input {
-  background: var(--crystal-surface-alt, #f5f2ed);
-  border: 1px solid var(--crystal-border, #d4d0c8);
-  border-radius: 4px;
-  padding: 0.875rem 1rem;
-  font-size: 1rem;
-  font-family: 'Questrial', sans-serif;
-  color: var(--crystal-text-dark, #2d2a26);
+  background: var(--crystal-surface-warm, #f5ede8);
+  border: 1px solid var(--crystal-border, #ddd3cc);
+  border-radius: 2px;
+  padding: 0.75rem 1rem;
+  font-size: 0.9375rem;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--crystal-text-dark, #2a2320);
   margin-bottom: 1rem;
   transition: all 0.2s ease;
 }
