@@ -1409,14 +1409,15 @@
 }
 
 .player-theme .welcome-image {
-  margin-bottom: 1.25rem;
-  border-radius: 2px;
+  margin-bottom: 2rem;
+  border-radius: 16px;
   overflow: hidden;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
 }
 
 .player-theme .welcome-image img {
   width: 100%;
-  max-height: 200px;
+  max-height: 280px;
   object-fit: cover;
 }
 
