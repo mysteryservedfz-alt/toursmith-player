@@ -3173,12 +3173,23 @@ const TourPlayer = () => {
             )}
             <h2>{tour.completionTitle || "Tour Complete!"}</h2>
             <p>{tour.completionBody || `Congratulations! You've completed the ${tour.title} tour.`}</p>
-            <button 
-              className="btn btn-primary"
-              onClick={() => { setTourComplete(false); setShowWelcome(true); }}
-            >
-              {tour.completionButtonLabel || "Back to Start"}
-            </button>
+            {tour.completionButtonUrl ? (
+              <a 
+                href={tour.completionButtonUrl}
+                className="btn btn-primary"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {tour.completionButtonLabel || "Continue"}
+              </a>
+            ) : (
+              <button 
+                className="btn btn-primary"
+                onClick={() => { setTourComplete(false); setShowWelcome(true); }}
+              >
+                {tour.completionButtonLabel || "Back to Start"}
+              </button>
+            )}
           </div>
         </div>
       )}
