@@ -1232,6 +1232,69 @@ const WelcomeEditor = ({ tour, onUpdate }) => {
             </div>
           </div>
         )}
+
+        {/* Completion Screen Section */}
+        <div className="divider" />
+        <h3 className="section-label">🎉 Completion Screen</h3>
+        <p className="text-small helper-text">Shown when players finish the tour</p>
+        
+        <div className="form-group">
+          <label className="form-label">Completion Title</label>
+          <input 
+            type="text" 
+            className="input" 
+            value={tour.completionTitle || ""} 
+            onChange={(e) => onUpdate("completionTitle", e.target.value || null)} 
+            placeholder="Tour Complete!" 
+            data-testid="completion-title-input" 
+          />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Completion Message</label>
+          <textarea 
+            className="input body-textarea" 
+            value={tour.completionBody || ""} 
+            onChange={(e) => onUpdate("completionBody", e.target.value || null)} 
+            placeholder="Congratulations! You've completed the tour." 
+            data-testid="completion-body-input" 
+          />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Completion Image URL (optional)</label>
+          <ClearableInput 
+            type="url" 
+            value={tour.completionImageUrl} 
+            onChange={(val) => onUpdate("completionImageUrl", val)} 
+            onClear={() => onUpdate("completionImageUrl", null)}
+            placeholder="https://example.com/celebration.jpg" 
+            data-testid="completion-image-input" 
+          />
+        </div>
+        {tour.completionImageUrl && (
+          <div className="image-preview">
+            <img src={tour.completionImageUrl} alt="Completion preview" />
+            <button 
+              type="button" 
+              className="btn btn-delete-media"
+              onClick={() => onUpdate("completionImageUrl", null)}
+              title="Remove image"
+            >
+              <Icons.Trash /> Remove Image
+            </button>
+          </div>
+        )}
+        <div className="form-group">
+          <label className="form-label">Button Label</label>
+          <input 
+            type="text" 
+            className="input" 
+            value={tour.completionButtonLabel || ""} 
+            onChange={(e) => onUpdate("completionButtonLabel", e.target.value || null)} 
+            placeholder="Back to Start" 
+            data-testid="completion-button-label-input" 
+          />
+          <p className="text-small">Default: "Back to Start"</p>
+        </div>
       </div>
     </div>
   );
