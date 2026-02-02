@@ -3157,7 +3157,7 @@ const TourPlayer = () => {
   // Unlock Gate (no transition)
   if (showUnlock && needsUnlock) {
     return (
-      <div className="player-theme player-layout" data-testid="player-unlock-gate" style={{ backgroundColor: tour.backgroundColor || undefined }}>
+      <div className="player-theme player-layout" data-testid="player-unlock-gate" style={getBackgroundStyle(currentPage?.skinImageUrl)}>
         <div className="player-container">
           <div className="unlock-gate">
             <div className="unlock-card card">
