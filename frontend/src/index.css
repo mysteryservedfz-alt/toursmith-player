@@ -3,48 +3,48 @@
 @tailwind utilities;
 
 /* Google Fonts for Player - Crystal Theme */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Questrial&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@400;500&display=swap');
 
-/* ==================== CRYSTAL PLAYER THEME ==================== */
-/* Inspired by editorial crystal flat-lays, boutique crystal shops, museum display cases */
-/* Colors: Dark neutral bg, linen/ivory content, soft amethyst, clear quartz, warm gold */
+/* ==================== CRYSTAL THEME ==================== */
+/* Inspired by: editorial crystal flat-lays, boutique shops, warm boho aesthetic */
+/* Reference: dusty rose backgrounds, warm wood, natural light, real gemstones */
 
 .player-theme {
-  /* Dark neutral background - museum display case feel */
-  --crystal-bg: #1a1a1a;
-  --crystal-bg-warm: #242220;
+  /* Dusty blush/rose - warm, organic, boutique feel */
+  --crystal-bg: #c9b8b3;
+  --crystal-bg-deep: #3d2f2a;
   
-  /* Light linen/ivory content panels */
-  --crystal-surface: #faf8f5;
-  --crystal-surface-alt: #f5f2ed;
-  --crystal-surface-dark: #ebe7e0;
+  /* Warm cream/natural white - like linen or raw silk */
+  --crystal-surface: #faf6f3;
+  --crystal-surface-warm: #f5ede8;
   
-  /* Amethyst purple - soft, elegant */
-  --crystal-amethyst: #9b8aa8;
-  --crystal-amethyst-deep: #7d6b8a;
-  --crystal-amethyst-light: #c4b8cf;
+  /* Terracotta/rust - earthy, grounded accent */
+  --crystal-terracotta: #b86853;
+  --crystal-terracotta-deep: #9a4f3c;
+  --crystal-terracotta-light: #d4917f;
   
-  /* Clear quartz / moonstone - soft silvery whites */
-  --crystal-quartz: #e8e6e3;
-  --crystal-moonstone: #d4d0c8;
+  /* Warm neutrals */
+  --crystal-sand: #e8ddd6;
+  --crystal-stone: #a69b94;
+  --crystal-wood: #5c4a42;
   
-  /* Warm gold - like gold inclusions in quartz */
-  --crystal-gold: #c9a962;
-  --crystal-gold-soft: #d4be82;
+  /* Muted greens from stones */
+  --crystal-sage: #8a9a87;
+  --crystal-moss: #6b7d65;
   
   /* Text colors */
-  --crystal-text-dark: #2d2a26;
-  --crystal-text-medium: #5c5650;
-  --crystal-text-light: #8a847c;
-  --crystal-text-on-dark: #e8e6e3;
+  --crystal-text-dark: #2a2320;
+  --crystal-text-warm: #5c4a42;
+  --crystal-text-muted: #8a7d75;
+  --crystal-text-light: #faf6f3;
   
   /* Borders */
-  --crystal-border: #d4d0c8;
-  --crystal-border-dark: #3d3a36;
+  --crystal-border: #ddd3cc;
+  --crystal-border-warm: #c9b8b3;
   
-  font-family: 'Questrial', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   background: var(--crystal-bg);
-  color: var(--crystal-text-on-dark);
+  color: var(--crystal-text-dark);
   min-height: 100vh;
 }
 
