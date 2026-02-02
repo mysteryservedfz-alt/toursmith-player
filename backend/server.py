@@ -137,6 +137,7 @@ class Tour(BaseModel):
     completionBody: Optional[str] = None
     completionImageUrl: Optional[str] = None
     completionButtonLabel: Optional[str] = None
+    completionButtonUrl: Optional[str] = None
     stops: List[Stop] = []
     createdAt: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     updatedAt: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
