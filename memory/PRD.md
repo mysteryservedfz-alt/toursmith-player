@@ -118,9 +118,15 @@ Build a tour generator application for creating interactive, location-based expe
 
 ## Pending / Backlog
 
+### P0 - Critical Bugs (User Reported)
+- [ ] Fix "Not Found" for newly published tours (race condition)
+- [ ] Fix stops without pages crashing player
+- [ ] Fix image/media deletion not persisting after save
+
 ### P1 - High Priority (Next Up)
+- [ ] **Move "Add Page" button** - from bottom of editor to sidebar header
 - [ ] Auto-save Recovery (localStorage backup)
-- [ ] Dark Mode Player
+- [ ] Undo/Redo functionality
 
 ### P2 - Medium Priority
 - [ ] Undo/Redo functionality
