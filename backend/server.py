@@ -265,21 +265,35 @@ async def update_tour(tour_id: str, data: TourUpdate, username: str = Depends(ve
     if "stops" in update_data and update_data["stops"] is not None:
         update_data["stops"] = [s.model_dump() if hasattr(s, 'model_dump') else s for s in update_data["stops"]]
     
-    # Only update fields that are not None, EXCEPT for specific clearable fields
-    clearable_fields = {'welcomeImageUrl', 'welcomeAudioUrl', 'welcomeTitle', 'welcomeBody', 
-                        'welcomeButtonLabel', 'welcomeGpsLat', 'welcomeGpsLng',
-                        'completionTitle', 'completionBody', 'completionImageUrl', 
-                        'completionButtonLabel', 'completionButtonUrl'}
+    # Fields that can be explicitly cleared (set to null)
+    clearable_fields = {
+        'welcomeImageUrl', 'welcomeAudioUrl', 'welcomeTitle', 'welcomeBody', 
+        'welcomeButtonLabel', 'welcomeGpsLat', 'welcomeGpsLng',
+        'completionTitle', 'completionBody', 'completionImageUrl', 
+        'completionButtonLabel', 'completionButtonUrl',
+        'skinImageUrl', 'backgroundColor'
+    }
     
     final_update = {}
+    unset_fields = {}
+    
     for k, v in update_data.items():
         if v is not None:
             final_update[k] = v
         elif k in clearable_fields:
-            # Allow these fields to be explicitly set to None/null
-            final_update[k] = None
+            # Use $unset for clearable fields set to null
+            unset_fields[k] = ""
     
-    await db.tours.update_one({"id": tour_id}, {"$set": final_update})
+    # Build the update query
+    update_query = {}
+    if final_update:
+        update_query["$set"] = final_update
+    if unset_fields:
+        update_query["$unset"] = unset_fields
+    
+    if update_query:
+        await db.tours.update_one({"id": tour_id}, update_query)
+    
     updated = await db.tours.find_one({"id": tour_id}, {"_id": 0})
     return updated
 
