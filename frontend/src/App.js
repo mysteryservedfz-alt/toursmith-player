@@ -3014,6 +3014,25 @@ const TourPlayer = () => {
     );
   }
 
+  // No stops - show message
+  if (!currentStop) {
+    return (
+      <div className="player-layout" data-testid="tour-player">
+        <header className="player-header">
+          <h1>{tour.title}</h1>
+        </header>
+        <main className="player-main">
+          <div className="player-content">
+            <div className="no-content-message">
+              <h2>🚧 Tour Under Construction</h2>
+              <p>This tour doesn't have any stops yet. Check back soon!</p>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   // Normal Page View (with transitions)
   return (
     <div className="player-layout" data-testid="tour-player">
