@@ -1132,37 +1132,36 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Questrial', sans-serif;
   font-size: 1.25rem;
-  font-weight: 600;
-  color: #94a3b8;
-  background: #0f172a;
+  font-weight: 500;
+  color: var(--crystal-text-light, #8a847c);
+  background: var(--crystal-bg, #1a1a1a);
 }
 
 .player-theme .player-header {
   text-align: center;
-  padding: 2.5rem 1.5rem 1.5rem;
-  background: rgba(30, 41, 59, 0.8);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+  padding: 2rem 1.5rem 1.5rem;
+  background: var(--crystal-surface, #faf8f5);
+  border-bottom: 1px solid var(--crystal-border, #d4d0c8);
   position: relative;
   z-index: 10;
 }
 
 .player-theme .player-header h1 {
-  font-family: 'Fraunces', serif;
-  font-size: 1.75rem;
-  font-weight: 700;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.625rem;
+  font-weight: 600;
   margin-bottom: 0.5rem;
-  color: #f8fafc;
-  letter-spacing: -0.02em;
+  color: var(--crystal-text-dark, #2d2a26);
+  letter-spacing: 0.02em;
 }
 
 .player-theme .player-progress {
-  font-family: 'Manrope', sans-serif;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #94a3b8;
+  font-family: 'Questrial', sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--crystal-text-light, #8a847c);
   margin: 0;
   display: flex;
   align-items: center;
@@ -1171,8 +1170,8 @@
 }
 
 .player-theme .progress-percent {
-  color: #f59e0b;
-  font-weight: 700;
+  color: var(--crystal-amethyst, #9b8aa8);
+  font-weight: 600;
 }
 
 .player-theme .player-main {
