@@ -1371,16 +1371,10 @@
 
 .player-theme .unlock-card .btn {
   width: 100%;
-  padding: 0.75rem;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  border-radius: 2px;
-  font-family: 'DM Sans', sans-serif;
-  background: var(--crystal-terracotta, #b86853);
-  color: #ffffff;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 12px;
 }
 
 .player-theme .unlock-card .btn:hover {
