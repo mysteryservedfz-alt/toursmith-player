@@ -2957,7 +2957,7 @@ const TourPlayer = () => {
   // Unlock Gate (no transition)
   if (showUnlock && needsUnlock) {
     return (
-      <div className="player-layout" data-testid="player-unlock-gate">
+      <div className="player-layout" data-testid="player-unlock-gate" style={{ backgroundColor: tour.backgroundColor || '#ffffff' }}>
         <div className="player-container">
           <div className="unlock-gate">
             <div className="unlock-card card">
