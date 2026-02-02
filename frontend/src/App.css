@@ -1365,7 +1365,8 @@
 
 .player-theme .unlock-card .input:focus {
   outline: none;
-  border-color: var(--crystal-terracotta, #b86853);
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
 }
 
 .player-theme .unlock-card .btn {
