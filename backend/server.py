@@ -123,6 +123,7 @@ class Tour(BaseModel):
     description: str = ""
     status: str = "draft"  # "draft" or "published"
     backgroundColor: str = "#ffffff"  # Default white background
+    skinImageUrl: Optional[str] = None  # Tour-level default skin (background image)
     # Welcome screen fields
     welcomeTitle: Optional[str] = None
     welcomeBody: Optional[str] = None
