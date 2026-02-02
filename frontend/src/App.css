@@ -2748,8 +2748,8 @@
 }
 
 .player-theme .player-task-instructions p {
-  font-family: 'Questrial', sans-serif;
-  color: var(--crystal-text-dark, #2d2a26);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--crystal-text-dark, #2a2320);
 }
 
 /* Player Media */
