@@ -1343,10 +1343,10 @@
 }
 
 .player-theme .unlock-prompt {
-  font-family: 'Questrial', sans-serif;
-  color: var(--crystal-text-medium, #5c5650);
-  margin-bottom: 1.5rem;
-  font-size: 1rem;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--crystal-text-warm, #5c4a42);
+  margin-bottom: 1.25rem;
+  font-size: 0.9375rem;
   line-height: 1.6;
 }
 
