@@ -336,6 +336,29 @@ const ToursList = () => {
     }
   };
 
+  const [copiedTourId, setCopiedTourId] = useState(null);
+  
+  const copyPlayerLink = async (tourId, e) => {
+    e.stopPropagation();
+    const baseUrl = process.env.REACT_APP_BACKEND_URL || window.location.origin;
+    const playerUrl = `${baseUrl}/play/${tourId}`;
+    try {
+      await navigator.clipboard.writeText(playerUrl);
+      setCopiedTourId(tourId);
+      setTimeout(() => setCopiedTourId(null), 2000);
+    } catch (err) {
+      // Fallback for mobile
+      const textArea = document.createElement('textarea');
+      textArea.value = playerUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setCopiedTourId(tourId);
+      setTimeout(() => setCopiedTourId(null), 2000);
+    }
+  };
+
   if (loading) return <div className="loading-screen">Loading tours...</div>;
 
   return (
