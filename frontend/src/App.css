@@ -2667,6 +2667,25 @@
   margin: 0;
 }
 
+/* ==================== NOIR PAWS THEME - TASK INSTRUCTIONS ==================== */
+.player-theme .player-task-instructions {
+  background: rgba(245, 158, 11, 0.1);
+  border: 2px solid rgba(245, 158, 11, 0.3);
+  border-radius: 16px;
+}
+
+.player-theme .task-label {
+  font-family: 'Special Elite', cursive;
+  color: #f59e0b;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.player-theme .player-task-instructions p {
+  font-family: 'Manrope', sans-serif;
+  color: #f8fafc;
+}
+
 /* Player Media */
 .player-media {
   margin: var(--spacing-lg) 0;
