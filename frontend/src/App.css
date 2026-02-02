@@ -1334,15 +1334,15 @@
   width: 48px;
   height: 48px;
   color: #f59e0b;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .player-theme .unlock-card h2 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.375rem;
-  font-weight: 500;
-  margin-bottom: 0.625rem;
-  color: var(--crystal-text-dark, #2a2320);
+  font-family: 'Fraunces', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: #f8fafc;
 }
 
 .player-theme .unlock-prompt {
