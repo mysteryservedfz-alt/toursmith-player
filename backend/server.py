@@ -236,14 +236,31 @@ async def update_tour(tour_id: str, data: TourUpdate, username: str = Depends(ve
     if not tour:
         raise HTTPException(status_code=404, detail="Tour not found")
     
-    update_data = {k: v for k, v in data.model_dump().items() if v is not None}
+    # Use exclude_unset=False to include explicitly set None values
+    # This allows clearing fields by setting them to null
+    update_data = data.model_dump()
+    
+    # Remove fields that weren't sent (still None from default) vs explicitly set to None
+    # For simplicity, we'll include all fields from the request
     update_data["updatedAt"] = datetime.now(timezone.utc).isoformat()
     
     # Convert stops to dict if present
-    if "stops" in update_data:
+    if "stops" in update_data and update_data["stops"] is not None:
         update_data["stops"] = [s.model_dump() if hasattr(s, 'model_dump') else s for s in update_data["stops"]]
     
-    await db.tours.update_one({"id": tour_id}, {"$set": update_data})
+    # Only update fields that are not None, EXCEPT for specific clearable fields
+    clearable_fields = {'welcomeImageUrl', 'welcomeAudioUrl', 'welcomeTitle', 'welcomeBody', 
+                        'welcomeButtonLabel', 'welcomeGpsLat', 'welcomeGpsLng'}
+    
+    final_update = {}
+    for k, v in update_data.items():
+        if v is not None:
+            final_update[k] = v
+        elif k in clearable_fields:
+            # Allow these fields to be explicitly set to None/null
+            final_update[k] = None
+    
+    await db.tours.update_one({"id": tour_id}, {"$set": final_update})
     updated = await db.tours.find_one({"id": tour_id}, {"_id": 0})
     return updated
 
