@@ -2688,8 +2688,25 @@ const TourPlayer = () => {
   const sortedStops = tour?.stops?.sort((a, b) => a.order - b.order) || [];
   const currentStop = sortedStops[currentStopIndex];
   const sortedPages = currentStop?.pages?.sort((a, b) => a.order - b.order) || [];
-  // If no pages, treat the stop itself as a page
-  const currentPage = sortedPages.length > 0 ? sortedPages[currentPageIndex] : currentStop;
+  
+  // If no pages, create a synthetic page from stop data so rendering works consistently
+  const currentPage = sortedPages.length > 0 
+    ? sortedPages[currentPageIndex] 
+    : currentStop 
+      ? {
+          id: `${currentStop.id}-synthetic`,
+          title: currentStop.title || '',
+          subtitle: currentStop.subtitle || '',
+          content: currentStop.content || currentStop.body || '',
+          imageUrl: currentStop.imageUrl,
+          audioUrl: currentStop.audioUrl,
+          mediaUrl: currentStop.mediaUrl,
+          mediaType: currentStop.mediaType,
+          skinImageUrl: currentStop.skinImageUrl,
+          unlockMode: currentStop.unlockMode,
+          storyMode: currentStop.storyMode
+        }
+      : null;
 
   // Get effective unlock settings considering story mode
   const getEffectiveUnlock = (page, stop) => {
