@@ -3153,14 +3153,20 @@ const TourPlayer = () => {
       {tourComplete && (
         <div className="tour-complete-overlay">
           <div className="tour-complete-content">
-            <div className="complete-icon">🎉</div>
-            <h2>Tour Complete!</h2>
-            <p>Congratulations! You've completed the {tour.title} tour.</p>
+            {tour.completionImageUrl ? (
+              <div className="complete-image">
+                <img src={tour.completionImageUrl} alt="Completion" />
+              </div>
+            ) : (
+              <div className="complete-icon">🎉</div>
+            )}
+            <h2>{tour.completionTitle || "Tour Complete!"}</h2>
+            <p>{tour.completionBody || `Congratulations! You've completed the ${tour.title} tour.`}</p>
             <button 
               className="btn btn-primary"
               onClick={() => { setTourComplete(false); setShowWelcome(true); }}
             >
-              Back to Start
+              {tour.completionButtonLabel || "Back to Start"}
             </button>
           </div>
         </div>
