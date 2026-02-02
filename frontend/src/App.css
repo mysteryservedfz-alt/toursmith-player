@@ -1393,13 +1393,9 @@
 }
 
 .player-theme .welcome-content {
-  max-width: 420px;
+  max-width: 500px;
   width: 100%;
   text-align: center;
-  background: var(--crystal-surface, #faf6f3);
-  padding: 2.25rem 1.75rem;
-  border-radius: 2px;
-  box-shadow: 0 16px 48px rgba(42, 35, 32, 0.18);
 }
 
 .player-theme .welcome-brand-logo {
