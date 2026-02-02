@@ -2518,7 +2518,10 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDu
               type="text"
               className="input"
               value={page.skinImageUrl || ""}
-              onChange={(e) => onUpdate({ skinImageUrl: e.target.value || null })}
+              onChange={(eOrValue) => {
+                const value = typeof eOrValue === 'string' ? eOrValue : eOrValue?.target?.value;
+                onUpdate({ skinImageUrl: value || null });
+              }}
               onClear={() => onUpdate({ skinImageUrl: null })}
               placeholder="https://example.com/page-background.jpg"
               data-testid="page-skin-url-input"
