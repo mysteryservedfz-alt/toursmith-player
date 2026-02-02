@@ -1379,7 +1379,7 @@
 
 /* ==================== WELCOME SCREEN - NOIR THEME ==================== */
 .player-theme.welcome-layout {
-  background-color: var(--crystal-bg, #c9b8b3);
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
 }
 
 .player-theme .welcome-screen {
