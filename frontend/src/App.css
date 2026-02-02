@@ -1516,103 +1516,102 @@
 
 .player-theme .complete-icon {
   font-size: 2.25rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.875rem;
 }
 
 .player-theme .complete-image img {
-  max-width: 160px;
-  border-radius: 4px;
-  margin-bottom: 1.5rem;
+  max-width: 140px;
+  border-radius: 2px;
+  margin-bottom: 1.25rem;
 }
 
 .player-theme .tour-complete-content h2 {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 1.625rem;
-  font-weight: 600;
-  color: var(--crystal-text-dark, #2d2a26);
-  margin-bottom: 0.75rem;
+  font-size: 1.375rem;
+  font-weight: 500;
+  color: var(--crystal-text-dark, #2a2320);
+  margin-bottom: 0.5rem;
 }
 
 .player-theme .tour-complete-content p {
-  font-family: 'Questrial', sans-serif;
-  color: var(--crystal-text-medium, #5c5650);
-  margin-bottom: 1.5rem;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--crystal-text-warm, #5c4a42);
+  margin-bottom: 1.25rem;
   line-height: 1.6;
+  font-size: 0.9375rem;
 }
 
 .player-theme .tour-complete-content .btn-primary {
-  font-family: 'Questrial', sans-serif;
-  font-size: 1rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9375rem;
   font-weight: 500;
-  padding: 0.875rem 2rem;
-  background: var(--crystal-amethyst, #9b8aa8);
+  padding: 0.75rem 1.75rem;
+  background: var(--crystal-terracotta, #b86853);
   color: #ffffff;
   border: none;
-  border-radius: 4px;
+  border-radius: 2px;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(155, 138, 168, 0.25);
   text-decoration: none;
   display: inline-block;
 }
 
 .player-theme .tour-complete-content .btn-primary:hover {
-  background: var(--crystal-amethyst-deep, #7d6b8a);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(155, 138, 168, 0.35);
+  background: var(--crystal-terracotta-deep, #9a4f3c);
 }
 
-/* ==================== GPS CHECK - CRYSTAL THEME ==================== */
+/* ==================== GPS CHECK - CRYSTAL ==================== */
 .player-theme .gps-check-section {
-  margin: 1.5rem 0;
-  padding: 1.25rem;
-  background: var(--crystal-surface-alt, #f5f2ed);
-  border: 1px solid var(--crystal-border, #d4d0c8);
-  border-radius: 4px;
+  margin: 1.25rem 0;
+  padding: 1rem;
+  background: var(--crystal-surface-warm, #f5ede8);
+  border: 1px solid var(--crystal-border, #ddd3cc);
+  border-radius: 2px;
 }
 
 .player-theme .gps-message {
-  font-family: 'Questrial', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 500;
-  font-size: 1rem;
-  color: var(--crystal-text-dark, #2d2a26);
+  font-size: 0.9375rem;
+  color: var(--crystal-text-dark, #2a2320);
 }
 
 .player-theme .gps-sublabel,
 .player-theme .gps-distance {
-  color: var(--crystal-text-light, #8a847c);
-  font-size: 0.875rem;
+  color: var(--crystal-text-muted, #8a7d75);
+  font-size: 0.8125rem;
 }
 
 .player-theme .gps-check-btn,
 .player-theme .gps-retry-btn {
-  font-family: 'Questrial', sans-serif;
-  background: var(--crystal-amethyst, #9b8aa8);
+  font-family: 'DM Sans', sans-serif;
+  background: var(--crystal-terracotta, #b86853);
   color: #ffffff;
   border: none;
-  padding: 0.625rem 1.25rem;
-  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  border-radius: 2px;
   font-weight: 500;
+  font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .player-theme .gps-check-btn:hover,
 .player-theme .gps-retry-btn:hover {
-  background: var(--crystal-amethyst-deep, #7d6b8a);
+  background: var(--crystal-terracotta-deep, #9a4f3c);
 }
 
 .player-theme .gps-spinner {
-  border-color: var(--crystal-border, #d4d0c8);
-  border-top-color: var(--crystal-amethyst, #9b8aa8);
+  border-color: var(--crystal-border, #ddd3cc);
+  border-top-color: var(--crystal-terracotta, #b86853);
 }
 
 .player-theme .gps-icon-large.success {
-  background: rgba(155, 138, 168, 0.15);
-  color: var(--crystal-amethyst, #9b8aa8);
+  background: rgba(184, 104, 83, 0.12);
+  color: var(--crystal-terracotta, #b86853);
 }
 
-/* ==================== MULTIPLE CHOICE - CRYSTAL THEME ==================== */
+/* ==================== MULTIPLE CHOICE - CRYSTAL ==================== */
 .player-theme .mc-options {
   display: flex;
   flex-direction: column;
