@@ -1,0 +1,114 @@
+{
+  "identity": {
+    "name": "Mystery Served",
+    "persona": "The Playful Detective",
+    "vibe": "Modern Noir meets Golden Retriever Energy. Mysterious but friendly. Dark, atmospheric, but with warm, inviting highlights.",
+    "principles": [
+      "Immersion First: Every screen should feel like part of a case file.",
+      "Tactile Design: Buttons and cards should feel 'clickable' and physical.",
+      "Legibility in the Dark: High contrast text on dark backgrounds is non-negotiable.",
+      "Playful Tension: Serious mystery aesthetics (serifs, dark mode) balanced with fun animations and warm colors."
+    ]
+  },
+  "typography": {
+    "primary_font": "Manrope",
+    "heading_font": "Fraunces",
+    "accent_font": "Special Elite",
+    "scale": {
+      "h1": "text-4xl md:text-5xl font-black tracking-tight",
+      "h2": "text-3xl md:text-4xl font-bold tracking-tight",
+      "h3": "text-2xl font-bold",
+      "body": "text-base md:text-lg leading-relaxed",
+      "caption": "text-sm font-medium tracking-wide uppercase"
+    },
+    "imports": [
+      "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;400;600;700;900&family=Manrope:wght@400;500;600;700&family=Special+Elite&display=swap"
+    ]
+  },
+  "colors": {
+    "palette": {
+      "background": "#0f172a",
+      "surface": "#1e293b",
+      "surface_highlight": "#334155",
+      "primary": "#f59e0b",
+      "primary_foreground": "#0f172a",
+      "secondary": "#6366f1",
+      "secondary_foreground": "#ffffff",
+      "accent": "#10b981",
+      "text_main": "#f8fafc",
+      "text_muted": "#94a3b8",
+      "border": "#334155",
+      "error": "#ef4444"
+    },
+    "usage": {
+      "body_bg": "bg-[#0f172a]",
+      "card_bg": "bg-[#1e293b]/90 backdrop-blur-md",
+      "text_primary": "text-[#f8fafc]",
+      "text_secondary": "text-[#94a3b8]",
+      "brand_accent": "text-[#f59e0b]"
+    }
+  },
+  "visual_enhancers": {
+    "textures": {
+      "noise": "url('https://grainy-gradients.vercel.app/noise.svg')",
+      "paper": "url('https://images.unsplash.com/photo-1667771428712-7056dbee6317?crop=entropy&cs=srgb&fm=jpg&q=85')"
+    },
+    "shadows": {
+      "card": "shadow-[0_8px_30px_rgb(0,0,0,0.12)]",
+      "button": "shadow-[0_4px_14px_0_rgba(245,158,11,0.39)]"
+    },
+    "borders": {
+      "subtle": "border border-white/10",
+      "highlight": "border border-[#f59e0b]/50"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-[#f59e0b] text-[#0f172a] font-bold px-6 py-3 rounded-xl shadow-lg hover:transform hover:-translate-y-1 transition-all duration-200 active:scale-95",
+      "secondary": "bg-[#1e293b] text-[#f8fafc] border border-[#334155] font-semibold px-6 py-3 rounded-xl hover:bg-[#334155] transition-all duration-200",
+      "ghost": "text-[#94a3b8] hover:text-[#f8fafc] font-medium px-4 py-2 transition-colors"
+    },
+    "cards": {
+      "base": "bg-[#1e293b]/80 backdrop-blur-md border border-white/5 rounded-2xl p-6 shadow-xl relative overflow-hidden",
+      "interactive": "hover:border-[#f59e0b]/30 transition-colors duration-300 cursor-pointer"
+    },
+    "inputs": {
+      "base": "bg-[#0f172a]/50 border border-[#334155] text-[#f8fafc] rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#f59e0b] focus:border-transparent outline-none transition-all placeholder:text-[#475569]"
+    }
+  },
+  "layout": {
+    "container": "max-w-md mx-auto px-4 min-h-screen flex flex-col relative",
+    "spacing": {
+      "section": "py-8",
+      "element": "mb-6"
+    }
+  },
+  "motion": {
+    "page_transition": {
+      "initial": { "opacity": 0, "y": 20 },
+      "animate": { "opacity": 1, "y": 0 },
+      "exit": { "opacity": 0, "y": -20 },
+      "transition": { "duration": 0.4, "ease": "easeOut" }
+    },
+    "stagger": 0.1
+  },
+  "assets": {
+    "logo_placeholder": "https://images.unsplash.com/photo-1760292421988-5e761866cc81?crop=entropy&cs=srgb&fm=jpg&q=85",
+    "background_texture": "https://images.unsplash.com/photo-1667771428712-7056dbee6317?crop=entropy&cs=srgb&fm=jpg&q=85"
+  },
+  "instructions_to_main_agent": [
+    "1. UPDATE CSS VARIABLES: Modify '/app/frontend/src/index.css' to replace the 'Boho Sunshine' variables with the new 'Noir Paws' palette. Keep the variable names if possible to avoid breaking admin, OR scope the new variables to a '.player-theme' class.",
+    "2. SCOPE STYLES: The user wants to focus on the PLAYER. Wrap the player app in a container with the new theme class/styles. Do not break the Admin dashboard.",
+    "3. UPDATE FONTS: Add the Google Fonts import for Fraunces, Manrope, and Special Elite to index.css.",
+    "4. REFACTOR PLAYER COMPONENTS: Go through the player-related components (Welcome, Tour, Unlock, etc.) and apply the new Tailwind classes defined in 'components'.",
+    "5. ADD TEXTURE: Apply the noise/paper texture to the main player background.",
+    "6. ENHANCE MOTION: Ensure page transitions are smooth. Use 'framer-motion' if available, or CSS transitions.",
+    "7. DATA-TESTID: Ensure all interactive elements have 'data-testid' attributes."
+  ],
+  "universal_guidelines": [
+    "Avoid generic AI aesthetics.",
+    "Use deep, rich colors for backgrounds, never pure black.",
+    "Ensure high contrast for accessibility.",
+    "Make interactions feel physical and responsive."
+  ]
+}
