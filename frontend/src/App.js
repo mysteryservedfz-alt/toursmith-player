@@ -487,6 +487,13 @@ const ToursList = () => {
                   </div>
                   <span className={`list-badge badge-${tour.status}`}>{tour.status}</span>
                   <div className="list-actions">
+                    <button 
+                      onClick={(e) => copyPlayerLink(tour.id, e)} 
+                      className={`btn-icon btn-copy-link-sm ${copiedTourId === tour.id ? 'copied' : ''}`}
+                      title="Copy Player Link"
+                    >
+                      {copiedTourId === tour.id ? <Icons.Check /> : <Icons.Link />}
+                    </button>
                     <button onClick={() => navigate(`/admin/tour/${tour.id}`)} className="btn btn-secondary btn-sm">
                       Edit
                     </button>
