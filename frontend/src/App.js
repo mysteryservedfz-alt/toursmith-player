@@ -2566,6 +2566,24 @@ const TourPlayer = () => {
   const [gpsDistance, setGpsDistance] = useState(null);
   const [gpsError, setGpsError] = useState(null);
 
+  // Helper: Get background style with optional skin image
+  // Page skin overrides tour skin; tour skin overrides background color
+  const getBackgroundStyle = (pageSkin = null) => {
+    const skinUrl = pageSkin || tour?.skinImageUrl;
+    const bgColor = tour?.backgroundColor || undefined;
+    
+    if (skinUrl) {
+      return {
+        backgroundColor: bgColor,
+        backgroundImage: `url(${skinUrl})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      };
+    }
+    return { backgroundColor: bgColor };
+  };
+
   // Calculate distance between two GPS points (Haversine formula)
   const calculateDistance = (lat1, lng1, lat2, lng2) => {
     const R = 6371000; // Earth radius in meters
