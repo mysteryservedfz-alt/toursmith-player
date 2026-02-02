@@ -2449,7 +2449,8 @@ const TourPlayer = () => {
   const sortedStops = tour?.stops?.sort((a, b) => a.order - b.order) || [];
   const currentStop = sortedStops[currentStopIndex];
   const sortedPages = currentStop?.pages?.sort((a, b) => a.order - b.order) || [];
-  const currentPage = sortedPages[currentPageIndex];
+  // If no pages, treat the stop itself as a page
+  const currentPage = sortedPages.length > 0 ? sortedPages[currentPageIndex] : currentStop;
 
   // Get effective unlock settings considering story mode
   const getEffectiveUnlock = (page, stop) => {
