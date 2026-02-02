@@ -1100,19 +1100,17 @@
   padding-top: var(--spacing-lg);
 }
 
-/* ==================== PLAYER LAYOUT - CRYSTAL THEME ==================== */
-/* Warm boho aesthetic - dusty rose, terracotta, natural textures */
-
+/* ==================== PLAYER LAYOUT - NOIR PAWS THEME ==================== */
 .player-theme.player-layout {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: var(--crystal-bg, #c9b8b3);
-  font-family: 'DM Sans', sans-serif;
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  font-family: 'Manrope', sans-serif;
   position: relative;
 }
 
-/* Subtle organic texture */
+/* Subtle grain texture overlay */
 .player-theme.player-layout::before {
   content: '';
   position: fixed;
@@ -1120,7 +1118,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   opacity: 0.03;
   pointer-events: none;
   z-index: 0;
