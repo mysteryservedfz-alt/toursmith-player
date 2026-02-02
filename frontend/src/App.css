@@ -2719,51 +2719,54 @@
 
 /* Task Instructions in Player */
 .player-task-instructions {
-  background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
-  border: 2px solid #0ea5e9;
-  border-radius: 12px;
+  background: var(--crystal-surface-alt, #f5f2ed);
+  border: 1px solid var(--crystal-border, #d4d0c8);
+  border-radius: 4px;
   padding: var(--spacing-lg);
   margin: var(--spacing-lg) 0;
 }
 
 .task-label {
-  font-family: 'Quicksand', sans-serif;
-  font-weight: 700;
-  font-size: 0.875rem;
-  color: #0369a1;
+  font-family: 'Questrial', sans-serif;
+  font-weight: 500;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--crystal-amethyst, #9b8aa8);
   margin-bottom: var(--spacing-sm);
 }
 
 .player-task-instructions p {
-  font-family: 'Quicksand', sans-serif;
+  font-family: 'Questrial', sans-serif;
   font-size: 1rem;
-  color: #0c4a6e;
+  color: var(--crystal-text-dark, #2d2a26);
   margin: 0;
 }
 
-/* ==================== NOIR PAWS THEME - TASK INSTRUCTIONS ==================== */
+/* ==================== CRYSTAL THEME - TASK INSTRUCTIONS ==================== */
 .player-theme .player-task-instructions {
-  background: rgba(245, 158, 11, 0.1);
-  border: 2px solid rgba(245, 158, 11, 0.3);
-  border-radius: 16px;
+  background: var(--crystal-surface-alt, #f5f2ed);
+  border: 1px solid var(--crystal-border, #d4d0c8);
+  border-radius: 4px;
+  border-left: 3px solid var(--crystal-amethyst, #9b8aa8);
 }
 
 .player-theme .task-label {
-  font-family: 'Special Elite', cursive;
-  color: #f59e0b;
+  font-family: 'Questrial', sans-serif;
+  color: var(--crystal-amethyst, #9b8aa8);
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.15em;
 }
 
 .player-theme .player-task-instructions p {
-  font-family: 'Manrope', sans-serif;
-  color: #f8fafc;
+  font-family: 'Questrial', sans-serif;
+  color: var(--crystal-text-dark, #2d2a26);
 }
 
 /* Player Media */
 .player-media {
   margin: var(--spacing-lg) 0;
-  border-radius: 12px;
+  border-radius: 4px;
   overflow: hidden;
 }
 
