@@ -1431,55 +1431,57 @@
 
 .player-theme .welcome-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 2rem;
-  font-weight: 900;
-  color: #f8fafc;
-  margin-bottom: 1rem;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+  font-size: 1.875rem;
+  font-weight: 600;
+  color: var(--crystal-text-dark, #2d2a26);
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
 }
 
 .player-theme .welcome-body {
-  font-size: 1.0625rem;
-  line-height: 1.7;
-  color: #94a3b8;
-  margin-bottom: 2rem;
+  font-family: 'Questrial', sans-serif;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--crystal-text-medium, #5c5650);
+  margin-bottom: 1.5rem;
 }
 
 .player-theme .welcome-body p {
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .player-theme .welcome-body strong {
-  color: #f59e0b;
+  color: var(--crystal-amethyst-deep, #7d6b8a);
   font-weight: 600;
 }
 
 .player-theme .welcome-body em {
-  color: #cbd5e1;
+  color: var(--crystal-text-dark, #2d2a26);
 }
 
 .player-theme .welcome-start-btn {
-  font-family: 'Manrope', sans-serif;
-  font-size: 1.125rem;
-  font-weight: 700;
-  padding: 1rem 2.5rem;
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  color: #0f172a;
+  font-family: 'Questrial', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.875rem 2rem;
+  background: var(--crystal-amethyst, #9b8aa8);
+  color: #ffffff;
   border: none;
-  border-radius: 50px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3);
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(155, 138, 168, 0.25);
 }
 
 .player-theme .welcome-start-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgba(245, 158, 11, 0.4);
+  background: var(--crystal-amethyst-deep, #7d6b8a);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(155, 138, 168, 0.35);
 }
 
 .player-theme .welcome-start-btn:active {
-  transform: translateY(-1px);
+  transform: translateY(0);
 }
 
 .player-theme .welcome-start-btn.disabled {
@@ -1488,15 +1490,14 @@
   transform: none;
 }
 
-/* ==================== TOUR COMPLETE - NOIR THEME ==================== */
+/* ==================== TOUR COMPLETE - CRYSTAL THEME ==================== */
 .player-theme .tour-complete-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(8px);
+  background: rgba(26, 26, 26, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1505,19 +1506,19 @@
 }
 
 .player-theme .tour-complete-content {
-  background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
-  border: 1px solid rgba(245, 158, 11, 0.2);
+  background: var(--crystal-surface, #faf8f5);
+  border: 1px solid var(--crystal-border, #d4d0c8);
   padding: 2.5rem 2rem;
-  border-radius: 24px;
+  border-radius: 8px;
   text-align: center;
   max-width: 380px;
   margin: 1.5rem;
   animation: scaleUp 0.4s ease;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
 }
 
 .player-theme .complete-icon {
-  font-size: 4rem;
+  font-size: 3rem;
   margin-bottom: 1rem;
   animation: bounce 1s ease infinite;
 }
