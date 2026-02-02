@@ -1399,12 +1399,13 @@
 }
 
 .player-theme .welcome-brand-logo {
-  margin-bottom: 1.25rem;
+  margin-bottom: 2rem;
 }
 
 .player-theme .welcome-brand-logo img {
-  max-width: 120px;
+  max-width: 160px;
   height: auto;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.4));
 }
 
 .player-theme .welcome-image {
