@@ -1262,56 +1262,53 @@
 }
 
 .player-theme .player-footer .btn {
-  font-family: 'Questrial', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 500;
   font-size: 0.875rem;
   padding: 0.75rem 1.5rem;
-  border-radius: 4px;
+  border-radius: 2px;
   transition: all 0.2s ease;
 }
 
 .player-theme .player-footer .btn-primary {
-  background: var(--crystal-amethyst, #9b8aa8);
+  background: var(--crystal-terracotta, #b86853);
   color: #ffffff;
   border: none;
-  box-shadow: 0 2px 8px rgba(155, 138, 168, 0.25);
 }
 
 .player-theme .player-footer .btn-primary:hover {
-  background: var(--crystal-amethyst-deep, #7d6b8a);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(155, 138, 168, 0.35);
+  background: var(--crystal-terracotta-deep, #9a4f3c);
 }
 
 .player-theme .player-footer .btn-secondary {
   background: transparent;
-  color: var(--crystal-text-medium, #5c5650);
-  border: 1px solid var(--crystal-border, #d4d0c8);
+  color: var(--crystal-text-warm, #5c4a42);
+  border: 1px solid var(--crystal-border, #ddd3cc);
 }
 
 .player-theme .player-footer .btn-secondary:hover {
-  background: var(--crystal-surface-alt, #f5f2ed);
-  color: var(--crystal-text-dark, #2d2a26);
+  background: var(--crystal-surface-warm, #f5ede8);
+  border-color: var(--crystal-border-warm, #c9b8b3);
 }
 
-/* ==================== PLAYER PROGRESS BAR - CRYSTAL ==================== */
+/* ==================== PROGRESS BAR - CRYSTAL ==================== */
 .player-theme .progress-bar-container {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 2px;
-  background: var(--crystal-border, #d4d0c8);
+  background: var(--crystal-sand, #e8ddd6);
   overflow: hidden;
 }
 
 .player-theme .progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, var(--crystal-amethyst-light, #c4b8cf), var(--crystal-amethyst, #9b8aa8));
+  background: var(--crystal-terracotta, #b86853);
   transition: width 0.5s ease;
 }
 
-/* ==================== UNLOCK GATE - CRYSTAL THEME ==================== */
+/* ==================== UNLOCK GATE - CRYSTAL ==================== */
 .player-theme .unlock-gate {
   min-height: 100vh;
   display: flex;
@@ -1321,20 +1318,19 @@
 }
 
 .player-theme .unlock-card {
-  max-width: 400px;
+  max-width: 380px;
   width: 100%;
   text-align: center;
-  background: var(--crystal-surface, #faf8f5);
-  border: 1px solid var(--crystal-border, #d4d0c8);
-  border-radius: 8px;
-  padding: 2.5rem 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  background: var(--crystal-surface, #faf6f3);
+  border-radius: 2px;
+  padding: 2.25rem 1.75rem;
+  box-shadow: 0 12px 40px rgba(42, 35, 32, 0.15);
 }
 
 .player-theme .unlock-card svg {
-  width: 40px;
-  height: 40px;
-  color: var(--crystal-amethyst, #9b8aa8);
+  width: 36px;
+  height: 36px;
+  color: var(--crystal-terracotta, #b86853);
   margin-bottom: 1.25rem;
 }
 
