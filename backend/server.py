@@ -144,6 +144,7 @@ class TourUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
     status: Optional[str] = None
+    backgroundColor: Optional[str] = None
     welcomeTitle: Optional[str] = None
     welcomeBody: Optional[str] = None
     welcomeImageUrl: Optional[str] = None
