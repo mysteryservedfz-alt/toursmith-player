@@ -1096,7 +1096,10 @@ const WelcomeEditor = ({ tour, onUpdate }) => {
             type="text"
             className="input"
             value={tour.skinImageUrl || ""}
-            onChange={(e) => onUpdate("skinImageUrl", e.target.value || null)}
+            onChange={(eOrValue) => {
+              const value = typeof eOrValue === 'string' ? eOrValue : eOrValue?.target?.value;
+              onUpdate("skinImageUrl", value || null);
+            }}
             onClear={() => onUpdate("skinImageUrl", null)}
             placeholder="https://example.com/crystal-background.jpg"
             data-testid="skin-image-url-input"
