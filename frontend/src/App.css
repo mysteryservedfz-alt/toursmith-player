@@ -1377,11 +1377,7 @@
   border-radius: 12px;
 }
 
-.player-theme .unlock-card .btn:hover {
-  background: var(--crystal-terracotta-deep, #9a4f3c);
-}
-
-/* ==================== WELCOME SCREEN - CRYSTAL ==================== */
+/* ==================== WELCOME SCREEN - NOIR THEME ==================== */
 .player-theme.welcome-layout {
   background-color: var(--crystal-bg, #c9b8b3);
 }
