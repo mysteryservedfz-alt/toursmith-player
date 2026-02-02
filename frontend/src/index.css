@@ -2,6 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Google Fonts for Player */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700;900&family=Manrope:wght@400;500;600;700&family=Special+Elite&display=swap');
+
+/* ==================== NOIR PAWS PLAYER THEME ==================== */
+.player-theme {
+  --player-bg: #0f172a;
+  --player-surface: #1e293b;
+  --player-surface-highlight: #334155;
+  --player-primary: #f59e0b;
+  --player-primary-foreground: #0f172a;
+  --player-secondary: #6366f1;
+  --player-accent: #10b981;
+  --player-text: #f8fafc;
+  --player-text-muted: #94a3b8;
+  --player-border: #334155;
+  --player-error: #ef4444;
+  
+  font-family: 'Manrope', sans-serif;
+  background: var(--player-bg);
+  color: var(--player-text);
+  min-height: 100vh;
+}
+
+.player-theme * {
+  box-sizing: border-box;
+}
+
 /* ==================== BOHO SUNSHINE DESIGN TOKENS ==================== */
 :root {
   /* Brand Colors - Hippie Sunshine Boho */
