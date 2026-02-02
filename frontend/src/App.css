@@ -2732,7 +2732,7 @@
   margin: 0;
 }
 
-/* ==================== CRYSTAL THEME - TASK INSTRUCTIONS ==================== */
+/* ==================== CRYSTAL - TASK INSTRUCTIONS ==================== */
 .player-theme .player-task-instructions {
   background: var(--crystal-surface-warm, #f5ede8);
   border: 1px solid var(--crystal-border, #ddd3cc);
