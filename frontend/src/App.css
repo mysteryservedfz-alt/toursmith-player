@@ -2437,6 +2437,54 @@
   color: #1a1a1a;
 }
 
+/* ==================== NOIR PAWS THEME - MULTIPLE CHOICE ==================== */
+.player-theme .mc-options-player {
+  gap: 0.75rem;
+}
+
+.player-theme .mc-option-btn {
+  background: rgba(30, 41, 59, 0.8);
+  border: 2px solid rgba(51, 65, 85, 0.6);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  backdrop-filter: blur(8px);
+}
+
+.player-theme .mc-option-btn:hover {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.player-theme .mc-option-btn.selected {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.15);
+}
+
+.player-theme .mc-option-letter {
+  background: rgba(51, 65, 85, 0.8);
+  color: #94a3b8;
+  font-family: 'Manrope', sans-serif;
+}
+
+.player-theme .mc-option-btn:hover .mc-option-letter {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+
+.player-theme .mc-option-btn.selected .mc-option-letter {
+  background: #f59e0b;
+  color: #0f172a;
+}
+
+.player-theme .mc-option-text {
+  font-family: 'Manrope', sans-serif;
+  color: #cbd5e1;
+}
+
+.player-theme .mc-option-btn.selected .mc-option-text {
+  color: #f8fafc;
+}
+
 /* Unlock Actions */
 .unlock-actions {
   display: flex;
