@@ -709,15 +709,13 @@ const TourEditor = () => {
             <Icons.Save />
             {saving ? 'Saving...' : hasUnsavedChanges ? 'Save Changes' : 'Saved'}
           </button>
-          <select
-            className="input status-select"
-            value={tour.status}
-            onChange={(e) => updateField("status", e.target.value)}
-            data-testid="tour-status-select"
+          <button
+            onClick={() => { updateField("status", tour.status === "published" ? "draft" : "published"); }}
+            className={`btn ${tour.status === "published" ? 'btn-unpublish' : 'btn-publish'}`}
+            data-testid="publish-btn"
           >
-            <option value="draft">Draft</option>
-            <option value="published">Published</option>
-          </select>
+            {tour.status === "published" ? 'Unpublish' : 'Publish'}
+          </button>
         </div>
       </header>
 
