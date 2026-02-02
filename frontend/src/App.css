@@ -2621,7 +2621,7 @@
 }
 
 .case-note {
-  color: var(--crystal-text-muted, #8a7d75);
+  color: #666666;
   margin-top: var(--spacing-xs);
 }
 
@@ -2631,7 +2631,7 @@
 }
 
 .hint-page {
-  max-width: 560px;
+  max-width: 600px;
   margin: 0 auto;
   padding: var(--spacing-xl);
 }
@@ -2640,68 +2640,72 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  background: var(--crystal-surface, #faf6f3);
-  border: 1px solid var(--crystal-border, #ddd3cc);
+  background: #ffffff;
+  border: 2px solid #e0e0e0;
   padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: 2px;
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 500;
-  color: var(--crystal-text-warm, #5c4a42);
+  border-radius: 8px;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  color: #1a1a1a;
   cursor: pointer;
   margin-bottom: var(--spacing-xl);
 }
 
 .hint-content {
-  background: var(--crystal-surface, #faf6f3);
-  border-radius: 2px;
+  background: #ffffff;
+  border-radius: 16px;
   padding: var(--spacing-2xl);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
 }
 
 .hint-content h2 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.25rem;
-  color: var(--crystal-terracotta, #b86853);
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.5rem;
+  color: #f59e0b;
   margin-bottom: var(--spacing-lg);
 }
 
 .hint-text p {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.9375rem;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.125rem;
   line-height: 1.7;
-  color: var(--crystal-text-warm, #5c4a42);
+  color: #1a1a1a;
   margin-bottom: var(--spacing-md);
 }
 
-/* ==================== CRYSTAL - HINT PAGE ==================== */
+/* ==================== NOIR PAWS THEME - HINT PAGE ==================== */
 .player-theme .hint-page {
-  padding: 1.5rem;
+  padding: 2rem 1.5rem;
 }
 
 .player-theme .hint-page .btn-back {
-  background: var(--crystal-surface, #faf6f3);
-  border: 1px solid var(--crystal-border, #ddd3cc);
-  color: var(--crystal-text-warm, #5c4a42);
-  border-radius: 2px;
-  font-family: 'DM Sans', sans-serif;
+  background: rgba(51, 65, 85, 0.5);
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  color: #94a3b8;
+  border-radius: 50px;
+  font-family: 'Manrope', sans-serif;
 }
 
 .player-theme .hint-page .btn-back:hover {
-  background: var(--crystal-surface-warm, #f5ede8);
+  background: rgba(51, 65, 85, 0.8);
+  color: #f8fafc;
 }
 
 .player-theme .hint-content {
-  background: var(--crystal-surface, #faf6f3);
-  border-radius: 2px;
+  background: rgba(30, 41, 59, 0.9);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(51, 65, 85, 0.5);
+  border-radius: 20px;
 }
 
 .player-theme .hint-content h2 {
-  font-family: 'Cormorant Garamond', serif;
-  color: var(--crystal-terracotta, #b86853);
+  font-family: 'Fraunces', serif;
+  color: #f59e0b;
 }
 
 .player-theme .hint-text p {
-  font-family: 'DM Sans', sans-serif;
-  color: var(--crystal-text-warm, #5c4a42);
+  font-family: 'Manrope', sans-serif;
+  color: #cbd5e1;
 }
 
 /* Task Instructions in Player */
