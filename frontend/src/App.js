@@ -755,13 +755,20 @@ const TourEditor = () => {
               const newStatus = tour.status === "published" ? "draft" : "published";
               const updatedTour = { ...tour, status: newStatus };
               setTour(updatedTour);
-              await saveTour(updatedTour);
+              setSaving(true);
+              try {
+                await saveTour(updatedTour);
+                // Small delay to ensure backend has processed the change
+                await new Promise(resolve => setTimeout(resolve, 300));
+              } finally {
+                setSaving(false);
+              }
             }}
             className={`btn ${tour.status === "published" ? 'btn-unpublish' : 'btn-publish'}`}
             disabled={saving}
             data-testid="publish-btn"
           >
-            {tour.status === "published" ? 'Unpublish' : 'Publish'}
+            {saving ? 'Saving...' : (tour.status === "published" ? 'Unpublish' : 'Publish')}
           </button>
         </div>
       </header>
