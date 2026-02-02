@@ -2726,9 +2726,9 @@
 }
 
 .player-task-instructions p {
-  font-family: 'Questrial', sans-serif;
-  font-size: 1rem;
-  color: var(--crystal-text-dark, #2d2a26);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9375rem;
+  color: var(--crystal-text-dark, #2a2320);
   margin: 0;
 }
 
