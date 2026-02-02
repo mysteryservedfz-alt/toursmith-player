@@ -1293,7 +1293,18 @@ const WelcomeEditor = ({ tour, onUpdate }) => {
             placeholder="Back to Start" 
             data-testid="completion-button-label-input" 
           />
-          <p className="text-small">Default: "Back to Start"</p>
+        </div>
+        <div className="form-group">
+          <label className="form-label">Button URL (optional)</label>
+          <ClearableInput 
+            type="url" 
+            value={tour.completionButtonUrl} 
+            onChange={(val) => onUpdate("completionButtonUrl", val)} 
+            onClear={() => onUpdate("completionButtonUrl", null)}
+            placeholder="https://yourwebsite.com/book-now" 
+            data-testid="completion-button-url-input" 
+          />
+          <p className="text-small">Leave empty to go back to tour start. Add a URL to redirect elsewhere (e.g., booking page).</p>
         </div>
       </div>
     </div>
