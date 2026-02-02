@@ -2710,49 +2710,45 @@
 
 /* Task Instructions in Player */
 .player-task-instructions {
-  background: var(--crystal-surface-warm, #f5ede8);
-  border: 1px solid var(--crystal-border, #ddd3cc);
-  border-left: 3px solid var(--crystal-terracotta, #b86853);
-  border-radius: 2px;
+  background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+  border: 2px solid #0ea5e9;
+  border-radius: 12px;
   padding: var(--spacing-lg);
   margin: var(--spacing-lg) 0;
 }
 
 .task-label {
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 500;
-  font-size: 0.6875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--crystal-terracotta, #b86853);
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: #0369a1;
   margin-bottom: var(--spacing-sm);
 }
 
 .player-task-instructions p {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.9375rem;
-  color: var(--crystal-text-dark, #2a2320);
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1rem;
+  color: #0c4a6e;
   margin: 0;
 }
 
-/* ==================== CRYSTAL - TASK INSTRUCTIONS ==================== */
+/* ==================== NOIR PAWS THEME - TASK INSTRUCTIONS ==================== */
 .player-theme .player-task-instructions {
-  background: var(--crystal-surface-warm, #f5ede8);
-  border: 1px solid var(--crystal-border, #ddd3cc);
-  border-radius: 2px;
-  border-left: 3px solid var(--crystal-terracotta, #b86853);
+  background: rgba(245, 158, 11, 0.1);
+  border: 2px solid rgba(245, 158, 11, 0.3);
+  border-radius: 16px;
 }
 
 .player-theme .task-label {
-  font-family: 'DM Sans', sans-serif;
-  color: var(--crystal-terracotta, #b86853);
+  font-family: 'Special Elite', cursive;
+  color: #f59e0b;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.1em;
 }
 
 .player-theme .player-task-instructions p {
-  font-family: 'DM Sans', sans-serif;
-  color: var(--crystal-text-dark, #2a2320);
+  font-family: 'Manrope', sans-serif;
+  color: #f8fafc;
 }
 
 /* Player Media */
