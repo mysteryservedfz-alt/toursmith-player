@@ -1218,7 +1218,7 @@
 
 /* ==================== WELCOME SCREEN (PLAYER) ==================== */
 .welcome-layout {
-  background: linear-gradient(180deg, var(--color-bg-light) 0%, var(--color-primary-light) 50%, var(--color-calm-light) 100%);
+  /* Background controlled by inline style */
 }
 
 .welcome-screen {
