@@ -1009,6 +1009,38 @@ const WelcomeEditor = ({ tour, onUpdate }) => {
   return (
     <div className="content-editor" data-testid="welcome-editor">
       <div className="editor-section main-text-section">
+        <h2>Tour Settings</h2>
+        
+        {/* Background Color Picker */}
+        <div className="form-group">
+          <label className="form-label">Background Color</label>
+          <div className="color-picker-container">
+            <div className="color-presets">
+              {['#ffffff', '#f8f9fa', '#fff8e7', '#e8f5e9', '#e3f2fd', '#fce4ec', '#f3e5f5', '#1a1a1a'].map(color => (
+                <button
+                  key={color}
+                  type="button"
+                  className={`color-preset ${tour.backgroundColor === color ? 'selected' : ''}`}
+                  style={{ backgroundColor: color }}
+                  onClick={() => onUpdate("backgroundColor", color)}
+                  title={color}
+                />
+              ))}
+            </div>
+            <div className="color-custom">
+              <input
+                type="color"
+                value={tour.backgroundColor || "#ffffff"}
+                onChange={(e) => onUpdate("backgroundColor", e.target.value)}
+                className="color-input"
+                data-testid="background-color-input"
+              />
+              <span className="color-value">{tour.backgroundColor || "#ffffff"}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="divider" />
         <h2>Welcome Screen</h2>
         <p className="text-small helper-text">Shown before the tour starts. Leave empty to skip.</p>
         <div className="form-group">
