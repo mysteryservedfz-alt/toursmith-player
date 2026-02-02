@@ -2640,3 +2640,35 @@
 .editor-header-actions {
   position: relative;
 }
+
+/* ==================== DELETE MEDIA BUTTON ==================== */
+.btn-delete-media {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: var(--spacing-sm);
+  padding: 8px 12px;
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-delete-media:hover {
+  background: #fecaca;
+  border-color: #f87171;
+}
+
+.image-preview {
+  position: relative;
+}
+
+.audio-preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
