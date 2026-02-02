@@ -154,6 +154,7 @@ class TourUpdate(BaseModel):
     description: Optional[str] = None
     status: Optional[str] = None
     backgroundColor: Optional[str] = None
+    skinImageUrl: Optional[str] = None  # Tour-level default skin
     welcomeTitle: Optional[str] = None
     welcomeBody: Optional[str] = None
     welcomeImageUrl: Optional[str] = None
