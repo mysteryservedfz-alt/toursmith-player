@@ -3038,7 +3038,7 @@ const TourPlayer = () => {
     const canStart = !gpsRequired || gpsStatus === 'allowed';
     
     return (
-      <div className="player-theme player-layout welcome-layout" data-testid="player-welcome" style={{ backgroundColor: tour.backgroundColor || undefined }}>
+      <div className="player-theme player-layout welcome-layout" data-testid="player-welcome" style={getBackgroundStyle()}>
         <div className="welcome-screen">
           <div className="welcome-content">
             {/* Brand Logo */}
