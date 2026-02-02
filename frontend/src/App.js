@@ -3124,7 +3124,7 @@ const TourPlayer = () => {
   // No stops - show message
   if (!currentStop) {
     return (
-      <div className="player-layout" data-testid="tour-player" style={{ backgroundColor: tour.backgroundColor || '#ffffff' }}>
+      <div className="player-theme player-layout" data-testid="tour-player" style={{ backgroundColor: tour.backgroundColor || undefined }}>
         <header className="player-header">
           <h1>{tour.title}</h1>
         </header>
@@ -3142,7 +3142,7 @@ const TourPlayer = () => {
 
   // Normal Page View (with transitions)
   return (
-    <div className="player-layout" data-testid="tour-player" style={{ backgroundColor: tour.backgroundColor || '#ffffff' }}>
+    <div className="player-theme player-layout" data-testid="tour-player" style={{ backgroundColor: tour.backgroundColor || undefined }}>
       {/* Confetti Animation */}
       {showConfetti && (
         <div className="confetti-container">
