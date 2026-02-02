@@ -164,6 +164,7 @@ class TourUpdate(BaseModel):
     completionBody: Optional[str] = None
     completionImageUrl: Optional[str] = None
     completionButtonLabel: Optional[str] = None
+    completionButtonUrl: Optional[str] = None
     stops: Optional[List[Stop]] = None
 
 # ==================== AUTH HELPERS ====================
