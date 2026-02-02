@@ -1142,7 +1142,7 @@
   align-items: center;
   justify-content: center;
   padding: var(--spacing-xl);
-  background: linear-gradient(160deg, var(--color-bg-light) 0%, var(--color-accent-light) 50%, var(--color-calm-light) 100%);
+  /* Background controlled by parent player-layout inline style */
 }
 
 .unlock-card {
