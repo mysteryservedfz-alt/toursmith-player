@@ -132,6 +132,11 @@ class Tour(BaseModel):
     welcomeGpsLat: Optional[float] = None
     welcomeGpsLng: Optional[float] = None
     welcomeGpsRadiusMeters: Optional[int] = 100
+    # Completion screen fields
+    completionTitle: Optional[str] = None
+    completionBody: Optional[str] = None
+    completionImageUrl: Optional[str] = None
+    completionButtonLabel: Optional[str] = None
     stops: List[Stop] = []
     createdAt: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     updatedAt: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
