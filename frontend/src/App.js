@@ -1029,11 +1029,11 @@ const WelcomeEditor = ({ tour, onUpdate }) => {
         </div>
         <div className="form-group">
           <label className="form-label">Welcome Image URL</label>
-          <input 
+          <ClearableInput 
             type="url" 
-            className="input" 
-            value={tour.welcomeImageUrl || ""} 
-            onChange={(e) => onUpdate("welcomeImageUrl", e.target.value || null)} 
+            value={tour.welcomeImageUrl} 
+            onChange={(val) => onUpdate("welcomeImageUrl", val)} 
+            onClear={() => onUpdate("welcomeImageUrl", null)}
             placeholder="https://example.com/welcome-image.jpg" 
             data-testid="welcome-image-input" 
           />
@@ -1041,15 +1041,23 @@ const WelcomeEditor = ({ tour, onUpdate }) => {
         {tour.welcomeImageUrl && (
           <div className="image-preview">
             <img src={tour.welcomeImageUrl} alt="Welcome preview" />
+            <button 
+              type="button" 
+              className="btn btn-delete-media"
+              onClick={() => onUpdate("welcomeImageUrl", null)}
+              title="Remove image"
+            >
+              <Icons.Trash /> Remove Image
+            </button>
           </div>
         )}
         <div className="form-group">
           <label className="form-label">Audio URL (optional)</label>
-          <input 
+          <ClearableInput 
             type="url" 
-            className="input" 
-            value={tour.welcomeAudioUrl || ""} 
-            onChange={(e) => onUpdate("welcomeAudioUrl", e.target.value || null)} 
+            value={tour.welcomeAudioUrl} 
+            onChange={(val) => onUpdate("welcomeAudioUrl", val)} 
+            onClear={() => onUpdate("welcomeAudioUrl", null)}
             placeholder="https://example.com/welcome-audio.mp3" 
             data-testid="welcome-audio-input" 
           />
@@ -1057,6 +1065,15 @@ const WelcomeEditor = ({ tour, onUpdate }) => {
         {tour.welcomeAudioUrl && (
           <div className="audio-preview">
             <audio controls src={tour.welcomeAudioUrl} />
+            <button 
+              type="button" 
+              className="btn btn-delete-media"
+              onClick={() => onUpdate("welcomeAudioUrl", null)}
+              title="Remove audio"
+            >
+              <Icons.Trash /> Remove Audio
+            </button>
+          </div>
           </div>
         )}
         <div className="form-group">
