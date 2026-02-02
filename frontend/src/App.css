@@ -1387,7 +1387,7 @@
 
 /* ==================== WELCOME SCREEN - CRYSTAL THEME ==================== */
 .player-theme.welcome-layout {
-  background-color: var(--crystal-bg, #1a1a1a);
+  background-color: var(--crystal-bg, #c9b8b3);
 }
 
 .player-theme .welcome-screen {
