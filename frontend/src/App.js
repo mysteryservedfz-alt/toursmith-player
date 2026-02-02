@@ -2491,6 +2491,44 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDu
             </>
           )}
         </AccordionSection>
+
+        {/* Skin Override */}
+        <AccordionSection
+          title="Page Skin (Background)"
+          icon={<Icons.Image />}
+          isOpen={openSections.skin}
+          onToggle={() => toggleSection('skin')}
+          hasContent={!!page.skinImageUrl}
+          onClear={() => onUpdate({ skinImageUrl: null })}
+        >
+          <div className="form-group">
+            <label className="form-label">Skin Image URL</label>
+            <p className="text-small helper-text">Overrides the tour's default skin for this page only</p>
+            <ClearableInput
+              type="text"
+              className="input"
+              value={page.skinImageUrl || ""}
+              onChange={(e) => onUpdate({ skinImageUrl: e.target.value || null })}
+              onClear={() => onUpdate({ skinImageUrl: null })}
+              placeholder="https://example.com/page-background.jpg"
+              data-testid="page-skin-url-input"
+            />
+            {page.skinImageUrl && (
+              <div className="skin-preview" style={{ marginTop: '0.5rem' }}>
+                <img 
+                  src={page.skinImageUrl} 
+                  alt="Skin preview" 
+                  style={{ 
+                    maxWidth: '100%', 
+                    maxHeight: '100px', 
+                    borderRadius: '8px',
+                    objectFit: 'cover'
+                  }} 
+                />
+              </div>
+            )}
+          </div>
+        </AccordionSection>
       </div>
 
       <DeleteConfirmModal 
