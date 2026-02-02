@@ -1074,7 +1074,6 @@ const WelcomeEditor = ({ tour, onUpdate }) => {
               <Icons.Trash /> Remove Audio
             </button>
           </div>
-          </div>
         )}
         <div className="form-group">
           <label className="form-label">Button Label</label>
