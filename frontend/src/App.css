@@ -1401,13 +1401,13 @@
 }
 
 .player-theme .welcome-content {
-  max-width: 480px;
+  max-width: 420px;
   width: 100%;
   text-align: center;
-  background: var(--crystal-surface, #faf8f5);
-  padding: 2.5rem 2rem;
-  border-radius: 8px;
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+  background: var(--crystal-surface, #faf6f3);
+  padding: 2.25rem 1.75rem;
+  border-radius: 2px;
+  box-shadow: 0 16px 48px rgba(42, 35, 32, 0.18);
 }
 
 .player-theme .welcome-brand-logo {
