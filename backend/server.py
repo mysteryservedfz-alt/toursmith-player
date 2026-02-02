@@ -159,6 +159,10 @@ class TourUpdate(BaseModel):
     welcomeGpsLat: Optional[float] = None
     welcomeGpsLng: Optional[float] = None
     welcomeGpsRadiusMeters: Optional[int] = None
+    completionTitle: Optional[str] = None
+    completionBody: Optional[str] = None
+    completionImageUrl: Optional[str] = None
+    completionButtonLabel: Optional[str] = None
     stops: Optional[List[Stop]] = None
 
 # ==================== AUTH HELPERS ====================
