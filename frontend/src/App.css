@@ -1609,59 +1609,60 @@
 .player-theme .mc-options {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1.25rem;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
 }
 
 .player-theme .mc-option {
-  background: var(--crystal-surface-warm, #f5ede8);
-  border: 1px solid var(--crystal-border, #ddd3cc);
-  border-radius: 2px;
-  padding: 0.75rem 1rem;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.9375rem;
-  color: var(--crystal-text-warm, #5c4a42);
+  background: rgba(30, 41, 59, 0.6);
+  border: 2px solid rgba(51, 65, 85, 0.5);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  font-family: 'Manrope', sans-serif;
+  font-size: 1rem;
+  color: #cbd5e1;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
   text-align: left;
 }
 
 .player-theme .mc-option:hover {
-  border-color: var(--crystal-terracotta-light, #d4917f);
-  background: rgba(184, 104, 83, 0.06);
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
 }
 
 .player-theme .mc-option.selected {
-  border-color: var(--crystal-terracotta, #b86853);
-  background: rgba(184, 104, 83, 0.1);
-  color: var(--crystal-text-dark, #2a2320);
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.15);
+  color: #f8fafc;
 }
 
-/* ==================== HINT BUTTON - CRYSTAL ==================== */
+/* ==================== HINT BUTTON - NOIR THEME ==================== */
 .player-theme .hint-trigger {
   display: flex;
   align-items: center;
-  gap: 0.375rem;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.8125rem;
-  color: var(--crystal-text-muted, #8a7d75);
+  gap: 0.5rem;
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.875rem;
+  color: #94a3b8;
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 0.375rem 0;
-  margin-top: 0.75rem;
+  padding: 0.5rem 0;
+  margin-top: 1rem;
   transition: color 0.2s ease;
 }
 
 .player-theme .hint-trigger:hover {
-  color: var(--crystal-terracotta, #b86853);
+  color: #f59e0b;
 }
 
-/* ==================== MEDIA ELEMENTS - CRYSTAL ==================== */
+/* ==================== MEDIA ELEMENTS - NOIR THEME ==================== */
 .player-theme .player-image {
-  margin-bottom: 1.25rem;
-  border-radius: 2px;
+  margin-bottom: 1.5rem;
+  border-radius: 12px;
   overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .player-theme .player-image img {
@@ -1670,18 +1671,20 @@
 }
 
 .player-theme .audio-player {
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
 }
 
 .player-theme .audio-player audio {
   width: 100%;
-  border-radius: 2px;
+  border-radius: 50px;
+  background: rgba(30, 41, 59, 0.8);
 }
 
 .player-theme .embed-container {
-  margin-bottom: 1.25rem;
-  border-radius: 2px;
+  margin-bottom: 1.5rem;
+  border-radius: 12px;
   overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .player-theme .embed-container iframe {
@@ -1690,7 +1693,7 @@
   border: none;
 }
 
-/* ==================== CONFETTI - CRYSTAL ==================== */
+/* ==================== CONFETTI - NOIR THEME ==================== */
 .player-theme .confetti-piece {
   position: absolute;
   width: 10px;
