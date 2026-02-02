@@ -2633,7 +2633,7 @@ const TourPlayer = () => {
   // Hint page view (full page with back button)
   if (showHintPage && unlockData?.hintText) {
     return (
-      <div className="player-layout hint-page-layout" data-testid="player-hint-page">
+      <div className="player-layout hint-page-layout" data-testid="player-hint-page" style={{ backgroundColor: tour.backgroundColor || '#ffffff' }}>
         <div className="hint-page">
           <button 
             onClick={() => setShowHintPage(false)} 
