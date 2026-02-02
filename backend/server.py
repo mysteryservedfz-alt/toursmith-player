@@ -261,7 +261,8 @@ async def update_tour(tour_id: str, data: TourUpdate, username: str = Depends(ve
     
     # Only update fields that are not None, EXCEPT for specific clearable fields
     clearable_fields = {'welcomeImageUrl', 'welcomeAudioUrl', 'welcomeTitle', 'welcomeBody', 
-                        'welcomeButtonLabel', 'welcomeGpsLat', 'welcomeGpsLng'}
+                        'welcomeButtonLabel', 'welcomeGpsLat', 'welcomeGpsLng',
+                        'completionTitle', 'completionBody', 'completionImageUrl', 'completionButtonLabel'}
     
     final_update = {}
     for k, v in update_data.items():
