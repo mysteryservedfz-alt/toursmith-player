@@ -1382,9 +1382,7 @@
 }
 
 .player-theme .unlock-card .btn:hover {
-  background: var(--crystal-amethyst-deep, #7d6b8a);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(155, 138, 168, 0.35);
+  background: var(--crystal-terracotta-deep, #9a4f3c);
 }
 
 /* ==================== WELCOME SCREEN - CRYSTAL THEME ==================== */
