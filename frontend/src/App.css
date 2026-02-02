@@ -2009,7 +2009,7 @@
 
 /* Hint Page */
 .hint-page-layout {
-  background: linear-gradient(135deg, #fef3c7 0%, #fff7ed 100%);
+  /* Background controlled by inline style */
 }
 
 .hint-page {
