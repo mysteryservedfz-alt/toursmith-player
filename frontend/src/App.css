@@ -2505,51 +2505,51 @@
   color: #1a1a1a;
 }
 
-/* ==================== CRYSTAL THEME - MULTIPLE CHOICE (UNLOCK GATE) ==================== */
+/* ==================== CRYSTAL - MC OPTIONS (UNLOCK GATE) ==================== */
 .player-theme .mc-options-player {
   gap: 0.5rem;
 }
 
 .player-theme .mc-option-btn {
-  background: var(--crystal-surface-alt, #f5f2ed);
-  border: 1px solid var(--crystal-border, #d4d0c8);
-  border-radius: 4px;
-  padding: 0.875rem 1rem;
+  background: var(--crystal-surface-warm, #f5ede8);
+  border: 1px solid var(--crystal-border, #ddd3cc);
+  border-radius: 2px;
+  padding: 0.75rem 1rem;
 }
 
 .player-theme .mc-option-btn:hover {
-  border-color: var(--crystal-amethyst, #9b8aa8);
-  background: rgba(155, 138, 168, 0.08);
+  border-color: var(--crystal-terracotta-light, #d4917f);
+  background: rgba(184, 104, 83, 0.06);
 }
 
 .player-theme .mc-option-btn.selected {
-  border-color: var(--crystal-amethyst, #9b8aa8);
-  background: rgba(155, 138, 168, 0.12);
+  border-color: var(--crystal-terracotta, #b86853);
+  background: rgba(184, 104, 83, 0.1);
 }
 
 .player-theme .mc-option-letter {
-  background: var(--crystal-surface-dark, #ebe7e0);
-  color: var(--crystal-text-light, #8a847c);
-  font-family: 'Questrial', sans-serif;
+  background: var(--crystal-sand, #e8ddd6);
+  color: var(--crystal-text-muted, #8a7d75);
+  font-family: 'DM Sans', sans-serif;
 }
 
 .player-theme .mc-option-btn:hover .mc-option-letter {
-  background: rgba(155, 138, 168, 0.2);
-  color: var(--crystal-amethyst-deep, #7d6b8a);
+  background: rgba(184, 104, 83, 0.15);
+  color: var(--crystal-terracotta, #b86853);
 }
 
 .player-theme .mc-option-btn.selected .mc-option-letter {
-  background: var(--crystal-amethyst, #9b8aa8);
+  background: var(--crystal-terracotta, #b86853);
   color: #ffffff;
 }
 
 .player-theme .mc-option-text {
-  font-family: 'Questrial', sans-serif;
-  color: var(--crystal-text-medium, #5c5650);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--crystal-text-warm, #5c4a42);
 }
 
 .player-theme .mc-option-btn.selected .mc-option-text {
-  color: var(--crystal-text-dark, #2d2a26);
+  color: var(--crystal-text-dark, #2a2320);
 }
 
 /* Unlock Actions */
