@@ -2809,3 +2809,15 @@
   color: #666666;
   text-transform: uppercase;
 }
+
+/* ==================== COMPLETION IMAGE ==================== */
+.complete-image {
+  margin-bottom: var(--spacing-lg);
+}
+
+.complete-image img {
+  max-width: 200px;
+  max-height: 150px;
+  border-radius: 12px;
+  object-fit: cover;
+}
