@@ -3250,7 +3250,7 @@ const TourPlayer = () => {
   // No stops - show message
   if (!currentStop) {
     return (
-      <div className="player-theme player-layout" data-testid="tour-player" style={{ backgroundColor: tour.backgroundColor || undefined }}>
+      <div className="player-theme player-layout" data-testid="tour-player" style={getBackgroundStyle()}>
         <header className="player-header">
           <h1>{tour.title}</h1>
         </header>
@@ -3268,7 +3268,7 @@ const TourPlayer = () => {
 
   // Normal Page View (with transitions)
   return (
-    <div className="player-theme player-layout" data-testid="tour-player" style={{ backgroundColor: tour.backgroundColor || undefined }}>
+    <div className="player-theme player-layout" data-testid="tour-player" style={getBackgroundStyle(currentPage?.skinImageUrl)}>
       {/* Confetti Animation */}
       {showConfetti && (
         <div className="confetti-container">
