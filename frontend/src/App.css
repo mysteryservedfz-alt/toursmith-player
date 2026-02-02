@@ -1353,13 +1353,12 @@
 }
 
 .player-theme .unlock-card .input {
-  background: var(--crystal-surface-warm, #f5ede8);
-  border: 1px solid var(--crystal-border, #ddd3cc);
-  border-radius: 2px;
-  padding: 0.75rem 1rem;
-  font-size: 0.9375rem;
-  font-family: 'DM Sans', sans-serif;
-  color: var(--crystal-text-dark, #2a2320);
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  border-radius: 12px;
+  padding: 1rem;
+  font-size: 1rem;
+  color: #f8fafc;
   margin-bottom: 1rem;
   transition: all 0.2s ease;
 }
