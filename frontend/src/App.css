@@ -2716,12 +2716,12 @@
 }
 
 .task-label {
-  font-family: 'Questrial', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 500;
   font-size: 0.6875rem;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: var(--crystal-amethyst, #9b8aa8);
+  color: var(--crystal-terracotta, #b86853);
   margin-bottom: var(--spacing-sm);
 }
 
