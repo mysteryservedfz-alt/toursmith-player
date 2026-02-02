@@ -1040,7 +1040,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, var(--color-bg-light) 0%, var(--color-bg-warm) 100%);
+  background-color: #ffffff; /* Default, will be overridden by inline style */
 }
 
 .player-loading,
