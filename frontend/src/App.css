@@ -1518,103 +1518,104 @@
 }
 
 .player-theme .complete-icon {
-  font-size: 3rem;
+  font-size: 2.5rem;
   margin-bottom: 1rem;
-  animation: bounce 1s ease infinite;
 }
 
 .player-theme .complete-image img {
-  max-width: 180px;
-  border-radius: 12px;
+  max-width: 160px;
+  border-radius: 4px;
   margin-bottom: 1.5rem;
 }
 
 .player-theme .tour-complete-content h2 {
-  font-family: 'Fraunces', serif;
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #f8fafc;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.625rem;
+  font-weight: 600;
+  color: var(--crystal-text-dark, #2d2a26);
   margin-bottom: 0.75rem;
 }
 
 .player-theme .tour-complete-content p {
-  color: #94a3b8;
-  margin-bottom: 2rem;
+  font-family: 'Questrial', sans-serif;
+  color: var(--crystal-text-medium, #5c5650);
+  margin-bottom: 1.5rem;
   line-height: 1.6;
 }
 
 .player-theme .tour-complete-content .btn-primary {
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Questrial', sans-serif;
   font-size: 1rem;
-  font-weight: 700;
-  padding: 1rem 2rem;
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  color: #0f172a;
+  font-weight: 500;
+  padding: 0.875rem 2rem;
+  background: var(--crystal-amethyst, #9b8aa8);
+  color: #ffffff;
   border: none;
-  border-radius: 50px;
+  border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3);
+  box-shadow: 0 2px 8px rgba(155, 138, 168, 0.25);
   text-decoration: none;
   display: inline-block;
 }
 
 .player-theme .tour-complete-content .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(245, 158, 11, 0.4);
+  background: var(--crystal-amethyst-deep, #7d6b8a);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(155, 138, 168, 0.35);
 }
 
-/* ==================== GPS CHECK - NOIR THEME ==================== */
+/* ==================== GPS CHECK - CRYSTAL THEME ==================== */
 .player-theme .gps-check-section {
-  margin: 2rem 0;
-  padding: 1.5rem;
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid rgba(51, 65, 85, 0.5);
-  border-radius: 16px;
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  background: var(--crystal-surface-alt, #f5f2ed);
+  border: 1px solid var(--crystal-border, #d4d0c8);
+  border-radius: 4px;
 }
 
 .player-theme .gps-message {
-  font-family: 'Manrope', sans-serif;
-  font-weight: 600;
+  font-family: 'Questrial', sans-serif;
+  font-weight: 500;
   font-size: 1rem;
-  color: #f8fafc;
+  color: var(--crystal-text-dark, #2d2a26);
 }
 
 .player-theme .gps-sublabel,
 .player-theme .gps-distance {
-  color: #94a3b8;
+  color: var(--crystal-text-light, #8a847c);
   font-size: 0.875rem;
 }
 
 .player-theme .gps-check-btn,
 .player-theme .gps-retry-btn {
-  font-family: 'Manrope', sans-serif;
-  background: rgba(51, 65, 85, 0.5);
-  color: #f8fafc;
-  border: 1px solid rgba(51, 65, 85, 0.8);
-  padding: 0.75rem 1.5rem;
-  border-radius: 50px;
-  font-weight: 600;
+  font-family: 'Questrial', sans-serif;
+  background: var(--crystal-amethyst, #9b8aa8);
+  color: #ffffff;
+  border: none;
+  padding: 0.625rem 1.25rem;
+  border-radius: 4px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .player-theme .gps-check-btn:hover,
 .player-theme .gps-retry-btn:hover {
-  background: rgba(51, 65, 85, 0.8);
+  background: var(--crystal-amethyst-deep, #7d6b8a);
 }
 
 .player-theme .gps-spinner {
-  border-color: rgba(51, 65, 85, 0.5);
-  border-top-color: #f59e0b;
+  border-color: var(--crystal-border, #d4d0c8);
+  border-top-color: var(--crystal-amethyst, #9b8aa8);
 }
 
 .player-theme .gps-icon-large.success {
-  background: rgba(16, 185, 129, 0.2);
-  color: #10b981;
+  background: rgba(155, 138, 168, 0.15);
+  color: var(--crystal-amethyst, #9b8aa8);
 }
 
-/* ==================== MULTIPLE CHOICE - NOIR THEME ==================== */
+/* ==================== MULTIPLE CHOICE - CRYSTAL THEME ==================== */
 .player-theme .mc-options {
   display: flex;
   flex-direction: column;
