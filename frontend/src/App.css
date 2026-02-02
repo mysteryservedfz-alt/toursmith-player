@@ -2734,10 +2734,10 @@
 
 /* ==================== CRYSTAL THEME - TASK INSTRUCTIONS ==================== */
 .player-theme .player-task-instructions {
-  background: var(--crystal-surface-alt, #f5f2ed);
-  border: 1px solid var(--crystal-border, #d4d0c8);
-  border-radius: 4px;
-  border-left: 3px solid var(--crystal-amethyst, #9b8aa8);
+  background: var(--crystal-surface-warm, #f5ede8);
+  border: 1px solid var(--crystal-border, #ddd3cc);
+  border-radius: 2px;
+  border-left: 3px solid var(--crystal-terracotta, #b86853);
 }
 
 .player-theme .task-label {
