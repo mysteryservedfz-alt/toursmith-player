@@ -1183,55 +1183,61 @@
   z-index: 1;
 }
 
+/* Linen/ivory content panel */
 .player-theme .player-content {
   flex: 1;
-  max-width: 680px;
+  max-width: 640px;
   width: 100%;
-  margin: 0 auto;
-  padding: 2rem 1.5rem 6rem;
+  margin: 1.5rem auto;
+  padding: 2rem 2rem 6rem;
+  background: var(--crystal-surface, #faf8f5);
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 
 .player-theme .player-stop-title {
-  font-family: 'Special Elite', cursive;
-  font-size: 0.8125rem;
+  font-family: 'Questrial', sans-serif;
+  font-size: 0.6875rem;
   font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: #f59e0b;
-  margin-bottom: 0.75rem;
+  letter-spacing: 0.2em;
+  color: var(--crystal-amethyst, #9b8aa8);
+  margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
 .player-theme .player-stop-title::before {
-  content: '◆';
-  font-size: 0.5rem;
+  content: '◇';
+  font-size: 0.625rem;
+  color: var(--crystal-gold, #c9a962);
 }
 
 .player-theme .player-page-title {
-  font-family: 'Fraunces', serif;
-  font-size: 2rem;
-  font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: 1.5rem;
-  color: #f8fafc;
-  letter-spacing: -0.02em;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.875rem;
+  font-weight: 600;
+  line-height: 1.25;
+  margin-bottom: 1rem;
+  color: var(--crystal-text-dark, #2d2a26);
+  letter-spacing: 0.01em;
 }
 
 .player-theme .player-page-subtitle {
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 1.125rem;
-  font-weight: 500;
-  color: #94a3b8;
+  font-weight: 400;
+  color: var(--crystal-text-medium, #5c5650);
   margin-bottom: 1.5rem;
   font-style: italic;
 }
 
 .player-theme .player-page-content {
-  font-size: 1.0625rem;
-  line-height: 1.8;
-  color: #cbd5e1;
+  font-family: 'Questrial', sans-serif;
+  font-size: 1rem;
+  line-height: 1.85;
+  color: var(--crystal-text-medium, #5c5650);
 }
 
 .player-theme .player-page-content p {
@@ -1239,11 +1245,9 @@
 }
 
 .player-theme .page-end-divider {
-  height: 2px;
-  background: linear-gradient(90deg, transparent 0%, #f59e0b 50%, transparent 100%);
-  border-radius: 1px;
-  margin-top: 2.5rem;
-  opacity: 0.5;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--crystal-moonstone, #d4d0c8) 50%, transparent 100%);
+  margin-top: 2rem;
 }
 
 .player-theme .player-footer {
@@ -1254,9 +1258,8 @@
   display: flex;
   justify-content: space-between;
   padding: 1rem 1.5rem;
-  background: rgba(15, 23, 42, 0.95);
-  backdrop-filter: blur(12px);
-  border-top: 1px solid rgba(51, 65, 85, 0.5);
+  background: var(--crystal-surface, #faf8f5);
+  border-top: 1px solid var(--crystal-border, #d4d0c8);
   z-index: 100;
 }
 
