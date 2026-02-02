@@ -120,6 +120,7 @@ class Tour(BaseModel):
     title: str = "Untitled Tour"
     description: str = ""
     status: str = "draft"  # "draft" or "published"
+    backgroundColor: str = "#ffffff"  # Default white background
     # Welcome screen fields
     welcomeTitle: Optional[str] = None
     welcomeBody: Optional[str] = None
