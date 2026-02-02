@@ -710,8 +710,14 @@ const TourEditor = () => {
             {saving ? 'Saving...' : hasUnsavedChanges ? 'Save Changes' : 'Saved'}
           </button>
           <button
-            onClick={() => { updateField("status", tour.status === "published" ? "draft" : "published"); }}
+            onClick={async () => { 
+              const newStatus = tour.status === "published" ? "draft" : "published";
+              const updatedTour = { ...tour, status: newStatus };
+              setTour(updatedTour);
+              await saveTour(updatedTour);
+            }}
             className={`btn ${tour.status === "published" ? 'btn-unpublish' : 'btn-publish'}`}
+            disabled={saving}
             data-testid="publish-btn"
           >
             {tour.status === "published" ? 'Unpublish' : 'Publish'}
