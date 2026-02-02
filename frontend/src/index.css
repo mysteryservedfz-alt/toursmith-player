@@ -2,26 +2,49 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Google Fonts for Player */
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700;900&family=Manrope:wght@400;500;600;700&family=Special+Elite&display=swap');
+/* Google Fonts for Player - Crystal Theme */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Questrial&display=swap');
 
-/* ==================== NOIR PAWS PLAYER THEME ==================== */
+/* ==================== CRYSTAL PLAYER THEME ==================== */
+/* Inspired by editorial crystal flat-lays, boutique crystal shops, museum display cases */
+/* Colors: Dark neutral bg, linen/ivory content, soft amethyst, clear quartz, warm gold */
+
 .player-theme {
-  --player-bg: #0f172a;
-  --player-surface: #1e293b;
-  --player-surface-highlight: #334155;
-  --player-primary: #f59e0b;
-  --player-primary-foreground: #0f172a;
-  --player-secondary: #6366f1;
-  --player-accent: #10b981;
-  --player-text: #f8fafc;
-  --player-text-muted: #94a3b8;
-  --player-border: #334155;
-  --player-error: #ef4444;
+  /* Dark neutral background - museum display case feel */
+  --crystal-bg: #1a1a1a;
+  --crystal-bg-warm: #242220;
   
-  font-family: 'Manrope', sans-serif;
-  background: var(--player-bg);
-  color: var(--player-text);
+  /* Light linen/ivory content panels */
+  --crystal-surface: #faf8f5;
+  --crystal-surface-alt: #f5f2ed;
+  --crystal-surface-dark: #ebe7e0;
+  
+  /* Amethyst purple - soft, elegant */
+  --crystal-amethyst: #9b8aa8;
+  --crystal-amethyst-deep: #7d6b8a;
+  --crystal-amethyst-light: #c4b8cf;
+  
+  /* Clear quartz / moonstone - soft silvery whites */
+  --crystal-quartz: #e8e6e3;
+  --crystal-moonstone: #d4d0c8;
+  
+  /* Warm gold - like gold inclusions in quartz */
+  --crystal-gold: #c9a962;
+  --crystal-gold-soft: #d4be82;
+  
+  /* Text colors */
+  --crystal-text-dark: #2d2a26;
+  --crystal-text-medium: #5c5650;
+  --crystal-text-light: #8a847c;
+  --crystal-text-on-dark: #e8e6e3;
+  
+  /* Borders */
+  --crystal-border: #d4d0c8;
+  --crystal-border-dark: #3d3a36;
+  
+  font-family: 'Questrial', sans-serif;
+  background: var(--crystal-bg);
+  color: var(--crystal-text-on-dark);
   min-height: 100vh;
 }
 
