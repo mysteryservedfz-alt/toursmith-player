@@ -1081,6 +1081,35 @@ const WelcomeEditor = ({ tour, onUpdate }) => {
           </div>
         </div>
 
+        {/* Skin Image URL */}
+        <div className="form-group">
+          <label className="form-label">Skin Image URL <span className="text-small">(optional)</span></label>
+          <p className="text-small helper-text">Background image for the player. Pages can override this.</p>
+          <ClearableInput
+            type="text"
+            className="input"
+            value={tour.skinImageUrl || ""}
+            onChange={(e) => onUpdate("skinImageUrl", e.target.value || null)}
+            onClear={() => onUpdate("skinImageUrl", null)}
+            placeholder="https://example.com/crystal-background.jpg"
+            data-testid="skin-image-url-input"
+          />
+          {tour.skinImageUrl && (
+            <div className="skin-preview" style={{ marginTop: '0.5rem' }}>
+              <img 
+                src={tour.skinImageUrl} 
+                alt="Skin preview" 
+                style={{ 
+                  maxWidth: '100%', 
+                  maxHeight: '120px', 
+                  borderRadius: '8px',
+                  objectFit: 'cover'
+                }} 
+              />
+            </div>
+          )}
+        </div>
+
         <div className="divider" />
         <h2>Welcome Screen</h2>
         <p className="text-small helper-text">Shown before the tour starts. Leave empty to skip.</p>
