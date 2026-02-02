@@ -129,10 +129,9 @@ Build a tour generator application for creating interactive, location-based expe
 - [ ] Undo/Redo functionality
 
 ### P2 - Medium Priority
-- [ ] Undo/Redo functionality
-- [ ] Bulk Actions (select multiple stops/pages)
 - [ ] Give Up & Skip option
 - [ ] Timer/Countdown challenges
+- [ ] Bulk Actions (select multiple stops/pages)
 
 ### P3 - Wish List (Future)
 - [ ] Offline Mode (cache tour data)
