@@ -1130,35 +1130,37 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 1.125rem;
-  font-weight: 500;
-  color: var(--crystal-text-warm, #5c4a42);
-  background: var(--crystal-bg, #c9b8b3);
+  font-family: 'Manrope', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #94a3b8;
+  background: #0f172a;
 }
 
 .player-theme .player-header {
   text-align: center;
-  padding: 1.75rem 1.5rem 1.25rem;
-  background: var(--crystal-surface, #faf6f3);
+  padding: 2.5rem 1.5rem 1.5rem;
+  background: rgba(30, 41, 59, 0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5);
   position: relative;
   z-index: 10;
 }
 
 .player-theme .player-header h1 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.5rem;
-  font-weight: 500;
-  margin-bottom: 0.375rem;
-  color: var(--crystal-text-dark, #2a2320);
-  letter-spacing: 0.02em;
+  font-family: 'Fraunces', serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #f8fafc;
+  letter-spacing: -0.02em;
 }
 
 .player-theme .player-progress {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 400;
-  color: var(--crystal-text-muted, #8a7d75);
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #94a3b8;
   margin: 0;
   display: flex;
   align-items: center;
@@ -1167,8 +1169,8 @@
 }
 
 .player-theme .progress-percent {
-  color: var(--crystal-terracotta, #b86853);
-  font-weight: 500;
+  color: #f59e0b;
+  font-weight: 700;
 }
 
 .player-theme .player-main {
