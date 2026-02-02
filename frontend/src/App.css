@@ -2622,7 +2622,7 @@
 }
 
 .case-note {
-  color: var(--crystal-text-light, #8a847c);
+  color: var(--crystal-text-muted, #8a7d75);
   margin-top: var(--spacing-xs);
 }
 
@@ -2632,7 +2632,7 @@
 }
 
 .hint-page {
-  max-width: 600px;
+  max-width: 560px;
   margin: 0 auto;
   padding: var(--spacing-xl);
 }
@@ -2641,71 +2641,68 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  background: var(--crystal-surface, #faf8f5);
-  border: 1px solid var(--crystal-border, #d4d0c8);
+  background: var(--crystal-surface, #faf6f3);
+  border: 1px solid var(--crystal-border, #ddd3cc);
   padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: 4px;
-  font-family: 'Questrial', sans-serif;
+  border-radius: 2px;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 500;
-  color: var(--crystal-text-medium, #5c5650);
+  color: var(--crystal-text-warm, #5c4a42);
   cursor: pointer;
   margin-bottom: var(--spacing-xl);
 }
 
 .hint-content {
-  background: var(--crystal-surface, #faf8f5);
-  border-radius: 8px;
+  background: var(--crystal-surface, #faf6f3);
+  border-radius: 2px;
   padding: var(--spacing-2xl);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
 
 .hint-content h2 {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 1.375rem;
-  color: var(--crystal-amethyst-deep, #7d6b8a);
+  font-size: 1.25rem;
+  color: var(--crystal-terracotta, #b86853);
   margin-bottom: var(--spacing-lg);
 }
 
 .hint-text p {
-  font-family: 'Questrial', sans-serif;
-  font-size: 1rem;
-  line-height: 1.75;
-  color: var(--crystal-text-medium, #5c5650);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--crystal-text-warm, #5c4a42);
   margin-bottom: var(--spacing-md);
 }
 
-/* ==================== CRYSTAL THEME - HINT PAGE ==================== */
+/* ==================== CRYSTAL - HINT PAGE ==================== */
 .player-theme .hint-page {
-  padding: 2rem 1.5rem;
+  padding: 1.5rem;
 }
 
 .player-theme .hint-page .btn-back {
-  background: var(--crystal-surface, #faf8f5);
-  border: 1px solid var(--crystal-border, #d4d0c8);
-  color: var(--crystal-text-medium, #5c5650);
-  border-radius: 4px;
-  font-family: 'Questrial', sans-serif;
+  background: var(--crystal-surface, #faf6f3);
+  border: 1px solid var(--crystal-border, #ddd3cc);
+  color: var(--crystal-text-warm, #5c4a42);
+  border-radius: 2px;
+  font-family: 'DM Sans', sans-serif;
 }
 
 .player-theme .hint-page .btn-back:hover {
-  background: var(--crystal-surface-alt, #f5f2ed);
-  color: var(--crystal-text-dark, #2d2a26);
+  background: var(--crystal-surface-warm, #f5ede8);
 }
 
 .player-theme .hint-content {
-  background: var(--crystal-surface, #faf8f5);
-  border: 1px solid var(--crystal-border, #d4d0c8);
-  border-radius: 8px;
+  background: var(--crystal-surface, #faf6f3);
+  border-radius: 2px;
 }
 
 .player-theme .hint-content h2 {
   font-family: 'Cormorant Garamond', serif;
-  color: var(--crystal-amethyst-deep, #7d6b8a);
+  color: var(--crystal-terracotta, #b86853);
 }
 
 .player-theme .hint-text p {
-  font-family: 'Questrial', sans-serif;
-  color: var(--crystal-text-medium, #5c5650);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--crystal-text-warm, #5c4a42);
 }
 
 /* Task Instructions in Player */
