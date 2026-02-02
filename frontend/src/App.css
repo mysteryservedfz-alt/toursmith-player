@@ -2741,8 +2741,8 @@
 }
 
 .player-theme .task-label {
-  font-family: 'Questrial', sans-serif;
-  color: var(--crystal-amethyst, #9b8aa8);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--crystal-terracotta, #b86853);
   text-transform: uppercase;
   letter-spacing: 0.15em;
 }
