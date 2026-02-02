@@ -420,7 +420,18 @@ const ToursList = () => {
                   onClick={() => navigate(`/admin/tour/${tour.id}`)}
                 >
                   <div className="card-header-row">
-                    <span className={`badge badge-${tour.status}`}>{tour.status}</span>
+                    <div className="card-status-row">
+                      <span className={`badge badge-${tour.status}`}>{tour.status}</span>
+                      <button 
+                        onClick={(e) => copyPlayerLink(tour.id, e)} 
+                        className={`btn-copy-link ${copiedTourId === tour.id ? 'copied' : ''}`}
+                        title="Copy Player Link"
+                        data-testid={`copy-link-${tour.id}`}
+                      >
+                        {copiedTourId === tour.id ? <Icons.Check /> : <Icons.Link />}
+                        <span>{copiedTourId === tour.id ? 'Copied!' : 'Copy Link'}</span>
+                      </button>
+                    </div>
                     <div className="card-actions" onClick={(e) => e.stopPropagation()}>
                       <button onClick={() => duplicateTour(tour.id)} className="btn-icon" title="Duplicate">
                         <Icons.Copy />
