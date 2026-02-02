@@ -17,6 +17,7 @@ Build a tour generator application for creating interactive, location-based expe
 - Multiple verification types
 - QR code generation for sharing
 - GPS location setup with interactive map
+- **Skin System** - Background images for tours and pages
 
 ### Player Features  
 - Mobile-responsive tour player
@@ -25,10 +26,19 @@ Build a tour generator application for creating interactive, location-based expe
 - Hint support
 - Navigation between stops and pages
 - GPS location lock enforcement
+- **Skin backgrounds** - Visual customization via background images
 
 ---
 
 ## Implemented Features
+
+### Skin System (Feb 2, 2026)
+- ✅ Tour-level default skin (`skinImageUrl`)
+- ✅ Page-level skin override (`skinImageUrl` per page)
+- ✅ URL-based image input in editor
+- ✅ Preview thumbnail in editor
+- ✅ Applied to all player screens (welcome, content, unlock, hints)
+- ✅ Priority: Page skin → Tour skin → Background color
 
 ### Authentication & Admin (Jan 29, 2026)
 - ✅ First-run admin setup
