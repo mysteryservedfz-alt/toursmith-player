@@ -102,7 +102,17 @@ Build a tour generator application for creating interactive, location-based expe
 
 ### Visual Themes
 - ✅ Admin: Clean, neutral, high-contrast
-- ✅ Player: "Boho Sunshine" warm theme
+- ✅ Player: "Boho Sunshine" warm theme (default)
+- ✅ **Player: "Noir Paws" Dark Theme (Feb 2, 2026)**
+  - Dark navy gradient background (#0f172a → #1e293b)
+  - Typography: Fraunces (headings), Manrope (body), Special Elite (labels)
+  - Amber/gold accent color (#f59e0b) for CTAs and highlights
+  - Glassmorphism effects with backdrop blur
+  - Grain texture overlay for depth
+  - Styled unlock gates (text input, multiple choice)
+  - Themed completion screen with animation
+  - GPS check section styling
+  - Hint page dark theme
 
 ---
 
