@@ -1341,49 +1341,50 @@
 }
 
 .player-theme .unlock-card h2 {
-  font-family: 'Fraunces', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 0.75rem;
-  color: #f8fafc;
+  color: var(--crystal-text-dark, #2d2a26);
 }
 
 .player-theme .unlock-prompt {
-  color: #94a3b8;
+  font-family: 'Questrial', sans-serif;
+  color: var(--crystal-text-medium, #5c5650);
   margin-bottom: 1.5rem;
   font-size: 1rem;
   line-height: 1.6;
 }
 
 .player-theme .unlock-card .input {
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid rgba(51, 65, 85, 0.8);
-  border-radius: 12px;
-  padding: 1rem;
+  background: var(--crystal-surface-alt, #f5f2ed);
+  border: 1px solid var(--crystal-border, #d4d0c8);
+  border-radius: 4px;
+  padding: 0.875rem 1rem;
   font-size: 1rem;
-  color: #f8fafc;
+  font-family: 'Questrial', sans-serif;
+  color: var(--crystal-text-dark, #2d2a26);
   margin-bottom: 1rem;
   transition: all 0.2s ease;
 }
 
 .player-theme .unlock-card .input:focus {
   outline: none;
-  border-color: #f59e0b;
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+  border-color: var(--crystal-amethyst, #9b8aa8);
+  box-shadow: 0 0 0 3px rgba(155, 138, 168, 0.15);
 }
 
 .player-theme .unlock-card .btn {
   width: 100%;
-  padding: 1rem;
+  padding: 0.875rem;
   font-size: 1rem;
-  font-weight: 700;
-  border-radius: 12px;
+  font-weight: 500;
+  border-radius: 4px;
 }
 
-/* ==================== WELCOME SCREEN - NOIR THEME ==================== */
+/* ==================== WELCOME SCREEN - CRYSTAL THEME ==================== */
 .player-theme.welcome-layout {
-  background-color: #0f172a;
-  background-image: linear-gradient(180deg, transparent 0%, rgba(30, 41, 59, 0.5) 100%);
+  background-color: var(--crystal-bg, #1a1a1a);
 }
 
 .player-theme .welcome-screen {
@@ -1397,37 +1398,40 @@
 }
 
 .player-theme .welcome-content {
-  max-width: 500px;
+  max-width: 480px;
   width: 100%;
   text-align: center;
+  background: var(--crystal-surface, #faf8f5);
+  padding: 2.5rem 2rem;
+  border-radius: 8px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
 }
 
 .player-theme .welcome-brand-logo {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .player-theme .welcome-brand-logo img {
-  max-width: 160px;
+  max-width: 140px;
   height: auto;
-  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.4));
 }
 
 .player-theme .welcome-image {
-  margin-bottom: 2rem;
-  border-radius: 16px;
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
   overflow: hidden;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .player-theme .welcome-image img {
   width: 100%;
-  max-height: 280px;
+  max-height: 240px;
   object-fit: cover;
 }
 
 .player-theme .welcome-title {
-  font-family: 'Fraunces', serif;
-  font-size: 2.25rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
   font-weight: 900;
   color: #f8fafc;
   margin-bottom: 1rem;
