@@ -227,12 +227,26 @@ async def login_admin(data: AdminLogin):
 
 @api_router.get("/tours")
 async def get_tours(username: str = Depends(verify_token), limit: int = 100, skip: int = 0):
-    """Get all tours with pagination - returns only fields needed for list view"""
+    """Get all tours with pagination - returns fields needed for list view plus counts"""
     tours = await db.tours.find(
         {}, 
-        {"_id": 0, "id": 1, "title": 1, "description": 1, "status": 1, "createdAt": 1, "updatedAt": 1}
+        {"_id": 0, "id": 1, "title": 1, "description": 1, "status": 1, "createdAt": 1, "updatedAt": 1, "stops": 1}
     ).sort("updatedAt", -1).skip(skip).limit(limit).to_list(limit)
-    return tours
+    
+    # Calculate stop and page counts, then remove full stops array
+    result = []
+    for tour in tours:
+        stops = tour.get("stops", [])
+        stop_count = len(stops)
+        page_count = sum(len(stop.get("pages", [])) for stop in stops)
+        
+        # Remove stops array, add counts
+        tour.pop("stops", None)
+        tour["stopCount"] = stop_count
+        tour["pageCount"] = page_count
+        result.append(tour)
+    
+    return result
 
 @api_router.post("/tours", response_model=Tour)
 async def create_tour(data: TourCreate, username: str = Depends(verify_token)):
