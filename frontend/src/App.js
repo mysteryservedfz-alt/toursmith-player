@@ -3384,14 +3384,18 @@ const TourPlayer = () => {
 
       <main className="player-main">
         <div className="player-content" key={pageKey}>
-              {/* Stop Title */}
+              {/* Stop Title - always show as label */}
               <div className="player-stop-title">{currentStop.title}</div>
-              {currentStop.subtitle && (
+              
+              {/* Only show stop subtitle/intro when it's a synthetic page (stop without pages) */}
+              {sortedPages.length === 0 && currentStop.subtitle && (
                 <p className="player-stop-subtitle">{currentStop.subtitle}</p>
               )}
               
-              {/* Page Title */}
-              <h2 className="player-page-title">{currentPage.title}</h2>
+              {/* Page Title - only show if it's a real page with its own title */}
+              {sortedPages.length > 0 && currentPage.title && (
+                <h2 className="player-page-title">{currentPage.title}</h2>
+              )}
               
               {/* Page Content */}
               {renderContent(currentPage, false)}
