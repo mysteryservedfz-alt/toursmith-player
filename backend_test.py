@@ -11,7 +11,7 @@ from datetime import datetime
 from typing import Dict, Any, Optional
 
 # Use the public endpoint from frontend .env
-BACKEND_URL = "https://mystery-served.preview.emergentagent.com"
+BACKEND_URL = "https://toursmith-player.preview.emergentagent.com"
 API_BASE = f"{BACKEND_URL}/api"
 
 class TourGeneratorTester:
