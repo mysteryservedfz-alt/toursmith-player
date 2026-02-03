@@ -64,6 +64,15 @@ Build a tour generator application for creating interactive, location-based expe
 - ✅ **Improved Save Button** - Purple gradient with save icon, turns green when unsaved
 - ✅ **Keyboard Shortcuts** - Cmd/Ctrl+S (save), Cmd/Ctrl+N (new stop), Escape (back)
 - ✅ **Duplicate Stop/Page** - Copy button in menu to duplicate content
+- ✅ **"Add Page" button in sidebar header** - Relocated for better UX (Feb 3, 2026)
+
+### Database & Performance Optimizations (Feb 3, 2026)
+- ✅ `/admin/exists` uses `count_documents` for efficiency
+- ✅ `/tours` endpoint uses projection to fetch only list view fields
+- ✅ JWT_SECRET removed hardcoded fallback (fail-fast security)
+
+### Mobile Admin UX (Feb 2, 2026)
+- ✅ "Copy Link" button on tour cards for easy mobile access
 
 ### Verification System (Jan 31, 2026)
 - ✅ Story Mode toggle (bypass verification)
