@@ -198,8 +198,8 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)) 
 @api_router.get("/admin/exists")
 async def check_admin_exists():
     """Check if admin account exists (for first-run setup)"""
-    admin = await db.admins.find_one({}, {"_id": 0})
-    return {"exists": admin is not None}
+    count = await db.admins.count_documents({}, limit=1)
+    return {"exists": count > 0}
 
 @api_router.post("/admin/setup", response_model=TokenResponse)
 async def setup_admin(data: AdminSetup):
