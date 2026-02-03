@@ -2879,9 +2879,14 @@ const TourPlayer = () => {
   const isFirstPage = currentStopIndex === 0 && currentPageIndex === 0;
   const isLastPage = currentStopIndex === sortedStops.length - 1 && currentPageIndex === sortedPages.length - 1;
   
-  // Calculate progress percentage
-  const totalPages = sortedStops.reduce((sum, stop) => sum + (stop.pages?.length || 1), 0);
-  const completedPages = sortedStops.slice(0, currentStopIndex).reduce((sum, stop) => sum + (stop.pages?.length || 1), 0) + currentPageIndex;
+  // Calculate progress percentage - accounting for intro pages
+  const getTotalPagesForStop = (stop) => {
+    const actualPages = stop?.pages?.length || 0;
+    const hasIntro = stop && (stop.description || stop.subtitle || stop.taskInstructions);
+    return hasIntro ? actualPages + 1 : Math.max(actualPages, 1);
+  };
+  const totalPages = sortedStops.reduce((sum, stop) => sum + getTotalPagesForStop(stop), 0);
+  const completedPages = sortedStops.slice(0, currentStopIndex).reduce((sum, stop) => sum + getTotalPagesForStop(stop), 0) + currentPageIndex;
   const progressPercent = totalPages > 0 ? Math.round((completedPages / totalPages) * 100) : 0;
 
   if (loading) return <div className="player-loading">Loading tour...</div>;
