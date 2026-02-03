@@ -226,9 +226,12 @@ async def login_admin(data: AdminLogin):
 # ==================== TOUR ROUTES ====================
 
 @api_router.get("/tours", response_model=List[Tour])
-async def get_tours(username: str = Depends(verify_token)):
-    """Get all tours"""
-    tours = await db.tours.find({}, {"_id": 0}).to_list(1000)
+async def get_tours(username: str = Depends(verify_token), limit: int = 100, skip: int = 0):
+    """Get all tours with pagination"""
+    tours = await db.tours.find(
+        {}, 
+        {"_id": 0}
+    ).sort("updatedAt", -1).skip(skip).limit(limit).to_list(limit)
     return tours
 
 @api_router.post("/tours", response_model=Tour)
