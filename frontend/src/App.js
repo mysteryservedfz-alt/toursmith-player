@@ -2699,34 +2699,45 @@ const TourPlayer = () => {
 
   const sortedStops = tour?.stops?.sort((a, b) => a.order - b.order) || [];
   const currentStop = sortedStops[currentStopIndex];
-  const sortedPages = currentStop?.pages?.sort((a, b) => a.order - b.order) || [];
+  const actualPages = currentStop?.pages?.sort((a, b) => a.order - b.order) || [];
   
-  // If no pages, create a synthetic page from stop data so rendering works consistently
-  const currentPage = sortedPages.length > 0 
-    ? sortedPages[currentPageIndex] 
-    : currentStop 
-      ? {
-          id: `${currentStop.id}-synthetic`,
-          title: currentStop.title || '',
-          subtitle: currentStop.subtitle || '',
-          content: currentStop.content || currentStop.body || '',
-          description: currentStop.description || '',  // Stop uses 'description' for story text
-          intro2: currentStop.intro2 || '',
-          taskInstructions: currentStop.taskInstructions || '',
-          imageUrl: currentStop.imageUrl,
-          audioUrl: currentStop.audioUrl,
-          mediaUrl: currentStop.mediaUrl,
-          mediaType: currentStop.mediaType,
-          skinImageUrl: currentStop.skinImageUrl,
-          unlockMode: currentStop.unlockMode,
-          storyMode: currentStop.storyMode,
-          hintText: currentStop.hintText,
-          answer: currentStop.answer,
-          caseInsensitive: currentStop.caseInsensitive,
-          mcOptions: currentStop.mcOptions,
-          mcCorrectIndex: currentStop.mcCorrectIndex
-        }
-      : null;
+  // Check if stop has its own content to show (intro page)
+  const stopHasIntro = currentStop && (currentStop.description || currentStop.subtitle || currentStop.taskInstructions);
+  
+  // Create a synthetic intro page from stop data
+  const stopIntroPage = currentStop ? {
+    id: `${currentStop.id}-intro`,
+    title: currentStop.title || '',
+    subtitle: currentStop.subtitle || '',
+    content: currentStop.content || currentStop.body || '',
+    description: currentStop.description || '',
+    intro2: currentStop.intro2 || '',
+    taskInstructions: currentStop.taskInstructions || '',
+    imageUrl: currentStop.imageUrl,
+    audioUrl: currentStop.audioUrl,
+    mediaUrl: currentStop.mediaUrl,
+    mediaType: currentStop.mediaType,
+    skinImageUrl: currentStop.skinImageUrl,
+    unlockMode: stopHasIntro && actualPages.length > 0 ? 'continue' : currentStop.unlockMode, // Intro page is always continue if there are more pages
+    storyMode: currentStop.storyMode,
+    hintText: stopHasIntro && actualPages.length > 0 ? null : currentStop.hintText,
+    answer: stopHasIntro && actualPages.length > 0 ? null : currentStop.answer,
+    caseInsensitive: currentStop.caseInsensitive,
+    mcOptions: stopHasIntro && actualPages.length > 0 ? null : currentStop.mcOptions,
+    mcCorrectIndex: stopHasIntro && actualPages.length > 0 ? null : currentStop.mcCorrectIndex,
+    isStopIntro: true
+  } : null;
+  
+  // Build the full page list: intro (if has content) + actual pages
+  const sortedPages = stopHasIntro 
+    ? [stopIntroPage, ...actualPages]
+    : actualPages.length > 0 
+      ? actualPages 
+      : stopIntroPage 
+        ? [stopIntroPage] 
+        : [];
+  
+  const currentPage = sortedPages[currentPageIndex] || null;
 
   // Get effective unlock settings considering story mode
   const getEffectiveUnlock = (page, stop) => {
