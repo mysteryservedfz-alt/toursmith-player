@@ -2712,13 +2712,21 @@ const TourPlayer = () => {
           title: currentStop.title || '',
           subtitle: currentStop.subtitle || '',
           content: currentStop.content || currentStop.body || '',
+          description: currentStop.description || '',  // Stop uses 'description' for story text
+          intro2: currentStop.intro2 || '',
+          taskInstructions: currentStop.taskInstructions || '',
           imageUrl: currentStop.imageUrl,
           audioUrl: currentStop.audioUrl,
           mediaUrl: currentStop.mediaUrl,
           mediaType: currentStop.mediaType,
           skinImageUrl: currentStop.skinImageUrl,
           unlockMode: currentStop.unlockMode,
-          storyMode: currentStop.storyMode
+          storyMode: currentStop.storyMode,
+          hintText: currentStop.hintText,
+          answer: currentStop.answer,
+          caseInsensitive: currentStop.caseInsensitive,
+          mcOptions: currentStop.mcOptions,
+          mcCorrectIndex: currentStop.mcCorrectIndex
         }
       : null;
 
