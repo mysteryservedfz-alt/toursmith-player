@@ -1123,7 +1123,8 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  background-color: #0f172a;
+  background-image: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
   font-family: 'Manrope', sans-serif;
   position: relative;
 }
