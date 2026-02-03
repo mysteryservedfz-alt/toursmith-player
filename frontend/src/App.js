@@ -3428,11 +3428,10 @@ const TourPlayer = () => {
         </button>
         <button
           onClick={goNext}
-          disabled={isLastPage}
           className="btn btn-primary"
           data-testid="player-next-btn"
         >
-          Next <Icons.ChevronRight />
+          {isLastPage ? 'Finish' : 'Next'} <Icons.ChevronRight />
         </button>
       </footer>
     </div>
