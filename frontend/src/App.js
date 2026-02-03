@@ -2587,21 +2587,6 @@ const TourPlayer = () => {
   const [gpsDistance, setGpsDistance] = useState(null);
   const [gpsError, setGpsError] = useState(null);
 
-  // Helper: Determine if a color is light or dark
-  const isLightColor = (color) => {
-    if (!color) return false;
-    const hex = color.replace('#', '');
-    const r = parseInt(hex.substr(0, 2), 16);
-    const g = parseInt(hex.substr(2, 2), 16);
-    const b = parseInt(hex.substr(4, 2), 16);
-    // Calculate luminance
-    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-    return luminance > 0.5;
-  };
-
-  // Check if current theme should be light (for text colors)
-  const isLightTheme = tour?.backgroundColor && isLightColor(tour.backgroundColor) && !tour?.skinImageUrl;
-
   // Helper: Get background style with optional skin image
   // Page skin overrides tour skin; tour skin overrides background color
   const getBackgroundStyle = (pageSkin = null) => {
