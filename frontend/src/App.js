@@ -467,9 +467,6 @@ const ToursList = () => {
         ) : (
           <div className="tours-list">
             {tours.map((tour) => {
-              const totalPages = tour.stops?.reduce((sum, s) => sum + (s.pages?.length || 0), 0) || 0;
-              const hasAudio = tour.stops?.some(s => s.audioUrl || s.pages?.some(p => p.audioUrl));
-              const hasQuiz = tour.stops?.some(s => s.unlockMode === 'multiple_choice' || s.pages?.some(p => p.unlockMode === 'multiple_choice'));
               return (
                 <div 
                   key={tour.id} 
@@ -478,11 +475,9 @@ const ToursList = () => {
                 >
                   <span className={`list-status-dot status-${tour.status}`} />
                   <span className="list-title">{tour.title || "Untitled"}</span>
-                  <span className="list-meta">{tour.stops?.length || 0} stops • {totalPages} pages</span>
+                  <span className="list-meta">{tour.stopCount ?? tour.stops?.length ?? 0} stops • {tour.pageCount ?? 0} pages</span>
                   <div className="list-features">
                     {tour.welcomeTitle && <span className="feature-tag">Welcome</span>}
-                    {hasQuiz && <span className="feature-tag">Quiz</span>}
-                    {hasAudio && <span className="feature-tag">Audio</span>}
                   </div>
                   <span className={`list-badge badge-${tour.status}`}>{tour.status}</span>
                   <div className="list-actions">
