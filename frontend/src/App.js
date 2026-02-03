@@ -411,7 +411,6 @@ const ToursList = () => {
         ) : viewMode === 'grid' ? (
           <div className="tours-grid-compact">
             {tours.map((tour) => {
-              const totalPages = tour.stops?.reduce((sum, s) => sum + (s.pages?.length || 0), 0) || 0;
               return (
                 <div 
                   key={tour.id} 
@@ -446,8 +445,8 @@ const ToursList = () => {
                     <p className="card-desc">{tour.description}</p>
                   )}
                   <div className="card-stats">
-                    <span className="stat">📍 {tour.stops?.length || 0} stops</span>
-                    <span className="stat">📄 {totalPages} pages</span>
+                    <span className="stat">📍 {tour.stopCount ?? tour.stops?.length ?? 0} stops</span>
+                    <span className="stat">📄 {tour.pageCount ?? 0} pages</span>
                   </div>
                   <div className="card-features">
                     {tour.welcomeTitle && <span className="feature-tag">Welcome</span>}
