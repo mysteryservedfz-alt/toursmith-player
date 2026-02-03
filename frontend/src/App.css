@@ -698,6 +698,24 @@
   color: #1a1a1a;
 }
 
+.panel-header-actions {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.panel-header-actions .btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  padding: 6px 10px;
+}
+
+.panel-header-actions .btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 /* ==================== TOUR TREE STRUCTURE ==================== */
 .tour-tree {
   flex: 1;
