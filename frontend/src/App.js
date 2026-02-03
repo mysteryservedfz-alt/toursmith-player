@@ -2591,18 +2591,22 @@ const TourPlayer = () => {
   // Page skin overrides tour skin; tour skin overrides background color
   const getBackgroundStyle = (pageSkin = null) => {
     const skinUrl = pageSkin || tour?.skinImageUrl;
-    const bgColor = tour?.backgroundColor || undefined;
+    const bgColor = tour?.backgroundColor;
     
     if (skinUrl) {
       return {
-        backgroundColor: bgColor,
+        background: bgColor || '#0f172a',
         backgroundImage: `url(${skinUrl})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
       };
     }
-    return { backgroundColor: bgColor };
+    // Use 'background' to override CSS gradient when a color is set
+    if (bgColor) {
+      return { background: bgColor };
+    }
+    return {};
   };
 
   // Calculate distance between two GPS points (Haversine formula)
