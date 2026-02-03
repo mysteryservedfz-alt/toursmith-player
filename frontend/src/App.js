@@ -1980,9 +1980,6 @@ const StopEditor = ({ stop, onUpdate, onDelete, onDuplicate, onAddPage, onSelect
                   )}
                 </Droppable>
               </DragDropContext>
-              <button type="button" onClick={onAddPage} className="btn btn-secondary add-page-btn" data-testid="add-page-btn">
-                <Icons.Plus /> Add Page
-              </button>
             </div>
           )}
         </div>
