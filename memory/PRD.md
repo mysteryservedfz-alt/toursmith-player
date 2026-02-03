@@ -129,12 +129,12 @@ Build a tour generator application for creating interactive, location-based expe
 ## Pending / Backlog
 
 ### P0 - Critical Bugs (User Reported)
-- [ ] Fix "Not Found" for newly published tours (race condition)
-- [ ] Fix stops without pages crashing player
-- [ ] Fix image/media deletion not persisting after save
+- [x] ~~Fix "Not Found" for newly published tours (race condition)~~ - FIXED Feb 2, 2026
+- [x] ~~Fix stops without pages crashing player~~ - FIXED Feb 2, 2026
+- [x] ~~Fix image/media deletion not persisting after save~~ - FIXED Feb 2, 2026
 
 ### P1 - High Priority (Next Up)
-- [ ] **Move "Add Page" button** - from bottom of editor to sidebar header
+- [x] ~~**Move "Add Page" button**~~ - Moved to sidebar header (Feb 3, 2026)
 - [ ] Auto-save Recovery (localStorage backup)
 - [ ] Undo/Redo functionality
 
