@@ -778,9 +778,20 @@ const TourEditor = () => {
         <aside className="editor-sidebar stops-panel">
           <div className="panel-header">
             <h3>Tour Structure</h3>
-            <button onClick={addStop} className="btn btn-primary btn-sm" data-testid="add-stop-btn">
-              <Icons.Plus />
-            </button>
+            <div className="panel-header-actions">
+              <button onClick={addStop} className="btn btn-primary btn-sm" data-testid="add-stop-btn" title="Add Stop">
+                <Icons.Plus /> Stop
+              </button>
+              <button 
+                onClick={() => activeStopId && addPage(activeStopId)} 
+                className="btn btn-secondary btn-sm" 
+                data-testid="add-page-sidebar-btn" 
+                title={activeStopId ? "Add Page to selected stop" : "Select a stop first"}
+                disabled={!activeStopId}
+              >
+                <Icons.Plus /> Page
+              </button>
+            </div>
           </div>
           
           {/* Welcome Screen Item */}
