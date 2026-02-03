@@ -2867,9 +2867,12 @@ const TourPlayer = () => {
       setCurrentPageIndex(currentPageIndex - 1);
     } else if (currentStopIndex > 0) {
       const prevStop = sortedStops[currentStopIndex - 1];
-      const prevPages = prevStop?.pages?.sort((a, b) => a.order - b.order) || [];
+      const prevActualPages = prevStop?.pages?.sort((a, b) => a.order - b.order) || [];
+      const prevStopHasIntro = prevStop && (prevStop.description || prevStop.subtitle || prevStop.taskInstructions);
+      // Calculate total pages for prev stop (intro + actual pages)
+      const prevTotalPages = prevStopHasIntro ? prevActualPages.length + 1 : Math.max(prevActualPages.length, 1);
       setCurrentStopIndex(currentStopIndex - 1);
-      setCurrentPageIndex(Math.max(0, prevPages.length - 1));
+      setCurrentPageIndex(prevTotalPages - 1);
     }
   };
 
