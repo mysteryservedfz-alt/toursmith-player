@@ -223,6 +223,32 @@ async def login_admin(data: AdminLogin):
     token = create_token(data.username)
     return TokenResponse(token=token, username=data.username)
 
+class ChangeCredentials(BaseModel):
+    current_password: str
+    new_username: Optional[str] = None
+    new_password: Optional[str] = None
+
+@api_router.post("/admin/change-credentials")
+async def change_credentials(data: ChangeCredentials, username: str = Depends(verify_token)):
+    """Change admin username and/or password"""
+    admin = await db.admins.find_one({"username": username})
+    if not admin or not verify_password(data.current_password, admin["password"]):
+        raise HTTPException(status_code=401, detail="Current password is incorrect")
+    
+    update = {}
+    if data.new_username:
+        update["username"] = data.new_username
+    if data.new_password:
+        update["password"] = hash_password(data.new_password)
+    
+    if update:
+        await db.admins.update_one({"username": username}, {"$set": update})
+        new_username = data.new_username or username
+        token = create_token(new_username)
+        return {"message": "Credentials updated", "token": token, "username": new_username}
+    
+    return {"message": "No changes made"}
+
 # ==================== TOUR ROUTES ====================
 
 @api_router.get("/tours")
