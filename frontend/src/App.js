@@ -3291,6 +3291,7 @@ const TourPlayer = () => {
                 )}
                 
                 {unlockError && <p className="error-message">{unlockError}</p>}
+                {unlockSuccess && <p className="success-message">{unlockSuccess}</p>}
                 
                 <div className="unlock-actions">
                   <button onClick={handleUnlock} className="btn btn-primary" data-testid="unlock-submit">
