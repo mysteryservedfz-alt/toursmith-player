@@ -1382,6 +1382,49 @@
   border-radius: 12px;
 }
 
+/* Success and error messages */
+.player-theme .error-message {
+  color: #ef4444;
+  font-size: 0.9rem;
+  margin: 0.75rem 0;
+  font-style: italic;
+}
+
+.player-theme .success-message {
+  color: #22c55e;
+  font-size: 1rem;
+  margin: 0.75rem 0;
+  font-weight: 600;
+  font-style: italic;
+}
+
+/* Transition overlay */
+.transition-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.transition-overlay p {
+  font-family: 'Georgia', serif;
+  font-size: 1.25rem;
+  color: #1a1a1a;
+  font-style: italic;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 /* ==================== WELCOME SCREEN - NOIR THEME ==================== */
 .player-theme.welcome-layout {
   background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
