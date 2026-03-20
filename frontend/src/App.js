@@ -2838,11 +2838,15 @@ const TourPlayer = () => {
     }
     
     if (correct) {
-      setUnlockedPages(prev => new Set([...prev, pageKey]));
-      setShowUnlock(false);
-      setUnlockInput("");
       setUnlockError("");
-      setSelectedMcOption(null);
+      setUnlockSuccess("There it is.");
+      setTimeout(() => {
+        setUnlockedPages(prev => new Set([...prev, pageKey]));
+        setShowUnlock(false);
+        setUnlockInput("");
+        setUnlockSuccess("");
+        setSelectedMcOption(null);
+      }, 1500);
     } else {
       setUnlockError("Not quite. Take another look — you're closer than you think.");
     }
