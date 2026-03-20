@@ -3395,6 +3395,13 @@ const TourPlayer = () => {
         </div>
       )}
       
+      {/* Transition overlay */}
+      {isTransitioning && (
+        <div className="transition-overlay">
+          <p>Following Hannah's trail…</p>
+        </div>
+      )}
+      
       <header className="player-header">
         {/* Progress Bar */}
         <div className="progress-bar-container">
