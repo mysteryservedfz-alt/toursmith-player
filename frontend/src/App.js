@@ -2855,11 +2855,16 @@ const TourPlayer = () => {
   };
 
   const goNext = () => {
-    if (currentPageIndex < sortedPages.length - 1) {
+    // Show transition when moving to a new stop
+    if (currentPageIndex >= sortedPages.length - 1 && currentStopIndex < sortedStops.length - 1) {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setIsTransitioning(false);
+        setCurrentStopIndex(currentStopIndex + 1);
+        setCurrentPageIndex(0);
+      }, 1500);
+    } else if (currentPageIndex < sortedPages.length - 1) {
       setCurrentPageIndex(currentPageIndex + 1);
-    } else if (currentStopIndex < sortedStops.length - 1) {
-      setCurrentStopIndex(currentStopIndex + 1);
-      setCurrentPageIndex(0);
     } else {
       // Tour complete!
       setTourComplete(true);
