@@ -2844,7 +2844,7 @@ const TourPlayer = () => {
       setUnlockError("");
       setSelectedMcOption(null);
     } else {
-      setUnlockError("Incorrect. Please try again.");
+      setUnlockError("Not quite. Take another look — you're closer than you think.");
     }
   };
 
