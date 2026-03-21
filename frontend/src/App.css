@@ -3540,3 +3540,54 @@
   border-radius: 12px;
   object-fit: cover;
 }
+
+/* Color Picker for Text Color */
+.color-picker-container {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.color-presets {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.color-preset {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.color-preset:hover {
+  transform: scale(1.1);
+}
+
+.color-preset.selected {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.color-custom {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.color-custom input[type="color"] {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.color-custom .color-value {
+  font-size: 0.75rem;
+  color: var(--color-text-light);
+  font-family: monospace;
+}
