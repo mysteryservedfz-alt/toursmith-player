@@ -2153,6 +2153,30 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDu
           <label className="form-label">Story Text 2</label>
           <textarea className="input" value={page.body2 || ""} onChange={(e) => onUpdate({ body2: e.target.value || null })} placeholder="Optional secondary text" data-testid="page-body2-input" />
         </div>
+        <div className="form-group">
+          <label className="form-label">Text Color</label>
+          <div className="color-picker-container">
+            <div className="color-presets">
+              {["#1a1a1a", "#ffffff", "#333333", "#666666", "#f5f5f5", "#d4af37"].map(color => (
+                <button
+                  key={color}
+                  type="button"
+                  className={`color-preset ${page.textColor === color ? 'selected' : ''}`}
+                  style={{ backgroundColor: color, border: color === '#ffffff' || color === '#f5f5f5' ? '1px solid #ccc' : 'none' }}
+                  onClick={() => onUpdate({ textColor: color })}
+                />
+              ))}
+            </div>
+            <div className="color-custom">
+              <input
+                type="color"
+                value={page.textColor || "#1a1a1a"}
+                onChange={(e) => onUpdate({ textColor: e.target.value })}
+              />
+              <span className="color-value">{page.textColor || "#1a1a1a"}</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* ACCORDION SECTIONS */}
