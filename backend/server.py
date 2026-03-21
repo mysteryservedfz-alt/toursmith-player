@@ -91,6 +91,8 @@ class Stop(BaseModel):
     subtitle: Optional[str] = None
     description: str = ""  # intro
     intro2: Optional[str] = None
+    # Text color
+    textColor: Optional[str] = None
     # On-Site Task / Instructions
     taskInstructions: Optional[str] = None
     # Media fields
