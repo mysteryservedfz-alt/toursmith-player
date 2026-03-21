@@ -56,6 +56,8 @@ class Page(BaseModel):
     body2: Optional[str] = None
     # Skin (background image) - overrides tour-level skin
     skinImageUrl: Optional[str] = None
+    # Text color
+    textColor: Optional[str] = None
     # On-Site Task / Instructions
     taskInstructions: Optional[str] = None
     # Media fields
