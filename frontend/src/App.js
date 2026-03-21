@@ -3463,7 +3463,7 @@ const TourPlayer = () => {
       </header>
 
       <main className="player-main">
-        <div className="player-content" key={pageKey}>
+        <div className="player-content" key={pageKey} style={{ color: currentPage?.textColor || currentStop?.textColor || '#1a1a1a' }}>
               {/* Stop Title - always show as label */}
               <div className="player-stop-title">{currentStop.title}</div>
               
