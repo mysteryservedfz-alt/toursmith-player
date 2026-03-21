@@ -2089,9 +2089,7 @@
 
 .player-body-secondary {
   padding: var(--spacing-lg);
-  background-color: var(--color-bg-warm);
-  border-radius: var(--border-radius-md);
-  border-left: 4px solid var(--color-calm);
+  margin-top: var(--spacing-md);
 }
 
 .player-image {
