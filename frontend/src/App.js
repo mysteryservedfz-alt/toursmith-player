@@ -2952,11 +2952,19 @@ const TourPlayer = () => {
   if (error) return <div className="player-error">{error}</div>;
   if (!tour || !currentStop || !currentPage) return <div className="player-error">No content available</div>;
 
-  // Hint page view (full page with back button)
+  // Hint page view (full page with back button at bottom)
   if (showHintPage && unlockData?.hintText) {
     return (
       <div className="player-theme player-layout hint-page-layout" data-testid="player-hint-page" style={getBackgroundStyle(currentPage?.skinImageUrl)}>
         <div className="hint-page">
+          <div className="hint-content">
+            <h2>Hint</h2>
+            <div className="hint-text">
+              {unlockData.hintText.split('\n').map((line, i) => (
+                <p key={i}>{line}</p>
+              ))}
+            </div>
+          </div>
           <button 
             onClick={() => setShowHintPage(false)} 
             className="btn btn-back"
@@ -2964,14 +2972,6 @@ const TourPlayer = () => {
           >
             <Icons.ChevronLeft /> Back to Challenge
           </button>
-          <div className="hint-content">
-            <h2>💡 Hint</h2>
-            <div className="hint-text">
-              {unlockData.hintText.split('\n').map((line, i) => (
-                <p key={i}>{line}</p>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     );
