@@ -26,148 +26,111 @@ Build a tour generator application for creating interactive, location-based expe
 - Hint support
 - Navigation between stops and pages
 - GPS location lock enforcement
+- **Inline unlock gate** — page content shown above answer input
 - **Skin backgrounds** - Visual customization via background images
 
 ---
 
 ## Implemented Features
 
+### Mystery Served Tour Creation (Mar 24, 2026)
+- Created "The Recipe Conspiracy" tour — 5 stops, 21 pages
+- Stops: Hawkers Asian Street Food (6p), Bodega on Central (4p), Kalamazoo Olive Co (4p), Poppo's Taqueria (4p), Plant Love Ice Cream (3p)
+- Answer codes: ABRA → GOLD → TBD → HOCUS → POCUS → CADABRA
+- Hints configured for puzzle pages (Hint 1 only)
+- Welcome screen with Mystery Served branding
+- Completion screen with "Thank you for playing" message
+- Tour ID: 3e5dce21-2438-4451-9ee9-7049c0491530
+
+### Inline Unlock Gate (Mar 24, 2026)
+- Restructured player unlock gate to show page content above the answer input
+- Players can read story/clue text and enter answers on the same screen
+- Replaced the old "This content is locked" overlay modal
+- Styled with clean divider and inline form below content
+- Header with progress bar visible during puzzle pages
+- Previous button available during puzzles
+
 ### Skin System (Feb 2, 2026)
-- ✅ Tour-level default skin (`skinImageUrl`)
-- ✅ Page-level skin override (`skinImageUrl` per page)
-- ✅ URL-based image input in editor
-- ✅ Preview thumbnail in editor
-- ✅ Applied to all player screens (welcome, content, unlock, hints)
-- ✅ Priority: Page skin → Tour skin → Background color
+- Tour-level default skin (`skinImageUrl`)
+- Page-level skin override (`skinImageUrl` per page)
+- URL-based image input in editor
+- Preview thumbnail in editor
+- Applied to all player screens (welcome, content, unlock, hints)
+- Priority: Page skin → Tour skin → Background color
 
 ### Authentication & Admin (Jan 29, 2026)
-- ✅ First-run admin setup
-- ✅ JWT-based login (demo/demo123)
-- ✅ Protected admin routes
+- First-run admin setup
+- JWT-based login
+- Protected admin routes
+- Change credentials endpoint (/api/admin/change-credentials)
 
 ### Tour Management (Jan 29, 2026)
-- ✅ Create, Edit, Duplicate, Delete tours
-- ✅ Tour listing with status badges
-- ✅ Publish/Draft status toggle
+- Create, Edit, Duplicate, Delete tours
+- Tour listing with status badges
+- Publish/Draft status toggle
 
 ### Stop & Page Editor (Jan 29-31, 2026)
-- ✅ Accordion-based editor layout
-- ✅ Title, Subtitle, Story Text fields
-- ✅ On-Site Task / Instructions field
-- ✅ Media Type selector (IMAGE/VIDEO/YOUTUBE)
-- ✅ Background Image / Gallery support
-- ✅ Embed support (YouTube, Vimeo, Google Maps)
-- ✅ Audio URL with preview player
-- ✅ CTA Button (label + URL)
-- ✅ Drag-and-drop reordering
-- ✅ **Accordion Clear Buttons** - Trash icon to clear section content
-- ✅ **Improved Save Button** - Purple gradient with save icon, turns green when unsaved
-- ✅ **Keyboard Shortcuts** - Cmd/Ctrl+S (save), Cmd/Ctrl+N (new stop), Escape (back)
-- ✅ **Duplicate Stop/Page** - Copy button in menu to duplicate content
-- ✅ **"Add Page" button in sidebar header** - Relocated for better UX (Feb 3, 2026)
-
-### Database & Performance Optimizations (Feb 3, 2026)
-- ✅ `/admin/exists` uses `count_documents` for efficiency
-- ✅ `/tours` endpoint uses projection to fetch only list view fields
-- ✅ JWT_SECRET removed hardcoded fallback (fail-fast security)
-
-### Mobile Admin UX (Feb 2, 2026)
-- ✅ "Copy Link" button on tour cards for easy mobile access
+- Accordion-based editor layout
+- Title, Subtitle, Story Text fields
+- On-Site Task / Instructions field
+- Media Type selector (IMAGE/VIDEO/YOUTUBE)
+- Background Image / Gallery support
+- Embed support (YouTube, Vimeo, Google Maps)
+- Audio URL with preview player
+- CTA Button (label + URL)
+- Drag-and-drop reordering
+- Text color picker per stop/page
 
 ### Verification System (Jan 31, 2026)
-- ✅ Story Mode toggle (bypass verification)
-- ✅ TEXT verification with case-insensitive option
-- ✅ MULTIPLE CHOICE verification (add/remove options, select correct)
-- ✅ WHITEBOARD verification (any input accepted)
-- ✅ Page-level override of stop settings
+- Story Mode toggle (bypass verification)
+- TEXT verification with case-insensitive option
+- MULTIPLE CHOICE verification
+- WHITEBOARD verification
+- Page-level override of stop settings
 
 ### Hints System (Jan 31, 2026)
-- ✅ Hint text field per stop/page
-- ✅ Auto-Show Hints toggle
-- ✅ Full-page hint view with back button
-
-### Sharing Features (Jan 31, 2026)
-- ✅ QR Code generation panel
-- ✅ Copy Tour Link button
-- ✅ Preview as Player button
-- ✅ Player URL display
+- Hint text field per stop/page
+- Auto-Show Hints toggle
+- Full-page hint view with back button
 
 ### GPS Lock Feature (Jan 31, 2026)
-- ✅ Interactive Leaflet map in admin editor
-- ✅ Click-to-set coordinates on map
-- ✅ "Use My Location" button (browser geolocation)
-- ✅ Manual lat/lng coordinate entry
-- ✅ Configurable radius (10-5000m) - "bubble size"
-- ✅ Visual radius circle on map
-- ✅ GPS enforcement in player (strict mode)
-- ✅ "Check My Location" button in player
-- ✅ Distance calculation (Haversine formula)
-- ✅ Location status states (checking, success, too far, error)
-- ✅ Start Tour button disabled until GPS verified
+- Interactive Leaflet map in admin editor
+- Click-to-set coordinates on map
+- "Use My Location" button
+- Configurable radius (10-5000m)
+- GPS enforcement in player (welcome screen)
+- Distance calculation (Haversine formula)
 
 ### Player (Jan 29-31, 2026)
-- ✅ Welcome screen with GPS lock enforcement
-- ✅ **Mystery Served brand logo** on welcome screen
-- ✅ **Progress bar** - Visual purple gradient at top
-- ✅ **Progress percentage** - Shows completion %
-- ✅ Progress indicator (Stop X of Y, Page X of Y)
-- ✅ **Confetti celebration** on tour completion
-- ✅ **Tour Complete screen** with congratulations message
-- ✅ Content rendering (text, media, audio)
-- ✅ TEXT, MULTIPLE CHOICE, WHITEBOARD verification
-- ✅ Case-insensitive answer matching
-- ✅ Previous/Next navigation
-- ✅ Hint full-page view
-
-### Visual Themes
-- ✅ Admin: Clean, neutral, high-contrast
-- ✅ Player: "Boho Sunshine" warm theme (default)
-- ✅ **Player: "Noir Paws" Dark Theme (Feb 2, 2026)**
-  - Dark navy gradient background (#0f172a → #1e293b)
-  - Typography: Fraunces (headings), Manrope (body), Special Elite (labels)
-  - Amber/gold accent color (#f59e0b) for CTAs and highlights
-  - Glassmorphism effects with backdrop blur
-  - Grain texture overlay for depth
-  - Styled unlock gates (text input, multiple choice)
-  - Themed completion screen with animation
-  - GPS check section styling
-  - Hint page dark theme
+- Welcome screen with GPS lock enforcement
+- Mystery Served brand logo on welcome screen
+- Progress bar with completion percentage
+- Content rendering (text, media, audio)
+- Confetti celebration on tour completion
+- Tour Complete screen
+- Previous/Next navigation
+- Custom success/error/transition messages
 
 ---
 
 ## Pending / Backlog
 
-### P0 - Critical Bugs (User Reported)
-- [x] ~~Fix "Not Found" for newly published tours (race condition)~~ - FIXED Feb 2, 2026
-- [x] ~~Fix stops without pages crashing player~~ - FIXED Feb 2, 2026
-- [x] ~~Fix image/media deletion not persisting after save~~ - FIXED Feb 2, 2026
+### P0 - Critical
+- [ ] **Change Password UI** — Backend endpoint exists but no admin UI form
 
-### P1 - High Priority (Next Up)
-- [x] ~~**Move "Add Page" button**~~ - Moved to sidebar header (Feb 3, 2026)
-- [ ] Auto-save Recovery (localStorage backup)
+### P1 - High Priority
+- [ ] Drag-and-drop sidebar reordering for pages
+- [ ] Story Import Feature (Markdown/DOCX upload)
+- [ ] Progressive Hints (3 hints revealed one by one)
 - [ ] Undo/Redo functionality
+- [ ] Auto-save Recovery (localStorage backup)
+- [ ] "Give Up & Skip" option in player
+- [ ] Tour Analytics (completion rates, drop-off points)
 
 ### P2 - Medium Priority
-- [ ] Give Up & Skip option
-- [ ] Timer/Countdown challenges
-- [ ] Bulk Actions (select multiple stops/pages)
-
-### P3 - Wish List (Future)
-- [ ] Offline Mode (cache tour data)
-- [ ] Drawing/Sketch Answer
-- [ ] Voice Recording answers
-- [ ] AR Integration
-- [ ] Background Music per stop
-- [ ] Preview Mode (test as player)
-- [ ] Version History
-- [ ] Import/Export tours
-- [ ] Paid Tours (Stripe)
-- [ ] Tour Marketplace
-- [ ] Branded Player (custom colors/logo per tour)
-- [ ] Embed Widget
-- [ ] Social Sharing
-- [ ] Collaboration (multiple admins)
-- [ ] Tour Analytics
+- [ ] Monetization (Stripe integration)
+- [ ] Collaboration (multi-admin editing)
+- [ ] Version History (rollback)
 
 ---
 
@@ -175,7 +138,7 @@ Build a tour generator application for creating interactive, location-based expe
 
 ### Backend
 - FastAPI + Pydantic
-- MongoDB (pymongo)
+- MongoDB (motor - async)
 - JWT authentication
 
 ### Frontend  
@@ -200,38 +163,13 @@ Build a tour generator application for creating interactive, location-based expe
 
 ---
 
-## Data Models
-
-### Tour
-- id, title, description, status
-- welcomeTitle, welcomeBody, welcomeImageUrl, welcomeAudioUrl, welcomeButtonLabel
-- welcomeGpsEnabled, welcomeGpsLat, welcomeGpsLng, welcomeGpsRadiusMeters
-- stops: List[Stop]
-- createdAt, updatedAt
-
-### Stop
-- id, title, subtitle, description, intro2
-- taskInstructions, mediaType, mediaUrl
-- imageUrl, imageAlt, galleryUrls
-- embedUrl, embedCaption, audioUrl
-- ctaLabel, ctaUrl
-- unlockMode, answer, caseInsensitive
-- mcOptions, mcCorrectIndex
-- hintText, autoShowHint, storyMode
-- pages: List[Page]
-- order
-
-### Page
-- Same fields as Stop (excluding pages array)
-
----
-
 ## API Endpoints
 
 ### Authentication
 - POST /api/admin/login
 - GET /api/admin/exists
 - POST /api/admin/setup
+- POST /api/admin/change-credentials
 
 ### Tours (Protected)
 - GET /api/tours
@@ -250,9 +188,12 @@ Build a tour generator application for creating interactive, location-based expe
 - Username: demo
 - Password: demo123
 
+## Key Tours
+- Mystery Served (The Recipe Conspiracy): `3e5dce21-2438-4451-9ee9-7049c0491530`
+
 ---
 
 ## Known Issues / Limitations
-1. Page transitions removed due to React 19 + react-transition-group incompatibility
-2. Frontend is monolithic single-file (App.js) - user requested no refactoring
-3. GPS feature requires HTTPS in production for geolocation API to work
+1. Frontend is monolithic single-file (App.js) — fragile, needs refactoring
+2. GPS feature requires HTTPS in production for geolocation API
+3. Stop 2 (Bodega) answer is TBD — needs updating when UV reveal word is confirmed
