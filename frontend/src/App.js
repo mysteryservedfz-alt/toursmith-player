@@ -3276,96 +3276,107 @@ const TourPlayer = () => {
     );
   }
 
-  // Unlock Gate (no transition)
+  // Unlock Gate — shows page content above the answer input
   if (showUnlock && needsUnlock) {
+    const hasPageContent = currentPage?.content || currentPage?.description || currentPage?.subtitle || currentPage?.taskInstructions;
     return (
       <div className="player-theme player-layout" data-testid="player-unlock-gate" style={getBackgroundStyle(currentPage?.skinImageUrl)}>
-        <div className="player-container">
-          <div className="unlock-gate">
-            <div className="unlock-card card">
-              <div className="card-body">
-                <Icons.Lock />
-                <h2>This content is locked</h2>
-                
-                {/* Text verification */}
-                {unlockData.mode === "text" && (
-                  <>
-                    <p className="unlock-prompt">Enter the password/code to continue</p>
-                    <input
-                      type="text"
-                      className={`input ${unlockError ? "input-error" : ""}`}
-                      value={unlockInput}
-                      onChange={(e) => { setUnlockInput(e.target.value); setUnlockError(""); }}
-                      placeholder="Your answer"
-                      onKeyDown={(e) => e.key === "Enter" && handleUnlock()}
-                      data-testid="unlock-input"
-                    />
-                    {unlockData.caseInsensitive && (
-                      <p className="text-small case-note">Case doesn't matter</p>
-                    )}
-                  </>
-                )}
-                
-                {/* Multiple choice verification */}
-                {unlockData.mode === "multiple_choice" && unlockData.mcOptions && (
-                  <>
-                    <p className="unlock-prompt">Select the correct answer</p>
-                    <div className="mc-options-player">
-                      {unlockData.mcOptions.map((option, index) => (
-                        <button
-                          key={index}
-                          type="button"
-                          className={`mc-option-btn ${selectedMcOption === index ? 'selected' : ''}`}
-                          onClick={() => { setSelectedMcOption(index); setUnlockError(""); }}
-                          data-testid={`mc-option-${index}`}
-                        >
-                          <span className="mc-option-letter">{String.fromCharCode(65 + index)}</span>
-                          <span className="mc-option-text">{option}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </>
-                )}
-                
-                {/* Whiteboard verification */}
-                {unlockData.mode === "whiteboard" && (
-                  <>
-                    <p className="unlock-prompt">Write anything to continue</p>
-                    <input
-                      type="text"
-                      className={`input ${unlockError ? "input-error" : ""}`}
-                      value={unlockInput}
-                      onChange={(e) => { setUnlockInput(e.target.value); setUnlockError(""); }}
-                      placeholder="Type anything..."
-                      onKeyDown={(e) => e.key === "Enter" && handleUnlock()}
-                      data-testid="unlock-input"
-                    />
-                  </>
-                )}
-                
-                {unlockError && <p className="error-message">{unlockError}</p>}
-                {unlockSuccess && <p className="success-message">{unlockSuccess}</p>}
-                
-                <div className="unlock-actions">
-                  <button onClick={handleUnlock} className="btn btn-primary" data-testid="unlock-submit">
-                    Continue
-                  </button>
-                  
-                  {/* Hint button */}
-                  {unlockData.hintText && !unlockData.autoShowHint && (
-                    <button 
-                      onClick={() => setShowHintPage(true)} 
-                      className="btn btn-hint"
-                      data-testid="show-hint-btn"
+        <header className="player-header">
+          <div className="progress-bar-container">
+            <div className="progress-bar" style={{ width: `${progressPercent}%` }} />
+          </div>
+          <h1>{tour.title}</h1>
+          <p className="player-progress">
+            Stop {currentStopIndex + 1} of {sortedStops.length} • Page {currentPageIndex + 1} of {sortedPages.length}
+            <span className="progress-percent">{progressPercent}%</span>
+          </p>
+        </header>
+
+        <main className="player-main">
+          <div className="player-content" style={{ color: currentPage?.textColor || currentStop?.textColor || '#1a1a1a' }}>
+            <div className="player-stop-title">{currentStop.title}</div>
+            
+            {hasPageContent && renderContent(currentPage, false)}
+
+            <div className="unlock-inline" data-testid="unlock-inline-form">
+              {/* Text verification */}
+              {unlockData.mode === "text" && (
+                <>
+                  <input
+                    type="text"
+                    className={`input ${unlockError ? "input-error" : ""}`}
+                    value={unlockInput}
+                    onChange={(e) => { setUnlockInput(e.target.value); setUnlockError(""); }}
+                    placeholder="Your answer"
+                    onKeyDown={(e) => e.key === "Enter" && handleUnlock()}
+                    data-testid="unlock-input"
+                  />
+                </>
+              )}
+              
+              {/* Multiple choice verification */}
+              {unlockData.mode === "multiple_choice" && unlockData.mcOptions && (
+                <div className="mc-options-player">
+                  {unlockData.mcOptions.map((option, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      className={`mc-option-btn ${selectedMcOption === index ? 'selected' : ''}`}
+                      onClick={() => { setSelectedMcOption(index); setUnlockError(""); }}
+                      data-testid={`mc-option-${index}`}
                     >
-                      💡 Need a hint?
+                      <span className="mc-option-letter">{String.fromCharCode(65 + index)}</span>
+                      <span className="mc-option-text">{option}</span>
                     </button>
-                  )}
+                  ))}
                 </div>
+              )}
+              
+              {/* Whiteboard verification */}
+              {unlockData.mode === "whiteboard" && (
+                <input
+                  type="text"
+                  className={`input ${unlockError ? "input-error" : ""}`}
+                  value={unlockInput}
+                  onChange={(e) => { setUnlockInput(e.target.value); setUnlockError(""); }}
+                  placeholder="Type anything..."
+                  onKeyDown={(e) => e.key === "Enter" && handleUnlock()}
+                  data-testid="unlock-input"
+                />
+              )}
+              
+              {unlockError && <p className="error-message">{unlockError}</p>}
+              {unlockSuccess && <p className="success-message">{unlockSuccess}</p>}
+              
+              <div className="unlock-actions">
+                <button onClick={handleUnlock} className="btn btn-primary" data-testid="unlock-submit">
+                  Continue
+                </button>
+                
+                {unlockData.hintText && !unlockData.autoShowHint && (
+                  <button 
+                    onClick={() => setShowHintPage(true)} 
+                    className="btn btn-hint"
+                    data-testid="show-hint-btn"
+                  >
+                    Need a hint?
+                  </button>
+                )}
               </div>
             </div>
           </div>
-        </div>
+        </main>
+
+        <footer className="player-footer">
+          <button
+            onClick={goPrev}
+            disabled={isFirstPage}
+            className="btn btn-secondary"
+            data-testid="player-prev-btn"
+          >
+            <Icons.ChevronLeft /> Previous
+          </button>
+        </footer>
       </div>
     );
   }

@@ -2671,6 +2671,71 @@
   margin-top: var(--spacing-xs);
 }
 
+/* Inline Unlock Form (content + answer on same page) */
+.unlock-inline {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  max-width: 480px;
+}
+
+.unlock-inline .input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 2px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  background: #fff;
+  color: #1a1a1a;
+  transition: border-color 0.2s;
+}
+
+.unlock-inline .input:focus {
+  outline: none;
+  border-color: #1a1a1a;
+}
+
+.unlock-inline .input.input-error {
+  border-color: #ef4444;
+}
+
+.unlock-inline .error-message {
+  color: #ef4444;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.unlock-inline .success-message {
+  color: #22c55e;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.unlock-inline .unlock-actions {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.unlock-inline .btn-hint {
+  background: transparent;
+  border: 1px solid #d1d5db;
+  color: #6b7280;
+  border-radius: 8px;
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.unlock-inline .btn-hint:hover {
+  border-color: #1a1a1a;
+  color: #1a1a1a;
+}
+
 /* Hint Page */
 .hint-page-layout {
   /* Background controlled by inline style */
