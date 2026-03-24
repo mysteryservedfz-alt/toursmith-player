@@ -2744,7 +2744,7 @@
 .hint-page {
   max-width: 600px;
   margin: 0 auto;
-  padding: var(--spacing-xl);
+  padding: 60px var(--spacing-xl) var(--spacing-xl);
 }
 
 .hint-page .btn-back {
@@ -2786,7 +2786,7 @@
 
 /* ==================== NOIR PAWS THEME - HINT PAGE ==================== */
 .player-theme .hint-page {
-  padding: 2rem 1.5rem;
+  padding: 60px 1.5rem 2rem;
 }
 
 .player-theme .hint-page .btn-back {
