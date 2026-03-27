@@ -92,7 +92,7 @@
     "frontend": "100%"
   },
   "test_credentials": {
-    "tour_player_url": "https://story-builder-dev.preview.emergentagent.com/play/3e5dce21-2438-4451-9ee9-7049c0491530"
+    "tour_player_url": "https://story-challenge-hub.preview.emergentagent.com/play/3e5dce21-2438-4451-9ee9-7049c0491530"
   },
   "seed_data_creation": "None - tour was pre-created via API",
   "retest_needed": false,

@@ -6,7 +6,7 @@ import json
 import uuid
 import os
 
-API_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://story-builder-dev.preview.emergentagent.com")
+API_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://story-challenge-hub.preview.emergentagent.com")
 API = f"{API_URL}/api"
 
 # Login
