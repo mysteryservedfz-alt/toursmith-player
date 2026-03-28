@@ -72,7 +72,7 @@ class Page(BaseModel):
     ctaLabel: Optional[str] = None
     ctaUrl: Optional[str] = None
     # Verification settings
-    unlockMode: Optional[str] = None  # None = inherit, "continue", "text", "multiple_choice", "whiteboard"
+    unlockMode: Optional[str] = None  # None = inherit, "continue", "text", "multiple_choice", "whiteboard", "photo"
     answer: Optional[str] = None
     caseInsensitive: bool = True  # Case-insensitive answer matching
     # Multiple choice options
@@ -107,7 +107,7 @@ class Stop(BaseModel):
     ctaLabel: Optional[str] = None
     ctaUrl: Optional[str] = None
     # Verification settings
-    unlockMode: str = "continue"  # "continue", "text", "multiple_choice", "whiteboard"
+    unlockMode: str = "continue"  # "continue", "text", "multiple_choice", "whiteboard", "photo"
     answer: Optional[str] = None
     caseInsensitive: bool = True  # Case-insensitive answer matching
     # Multiple choice options

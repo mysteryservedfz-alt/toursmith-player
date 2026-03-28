@@ -77,6 +77,7 @@ const Icons = {
   Navigation: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>,
   Save: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>,
   Copy: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>,
+  Camera: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>,
 };
 
 // Fix Leaflet default marker icon
@@ -839,6 +840,7 @@ const TourEditor = () => {
                                     {page.storyMode && <span className="mini-badge">S</span>}
                                     {page.unlockMode === 'text' && <Icons.Lock />}
                                     {page.unlockMode === 'multiple_choice' && <Icons.ListChecks />}
+                                    {page.unlockMode === 'photo' && <Icons.Camera />}
                                   </div>
                                 ))}
                               </div>
@@ -1873,8 +1875,20 @@ const StopEditor = ({ stop, onUpdate, onDelete, onDuplicate, onAddPage, onSelect
                   >
                     WHITEBOARD
                   </button>
+                  <button 
+                    type="button"
+                    className={`verification-type-btn ${stop.unlockMode === 'photo' ? 'active' : ''}`}
+                    onClick={() => onUpdate({ unlockMode: 'photo' })}
+                  >
+                    PHOTO
+                  </button>
                 </div>
               </div>
+
+              {/* Photo info */}
+              {stop.unlockMode === 'photo' && (
+                <p className="text-small helper-text">Players must upload a photo to proceed. Any photo is accepted.</p>
+              )}
 
               {/* Text verification options */}
               {stop.unlockMode === 'text' && (
@@ -1980,6 +1994,7 @@ const StopEditor = ({ stop, onUpdate, onDelete, onDuplicate, onAddPage, onSelect
                                   {page.unlockMode === 'text' && <Icons.Type />}
                                   {page.unlockMode === 'multiple_choice' && <Icons.ListChecks />}
                                   {page.unlockMode === 'whiteboard' && <Icons.Edit />}
+                                  {page.unlockMode === 'photo' && <Icons.Camera />}
                                 </span>
                               </span>
                               <button 
@@ -2075,6 +2090,7 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDu
       case "text": return "Text";
       case "multiple_choice": return "Multiple Choice";
       case "whiteboard": return "Whiteboard";
+      case "photo": return "Photo";
       default: return mode;
     }
   };
@@ -2472,11 +2488,23 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDu
                   >
                     WHITEBOARD
                   </button>
+                  <button 
+                    type="button"
+                    className={`verification-type-btn ${page.unlockMode === 'photo' ? 'active' : ''}`}
+                    onClick={() => onUpdate({ unlockMode: 'photo' })}
+                  >
+                    PHOTO
+                  </button>
                 </div>
                 {(!page.unlockMode || page.unlockMode === '') && (
                   <p className="text-small">Inheriting from stop: {getDisplayUnlockMode(stopUnlockMode)}</p>
                 )}
               </div>
+
+              {/* Photo info */}
+              {page.unlockMode === 'photo' && (
+                <p className="text-small helper-text">Players must upload a photo to proceed. Any photo is accepted.</p>
+              )}
 
               {/* Text verification options */}
               {page.unlockMode === 'text' && (
@@ -2620,6 +2648,7 @@ const TourPlayer = () => {
   const [unlockError, setUnlockError] = useState("");
   const [unlockSuccess, setUnlockSuccess] = useState("");
   const [selectedMcOption, setSelectedMcOption] = useState(null);
+  const [photoFile, setPhotoFile] = useState(null);
   const [showHintPage, setShowHintPage] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [tourComplete, setTourComplete] = useState(false);
@@ -2804,6 +2833,7 @@ const TourPlayer = () => {
       "text": "text",
       "multiple_choice": "multiple_choice",
       "whiteboard": "whiteboard",
+      "photo": "photo",
       // Legacy modes mapping
       "answer_required": "text",
       "password": "text",
@@ -2828,6 +2858,11 @@ const TourPlayer = () => {
     // For text mode, require an answer to be present
     if (mode === "text" && !source?.answer) {
       return null; // Treat as "continue" if no answer defined
+    }
+
+    // Photo mode needs no answer — any upload works
+    if (mode === "photo") {
+      return { mode, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint };
     }
     
     return {
@@ -2858,6 +2893,7 @@ const TourPlayer = () => {
     setSelectedMcOption(null);
     setUnlockInput("");
     setUnlockError("");
+    setPhotoFile(null);
     
     // Handle unlock gates
     if (needsUnlock && !showUnlock) {
@@ -2885,6 +2921,9 @@ const TourPlayer = () => {
     } else if (unlockData.mode === "whiteboard") {
       // Whiteboard mode - always allow (user just needs to type something)
       correct = unlockInput.trim().length > 0;
+    } else if (unlockData.mode === "photo") {
+      // Photo mode - any file selected counts
+      correct = !!photoFile;
     }
     
     if (correct) {
@@ -2896,6 +2935,7 @@ const TourPlayer = () => {
         setUnlockInput("");
         setUnlockSuccess("");
         setSelectedMcOption(null);
+        setPhotoFile(null);
       }, 1500);
     } else {
       setUnlockError("Not quite. Take another look — you're closer than you think.");
@@ -3343,6 +3383,40 @@ const TourPlayer = () => {
                   onKeyDown={(e) => e.key === "Enter" && handleUnlock()}
                   data-testid="unlock-input"
                 />
+              )}
+
+              {/* Photo verification */}
+              {unlockData.mode === "photo" && (
+                <div className="photo-upload-gate" data-testid="photo-upload-gate">
+                  <label className="photo-upload-label">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      capture="environment"
+                      className="photo-upload-input"
+                      onChange={(e) => { 
+                        if (e.target.files && e.target.files[0]) {
+                          setPhotoFile(e.target.files[0]); 
+                          setUnlockError(""); 
+                        }
+                      }}
+                      data-testid="photo-file-input"
+                    />
+                    <div className={`photo-upload-box ${photoFile ? 'has-photo' : ''}`}>
+                      {photoFile ? (
+                        <>
+                          <img src={URL.createObjectURL(photoFile)} alt="Uploaded" className="photo-preview" />
+                          <span className="photo-filename">{photoFile.name}</span>
+                        </>
+                      ) : (
+                        <>
+                          <Icons.Camera />
+                          <span>Tap to take a photo</span>
+                        </>
+                      )}
+                    </div>
+                  </label>
+                </div>
               )}
               
               {unlockError && <p className="error-message">{unlockError}</p>}

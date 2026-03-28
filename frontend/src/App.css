@@ -3656,3 +3656,61 @@
   color: var(--color-text-light);
   font-family: monospace;
 }
+
+/* Photo Upload Gate */
+.photo-upload-gate {
+  width: 100%;
+}
+
+.photo-upload-label {
+  display: block;
+  cursor: pointer;
+}
+
+.photo-upload-input {
+  display: none;
+}
+
+.photo-upload-box {
+  border: 2px dashed var(--color-border);
+  border-radius: 12px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: var(--color-text-light);
+  transition: border-color 0.2s, background 0.2s;
+  min-height: 120px;
+}
+
+.photo-upload-box:hover {
+  border-color: var(--color-primary);
+  background: rgba(0,0,0,0.02);
+}
+
+.photo-upload-box svg {
+  width: 32px;
+  height: 32px;
+  opacity: 0.6;
+}
+
+.photo-upload-box.has-photo {
+  border-style: solid;
+  border-color: var(--color-primary);
+  padding: 0.75rem;
+}
+
+.photo-preview {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.photo-filename {
+  font-size: 0.75rem;
+  color: var(--color-text-light);
+  word-break: break-all;
+}
