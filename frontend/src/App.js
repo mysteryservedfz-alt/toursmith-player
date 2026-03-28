@@ -4011,7 +4011,26 @@ const TourPlayer = () => {
               {/* Page Content */}
               {renderContent(currentPage, false)}
 
-              <div className="page-end-divider" />
+              {/* Themed divider */}
+              <div className="page-end-divider themed">
+                <span className="divider-line" />
+                <span className="divider-icon">
+                  {(() => {
+                    const icons = [
+                      // Guitar
+                      <svg key="guitar" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M11.5 3v4M15 5.5l-3.5 1M8 5.5l3.5 1"/><ellipse cx="11.5" cy="15" rx="5" ry="6"/><ellipse cx="11.5" cy="15" rx="2" ry="2.5"/><line x1="11.5" y1="3" x2="11.5" y2="2"/></svg>,
+                      // Banjo
+                      <svg key="banjo" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="14" r="6"/><circle cx="12" cy="14" r="2.5"/><line x1="12" y1="2" x2="12" y2="8"/><line x1="10" y1="3" x2="14" y2="3"/></svg>,
+                      // Violin
+                      <svg key="violin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v6"/><ellipse cx="12" cy="11" rx="3.5" ry="3"/><ellipse cx="12" cy="17" rx="3.5" ry="3"/><path d="M8.5 14h7"/><line x1="12" y1="20" x2="12" y2="22"/><circle cx="12" cy="2" r="0.5" fill="currentColor"/></svg>,
+                      // Music Notes
+                      <svg key="notes" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>,
+                    ];
+                    return icons[(currentStopIndex + currentPageIndex) % icons.length];
+                  })()}
+                </span>
+                <span className="divider-line" />
+              </div>
             </div>
       </main>
 
