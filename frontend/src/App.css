@@ -3784,3 +3784,155 @@
   font-size: 0.75rem;
   flex-shrink: 0;
 }
+
+/* Timer Gate */
+.timer-gate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 0;
+}
+
+.timer-circle {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.timer-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.timer-track {
+  fill: none;
+  stroke: #e5e7eb;
+  stroke-width: 6;
+}
+
+.timer-progress {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear;
+}
+
+.timer-number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+}
+
+.timer-label {
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+  font-style: italic;
+}
+
+/* Checklist Gate */
+.checklist-gate {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  user-select: none;
+}
+
+.checklist-item:hover {
+  border-color: var(--color-primary);
+}
+
+.checklist-item.checked {
+  background: #f0fdf4;
+  border-color: #22c55e;
+}
+
+.checklist-item input {
+  display: none;
+}
+
+.checklist-check {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 2px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #22c55e;
+  flex-shrink: 0;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.checklist-item.checked .checklist-check {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: #fff;
+}
+
+.checklist-text {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* Shake Gate */
+.shake-gate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 0;
+}
+
+.shake-icon {
+  animation: shake-wiggle 0.8s ease-in-out infinite;
+  color: var(--color-text-light);
+}
+
+.shake-icon.detected {
+  animation: none;
+  color: #22c55e;
+}
+
+.shake-label {
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+  font-style: italic;
+}
+
+.shake-fallback {
+  font-size: 0.8rem;
+  opacity: 0.6;
+  margin-top: 0.5rem;
+}
+
+@keyframes shake-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-12deg); }
+  40% { transform: rotate(12deg); }
+  60% { transform: rotate(-8deg); }
+  80% { transform: rotate(8deg); }
+}

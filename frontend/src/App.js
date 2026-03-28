@@ -1890,6 +1890,27 @@ const StopEditor = ({ stop, onUpdate, onDelete, onDuplicate, onAddPage, onSelect
                   >
                     RANKING
                   </button>
+                  <button 
+                    type="button"
+                    className={`verification-type-btn ${stop.unlockMode === 'timer' ? 'active' : ''}`}
+                    onClick={() => onUpdate({ unlockMode: 'timer', answer: '60' })}
+                  >
+                    TIMER
+                  </button>
+                  <button 
+                    type="button"
+                    className={`verification-type-btn ${stop.unlockMode === 'checklist' ? 'active' : ''}`}
+                    onClick={() => onUpdate({ unlockMode: 'checklist' })}
+                  >
+                    CHECKLIST
+                  </button>
+                  <button 
+                    type="button"
+                    className={`verification-type-btn ${stop.unlockMode === 'shake' ? 'active' : ''}`}
+                    onClick={() => onUpdate({ unlockMode: 'shake' })}
+                  >
+                    SHAKE
+                  </button>
                 </div>
               </div>
 
@@ -1995,6 +2016,56 @@ const StopEditor = ({ stop, onUpdate, onDelete, onDuplicate, onAddPage, onSelect
               {/* Whiteboard info */}
               {stop.unlockMode === 'whiteboard' && (
                 <p className="text-small helper-text">Players can type anything to proceed - no correct answer required</p>
+              )}
+
+              {/* Timer settings */}
+              {stop.unlockMode === 'timer' && (
+                <div className="form-group">
+                  <label className="form-label">Duration (seconds)</label>
+                  <input 
+                    type="number" 
+                    className="input" 
+                    value={stop.answer || "60"} 
+                    onChange={(e) => onUpdate({ answer: e.target.value })} 
+                    placeholder="60" 
+                    min="5"
+                    max="600"
+                  />
+                  <p className="text-small">Page auto-unlocks when the countdown reaches zero</p>
+                </div>
+              )}
+
+              {/* Checklist options */}
+              {stop.unlockMode === 'checklist' && (
+                <div className="form-group">
+                  <label className="form-label">Checklist Items</label>
+                  <div className="mc-options-editor">
+                    {(stop.mcOptions || []).map((option, index) => (
+                      <div key={index} className="mc-option-row">
+                        <span className="ranking-number">{index + 1}</span>
+                        <input
+                          type="text"
+                          className="input"
+                          value={option}
+                          onChange={(e) => updateMcOption(index, e.target.value)}
+                          placeholder={`Task ${index + 1}`}
+                        />
+                        <button type="button" onClick={() => removeMcOption(index)} className="btn btn-ghost btn-sm">
+                          <Icons.Trash />
+                        </button>
+                      </div>
+                    ))}
+                    <button type="button" onClick={addMcOption} className="btn btn-secondary btn-sm">
+                      <Icons.Plus /> Add Task
+                    </button>
+                  </div>
+                  <p className="text-small">Players check off each task to unlock. All must be checked.</p>
+                </div>
+              )}
+
+              {/* Shake info */}
+              {stop.unlockMode === 'shake' && (
+                <p className="text-small helper-text">Players shake their phone to unlock. On desktop, they tap a button instead.</p>
               )}
 
               {/* Ranking info (stop-level, shown below other sections) */}
@@ -2131,6 +2202,9 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDu
       case "whiteboard": return "Whiteboard";
       case "photo": return "Photo";
       case "ranking": return "Ranking";
+      case "timer": return "Timer";
+      case "checklist": return "Checklist";
+      case "shake": return "Shake";
       default: return mode;
     }
   };
@@ -2542,6 +2616,27 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDu
                   >
                     RANKING
                   </button>
+                  <button 
+                    type="button"
+                    className={`verification-type-btn ${page.unlockMode === 'timer' ? 'active' : ''}`}
+                    onClick={() => onUpdate({ unlockMode: 'timer', answer: '60' })}
+                  >
+                    TIMER
+                  </button>
+                  <button 
+                    type="button"
+                    className={`verification-type-btn ${page.unlockMode === 'checklist' ? 'active' : ''}`}
+                    onClick={() => onUpdate({ unlockMode: 'checklist' })}
+                  >
+                    CHECKLIST
+                  </button>
+                  <button 
+                    type="button"
+                    className={`verification-type-btn ${page.unlockMode === 'shake' ? 'active' : ''}`}
+                    onClick={() => onUpdate({ unlockMode: 'shake' })}
+                  >
+                    SHAKE
+                  </button>
                 </div>
                 {(!page.unlockMode || page.unlockMode === '') && (
                   <p className="text-small">Inheriting from stop: {getDisplayUnlockMode(stopUnlockMode)}</p>
@@ -2652,6 +2747,56 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDu
                 <p className="text-small helper-text">Players can type anything to proceed - no correct answer required</p>
               )}
 
+              {/* Timer settings */}
+              {page.unlockMode === 'timer' && (
+                <div className="form-group">
+                  <label className="form-label">Duration (seconds)</label>
+                  <input 
+                    type="number" 
+                    className="input" 
+                    value={page.answer || "60"} 
+                    onChange={(e) => onUpdate({ answer: e.target.value })} 
+                    placeholder="60" 
+                    min="5"
+                    max="600"
+                  />
+                  <p className="text-small">Page auto-unlocks when the countdown reaches zero</p>
+                </div>
+              )}
+
+              {/* Checklist options */}
+              {page.unlockMode === 'checklist' && (
+                <div className="form-group">
+                  <label className="form-label">Checklist Items</label>
+                  <div className="mc-options-editor">
+                    {(page.mcOptions || []).map((option, index) => (
+                      <div key={index} className="mc-option-row">
+                        <span className="ranking-number">{index + 1}</span>
+                        <input
+                          type="text"
+                          className="input"
+                          value={option}
+                          onChange={(e) => updateMcOption(index, e.target.value)}
+                          placeholder={`Task ${index + 1}`}
+                        />
+                        <button type="button" onClick={() => removeMcOption(index)} className="btn btn-ghost btn-sm">
+                          <Icons.Trash />
+                        </button>
+                      </div>
+                    ))}
+                    <button type="button" onClick={addMcOption} className="btn btn-secondary btn-sm">
+                      <Icons.Plus /> Add Task
+                    </button>
+                  </div>
+                  <p className="text-small">Players check off each task to unlock. All must be checked.</p>
+                </div>
+              )}
+
+              {/* Shake info */}
+              {page.unlockMode === 'shake' && (
+                <p className="text-small helper-text">Players shake their phone to unlock. On desktop, they tap a button instead.</p>
+              )}
+
               {/* Ranking info (page-level, shown below other sections) */}
             </>
           )}
@@ -2727,6 +2872,10 @@ const TourPlayer = () => {
   const [selectedMcOption, setSelectedMcOption] = useState(null);
   const [photoFile, setPhotoFile] = useState(null);
   const [rankingItems, setRankingItems] = useState([]);
+  const [timerSeconds, setTimerSeconds] = useState(0);
+  const [timerRunning, setTimerRunning] = useState(false);
+  const [checkedItems, setCheckedItems] = useState(new Set());
+  const [shakeDetected, setShakeDetected] = useState(false);
   const [showHintPage, setShowHintPage] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [tourComplete, setTourComplete] = useState(false);
@@ -2913,6 +3062,9 @@ const TourPlayer = () => {
       "whiteboard": "whiteboard",
       "photo": "photo",
       "ranking": "ranking",
+      "timer": "timer",
+      "checklist": "checklist",
+      "shake": "shake",
       // Legacy modes mapping
       "answer_required": "text",
       "password": "text",
@@ -2949,6 +3101,23 @@ const TourPlayer = () => {
       if (!source?.mcOptions || source.mcOptions.length < 2) return null;
       return { mode, mcOptions: source.mcOptions, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint };
     }
+
+    // Timer mode — answer field stores seconds
+    if (mode === "timer") {
+      const seconds = parseInt(source?.answer) || 60;
+      return { mode, timerDuration: seconds, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint };
+    }
+
+    // Checklist mode reuses mcOptions
+    if (mode === "checklist") {
+      if (!source?.mcOptions || source.mcOptions.length === 0) return null;
+      return { mode, mcOptions: source.mcOptions, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint };
+    }
+
+    // Shake mode — no config needed
+    if (mode === "shake") {
+      return { mode, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint };
+    }
     
     return {
       mode,
@@ -2980,6 +3149,10 @@ const TourPlayer = () => {
     setUnlockError("");
     setPhotoFile(null);
     setRankingItems([]);
+    setTimerSeconds(0);
+    setTimerRunning(false);
+    setCheckedItems(new Set());
+    setShakeDetected(false);
     
     // Handle unlock gates
     if (needsUnlock && !showUnlock) {
@@ -3012,6 +3185,74 @@ const TourPlayer = () => {
     setUnlockError("");
   };
 
+  // Timer countdown
+  useEffect(() => {
+    if (unlockData?.mode === "timer" && !timerRunning && timerSeconds === 0 && needsUnlock) {
+      setTimerSeconds(unlockData.timerDuration);
+      setTimerRunning(true);
+    }
+  }, [unlockData, pageKey]);
+
+  useEffect(() => {
+    if (!timerRunning || timerSeconds <= 0) return;
+    const interval = setInterval(() => {
+      setTimerSeconds(prev => {
+        if (prev <= 1) {
+          setTimerRunning(false);
+          // Auto-unlock when timer hits 0
+          setUnlockSuccess("Time's up. You're through.");
+          setTimeout(() => {
+            setUnlockedPages(prev2 => new Set([...prev2, pageKey]));
+            setShowUnlock(false);
+            setUnlockSuccess("");
+          }, 1500);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [timerRunning, timerSeconds]);
+
+  // Shake detection
+  useEffect(() => {
+    if (unlockData?.mode !== "shake" || !needsUnlock || shakeDetected) return;
+    let lastX = 0, lastY = 0, lastZ = 0;
+    let lastTime = Date.now();
+    const threshold = 25;
+
+    const handleMotion = (e) => {
+      const acc = e.accelerationIncludingGravity;
+      if (!acc) return;
+      const now = Date.now();
+      if (now - lastTime < 100) return;
+      const dx = Math.abs(acc.x - lastX);
+      const dy = Math.abs(acc.y - lastY);
+      const dz = Math.abs(acc.z - lastZ);
+      if (dx + dy + dz > threshold) {
+        setShakeDetected(true);
+      }
+      lastX = acc.x; lastY = acc.y; lastZ = acc.z;
+      lastTime = now;
+    };
+
+    window.addEventListener('devicemotion', handleMotion);
+    return () => window.removeEventListener('devicemotion', handleMotion);
+  }, [unlockData, pageKey, shakeDetected, needsUnlock]);
+
+  // Auto-unlock on shake detect
+  useEffect(() => {
+    if (shakeDetected && unlockData?.mode === "shake" && needsUnlock) {
+      setUnlockSuccess("There it is.");
+      setTimeout(() => {
+        setUnlockedPages(prev => new Set([...prev, pageKey]));
+        setShowUnlock(false);
+        setUnlockSuccess("");
+        setShakeDetected(false);
+      }, 1500);
+    }
+  }, [shakeDetected]);
+
   const handleUnlock = () => {
     if (!unlockData) return;
     
@@ -3036,6 +3277,15 @@ const TourPlayer = () => {
     } else if (unlockData.mode === "ranking") {
       // Ranking mode - check if items are in original order (0, 1, 2, ...)
       correct = rankingItems.every((item, index) => item.originalIndex === index);
+    } else if (unlockData.mode === "checklist") {
+      // Checklist mode - all items must be checked
+      correct = unlockData.mcOptions && checkedItems.size === unlockData.mcOptions.length;
+    } else if (unlockData.mode === "shake") {
+      // Shake mode - handled by effect, but allow button tap on desktop
+      correct = shakeDetected;
+    } else if (unlockData.mode === "timer") {
+      // Timer auto-unlocks — this shouldn't normally be called
+      correct = timerSeconds <= 0;
     }
     
     if (correct) {
@@ -3561,13 +3811,73 @@ const TourPlayer = () => {
                 </DragDropContext>
               )}
               
+              {/* Timer verification */}
+              {unlockData.mode === "timer" && (
+                <div className="timer-gate" data-testid="timer-gate">
+                  <div className="timer-circle">
+                    <svg viewBox="0 0 100 100" className="timer-svg">
+                      <circle cx="50" cy="50" r="45" className="timer-track" />
+                      <circle cx="50" cy="50" r="45" className="timer-progress" 
+                        style={{ strokeDasharray: `${2 * Math.PI * 45}`, strokeDashoffset: `${2 * Math.PI * 45 * (1 - timerSeconds / (unlockData.timerDuration || 60))}` }} 
+                      />
+                    </svg>
+                    <span className="timer-number">{timerSeconds}</span>
+                  </div>
+                  <p className="timer-label">{timerSeconds > 0 ? "Be here. Be present." : "Ready."}</p>
+                </div>
+              )}
+
+              {/* Checklist verification */}
+              {unlockData.mode === "checklist" && unlockData.mcOptions && (
+                <div className="checklist-gate" data-testid="checklist-gate">
+                  {unlockData.mcOptions.map((item, index) => (
+                    <label key={index} className={`checklist-item ${checkedItems.has(index) ? 'checked' : ''}`} data-testid={`checklist-item-${index}`}>
+                      <input 
+                        type="checkbox" 
+                        checked={checkedItems.has(index)}
+                        onChange={() => {
+                          setCheckedItems(prev => {
+                            const next = new Set(prev);
+                            if (next.has(index)) next.delete(index);
+                            else next.add(index);
+                            return next;
+                          });
+                          setUnlockError("");
+                        }}
+                      />
+                      <span className="checklist-check">{checkedItems.has(index) ? '✓' : ''}</span>
+                      <span className="checklist-text">{item}</span>
+                    </label>
+                  ))}
+                </div>
+              )}
+
+              {/* Shake verification */}
+              {unlockData.mode === "shake" && (
+                <div className="shake-gate" data-testid="shake-gate">
+                  <div className={`shake-icon ${shakeDetected ? 'detected' : ''}`}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="7" y="1" width="10" height="22" rx="2" ry="2"/>
+                      <path d="M4 5l-2 1"/><path d="M4 19l-2-1"/>
+                      <path d="M20 5l2 1"/><path d="M20 19l2-1"/>
+                    </svg>
+                  </div>
+                  <p className="shake-label">{shakeDetected ? "Got it." : "Shake your phone to continue"}</p>
+                  <button onClick={() => setShakeDetected(true)} className="btn btn-secondary btn-sm shake-fallback" data-testid="shake-tap-btn">
+                    Or tap here
+                  </button>
+                </div>
+              )}
+
               {unlockError && <p className="error-message">{unlockError}</p>}
               {unlockSuccess && <p className="success-message">{unlockSuccess}</p>}
               
               <div className="unlock-actions">
-                <button onClick={handleUnlock} className="btn btn-primary" data-testid="unlock-submit">
-                  Continue
-                </button>
+                {unlockData.mode !== "timer" && unlockData.mode !== "shake" && (
+                  <button onClick={handleUnlock} className="btn btn-primary" data-testid="unlock-submit">
+                    Continue
+                  </button>
+                )}
                 
                 {unlockData.hintText && !unlockData.autoShowHint && (
                   <button 
