@@ -3714,3 +3714,73 @@
   color: var(--color-text-light);
   word-break: break-all;
 }
+
+/* Ranking Unlock */
+.ranking-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ranking-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  cursor: grab;
+  transition: box-shadow 0.2s, border-color 0.2s;
+  user-select: none;
+}
+
+.ranking-item:hover {
+  border-color: var(--color-primary);
+}
+
+.ranking-item.dragging {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  border-color: var(--color-primary);
+  background: #fafafa;
+}
+
+.ranking-position {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.ranking-text {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.ranking-item svg {
+  opacity: 0.3;
+  flex-shrink: 0;
+}
+
+.ranking-number {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}

@@ -841,6 +841,7 @@ const TourEditor = () => {
                                     {page.unlockMode === 'text' && <Icons.Lock />}
                                     {page.unlockMode === 'multiple_choice' && <Icons.ListChecks />}
                                     {page.unlockMode === 'photo' && <Icons.Camera />}
+                                    {page.unlockMode === 'ranking' && <Icons.Grip />}
                                   </div>
                                 ))}
                               </div>
@@ -1882,12 +1883,47 @@ const StopEditor = ({ stop, onUpdate, onDelete, onDuplicate, onAddPage, onSelect
                   >
                     PHOTO
                   </button>
+                  <button 
+                    type="button"
+                    className={`verification-type-btn ${stop.unlockMode === 'ranking' ? 'active' : ''}`}
+                    onClick={() => onUpdate({ unlockMode: 'ranking' })}
+                  >
+                    RANKING
+                  </button>
                 </div>
               </div>
 
               {/* Photo info */}
               {stop.unlockMode === 'photo' && (
                 <p className="text-small helper-text">Players must upload a photo to proceed. Any photo is accepted.</p>
+              )}
+
+              {/* Ranking options */}
+              {stop.unlockMode === 'ranking' && (
+                <div className="form-group">
+                  <label className="form-label">Items (enter in correct order — players see them shuffled)</label>
+                  <div className="mc-options-editor">
+                    {(stop.mcOptions || []).map((option, index) => (
+                      <div key={index} className="mc-option-row">
+                        <span className="ranking-number">{index + 1}</span>
+                        <input
+                          type="text"
+                          className="input"
+                          value={option}
+                          onChange={(e) => updateMcOption(index, e.target.value)}
+                          placeholder={`#${index + 1}`}
+                        />
+                        <button type="button" onClick={() => removeMcOption(index)} className="btn btn-ghost btn-sm">
+                          <Icons.Trash />
+                        </button>
+                      </div>
+                    ))}
+                    <button type="button" onClick={addMcOption} className="btn btn-secondary btn-sm">
+                      <Icons.Plus /> Add Item
+                    </button>
+                  </div>
+                  <p className="text-small">Players will drag these into the correct order to unlock</p>
+                </div>
               )}
 
               {/* Text verification options */}
@@ -1960,6 +1996,8 @@ const StopEditor = ({ stop, onUpdate, onDelete, onDuplicate, onAddPage, onSelect
               {stop.unlockMode === 'whiteboard' && (
                 <p className="text-small helper-text">Players can type anything to proceed - no correct answer required</p>
               )}
+
+              {/* Ranking info (stop-level, shown below other sections) */}
             </>
           )}
         </AccordionSection>
@@ -1995,6 +2033,7 @@ const StopEditor = ({ stop, onUpdate, onDelete, onDuplicate, onAddPage, onSelect
                                   {page.unlockMode === 'multiple_choice' && <Icons.ListChecks />}
                                   {page.unlockMode === 'whiteboard' && <Icons.Edit />}
                                   {page.unlockMode === 'photo' && <Icons.Camera />}
+                                  {page.unlockMode === 'ranking' && <Icons.Grip />}
                                 </span>
                               </span>
                               <button 
@@ -2091,6 +2130,7 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDu
       case "multiple_choice": return "Multiple Choice";
       case "whiteboard": return "Whiteboard";
       case "photo": return "Photo";
+      case "ranking": return "Ranking";
       default: return mode;
     }
   };
@@ -2495,6 +2535,13 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDu
                   >
                     PHOTO
                   </button>
+                  <button 
+                    type="button"
+                    className={`verification-type-btn ${page.unlockMode === 'ranking' ? 'active' : ''}`}
+                    onClick={() => onUpdate({ unlockMode: 'ranking' })}
+                  >
+                    RANKING
+                  </button>
                 </div>
                 {(!page.unlockMode || page.unlockMode === '') && (
                   <p className="text-small">Inheriting from stop: {getDisplayUnlockMode(stopUnlockMode)}</p>
@@ -2504,6 +2551,34 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDu
               {/* Photo info */}
               {page.unlockMode === 'photo' && (
                 <p className="text-small helper-text">Players must upload a photo to proceed. Any photo is accepted.</p>
+              )}
+
+              {/* Ranking options */}
+              {page.unlockMode === 'ranking' && (
+                <div className="form-group">
+                  <label className="form-label">Items (enter in correct order — players see them shuffled)</label>
+                  <div className="mc-options-editor">
+                    {(page.mcOptions || []).map((option, index) => (
+                      <div key={index} className="mc-option-row">
+                        <span className="ranking-number">{index + 1}</span>
+                        <input
+                          type="text"
+                          className="input"
+                          value={option}
+                          onChange={(e) => updateMcOption(index, e.target.value)}
+                          placeholder={`#${index + 1}`}
+                        />
+                        <button type="button" onClick={() => removeMcOption(index)} className="btn btn-ghost btn-sm">
+                          <Icons.Trash />
+                        </button>
+                      </div>
+                    ))}
+                    <button type="button" onClick={addMcOption} className="btn btn-secondary btn-sm">
+                      <Icons.Plus /> Add Item
+                    </button>
+                  </div>
+                  <p className="text-small">Players will drag these into the correct order to unlock</p>
+                </div>
               )}
 
               {/* Text verification options */}
@@ -2576,6 +2651,8 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDu
               {page.unlockMode === 'whiteboard' && (
                 <p className="text-small helper-text">Players can type anything to proceed - no correct answer required</p>
               )}
+
+              {/* Ranking info (page-level, shown below other sections) */}
             </>
           )}
         </AccordionSection>
@@ -2649,6 +2726,7 @@ const TourPlayer = () => {
   const [unlockSuccess, setUnlockSuccess] = useState("");
   const [selectedMcOption, setSelectedMcOption] = useState(null);
   const [photoFile, setPhotoFile] = useState(null);
+  const [rankingItems, setRankingItems] = useState([]);
   const [showHintPage, setShowHintPage] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [tourComplete, setTourComplete] = useState(false);
@@ -2834,6 +2912,7 @@ const TourPlayer = () => {
       "multiple_choice": "multiple_choice",
       "whiteboard": "whiteboard",
       "photo": "photo",
+      "ranking": "ranking",
       // Legacy modes mapping
       "answer_required": "text",
       "password": "text",
@@ -2863,6 +2942,12 @@ const TourPlayer = () => {
     // Photo mode needs no answer — any upload works
     if (mode === "photo") {
       return { mode, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint };
+    }
+
+    // Ranking mode needs mcOptions
+    if (mode === "ranking") {
+      if (!source?.mcOptions || source.mcOptions.length < 2) return null;
+      return { mode, mcOptions: source.mcOptions, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint };
     }
     
     return {
@@ -2894,6 +2979,7 @@ const TourPlayer = () => {
     setUnlockInput("");
     setUnlockError("");
     setPhotoFile(null);
+    setRankingItems([]);
     
     // Handle unlock gates
     if (needsUnlock && !showUnlock) {
@@ -2902,6 +2988,29 @@ const TourPlayer = () => {
       setShowUnlock(false);
     }
   }, [needsUnlock, currentStopIndex, currentPageIndex]);
+
+  // Shuffle ranking items when a ranking page loads
+  useEffect(() => {
+    if (unlockData?.mode === "ranking" && unlockData.mcOptions && rankingItems.length === 0) {
+      const items = unlockData.mcOptions.map((text, i) => ({ id: `rank-${i}`, text, originalIndex: i }));
+      // Fisher-Yates shuffle
+      const shuffled = [...items];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      setRankingItems(shuffled);
+    }
+  }, [unlockData, pageKey]);
+
+  const handleRankingDragEnd = (result) => {
+    if (!result.destination) return;
+    const items = Array.from(rankingItems);
+    const [reordered] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reordered);
+    setRankingItems(items);
+    setUnlockError("");
+  };
 
   const handleUnlock = () => {
     if (!unlockData) return;
@@ -2924,6 +3033,9 @@ const TourPlayer = () => {
     } else if (unlockData.mode === "photo") {
       // Photo mode - any file selected counts
       correct = !!photoFile;
+    } else if (unlockData.mode === "ranking") {
+      // Ranking mode - check if items are in original order (0, 1, 2, ...)
+      correct = rankingItems.every((item, index) => item.originalIndex === index);
     }
     
     if (correct) {
@@ -3417,6 +3529,36 @@ const TourPlayer = () => {
                     </div>
                   </label>
                 </div>
+              )}
+
+              {/* Ranking verification */}
+              {unlockData.mode === "ranking" && rankingItems.length > 0 && (
+                <DragDropContext onDragEnd={handleRankingDragEnd}>
+                  <Droppable droppableId="ranking-player">
+                    {(provided) => (
+                      <div className="ranking-list" ref={provided.innerRef} {...provided.droppableProps} data-testid="ranking-list">
+                        {rankingItems.map((item, index) => (
+                          <Draggable key={item.id} draggableId={item.id} index={index}>
+                            {(provided, snapshot) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                className={`ranking-item ${snapshot.isDragging ? 'dragging' : ''}`}
+                                data-testid={`ranking-item-${index}`}
+                              >
+                                <span className="ranking-position">{index + 1}</span>
+                                <span className="ranking-text">{item.text}</span>
+                                <Icons.Grip />
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
               )}
               
               {unlockError && <p className="error-message">{unlockError}</p>}
