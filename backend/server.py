@@ -82,6 +82,9 @@ class Page(BaseModel):
     # Hint settings
     hintText: Optional[str] = None
     autoShowHint: bool = False
+    # Custom feedback messages
+    wrongAnswerMessage: Optional[str] = None
+    correctAnswerMessage: Optional[str] = None
     # Story mode (bypass verification)
     storyMode: bool = False
     order: int = 0
@@ -117,6 +120,9 @@ class Stop(BaseModel):
     # Hint settings
     hintText: Optional[str] = None
     autoShowHint: bool = False
+    # Custom feedback messages
+    wrongAnswerMessage: Optional[str] = None
+    correctAnswerMessage: Optional[str] = None
     # Story mode (bypass verification)
     storyMode: bool = False
     pages: List[Page] = []
