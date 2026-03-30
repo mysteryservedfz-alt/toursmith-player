@@ -1826,6 +1826,18 @@ const StopEditor = ({ stop, onUpdate, onDelete, onDuplicate, onAddPage, onSelect
             </label>
             <p className="text-small">Automatically show hint when player arrives</p>
           </div>
+          <div className="form-group">
+            <label className="form-label">Custom Wrong Answer Message</label>
+            <input 
+              type="text"
+              className="input" 
+              value={stop.wrongAnswerMessage || ""} 
+              onChange={(e) => onUpdate({ wrongAnswerMessage: e.target.value || null })} 
+              placeholder="Not quite. Take another look..." 
+              data-testid="stop-wrong-msg-input" 
+            />
+            <p className="text-small">Shown when player gives wrong answer. Leave blank for default.</p>
+          </div>
         </AccordionSection>
 
         {/* Verification Section */}
@@ -2543,6 +2555,18 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDu
             </label>
             <p className="text-small">Automatically show hint when player arrives</p>
           </div>
+          <div className="form-group">
+            <label className="form-label">Custom Wrong Answer Message</label>
+            <input 
+              type="text"
+              className="input" 
+              value={page.wrongAnswerMessage || ""} 
+              onChange={(e) => onUpdate({ wrongAnswerMessage: e.target.value || null })} 
+              placeholder="Not quite. Take another look..." 
+              data-testid="page-wrong-msg-input" 
+            />
+            <p className="text-small">Shown when player gives wrong answer. Leave blank for default.</p>
+          </div>
         </AccordionSection>
 
         {/* Verification Section */}
@@ -3096,30 +3120,30 @@ const TourPlayer = () => {
 
     // Photo mode needs no answer — any upload works
     if (mode === "photo") {
-      return { mode, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint };
+      return { mode, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint, wrongAnswerMessage: source?.wrongAnswerMessage || page?.wrongAnswerMessage };
     }
 
     // Ranking mode needs mcOptions
     if (mode === "ranking") {
       if (!source?.mcOptions || source.mcOptions.length < 2) return null;
-      return { mode, mcOptions: source.mcOptions, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint };
+      return { mode, mcOptions: source.mcOptions, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint, wrongAnswerMessage: source?.wrongAnswerMessage || page?.wrongAnswerMessage };
     }
 
     // Timer mode — answer field stores seconds
     if (mode === "timer") {
       const seconds = parseInt(source?.answer) || 60;
-      return { mode, timerDuration: seconds, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint };
+      return { mode, timerDuration: seconds, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint, wrongAnswerMessage: source?.wrongAnswerMessage || page?.wrongAnswerMessage };
     }
 
     // Checklist mode reuses mcOptions
     if (mode === "checklist") {
       if (!source?.mcOptions || source.mcOptions.length === 0) return null;
-      return { mode, mcOptions: source.mcOptions, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint };
+      return { mode, mcOptions: source.mcOptions, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint, wrongAnswerMessage: source?.wrongAnswerMessage || page?.wrongAnswerMessage };
     }
 
     // Shake mode — no config needed
     if (mode === "shake") {
-      return { mode, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint };
+      return { mode, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint, wrongAnswerMessage: source?.wrongAnswerMessage || page?.wrongAnswerMessage };
     }
     
     return {
@@ -3129,7 +3153,8 @@ const TourPlayer = () => {
       mcOptions: source?.mcOptions,
       mcCorrectIndex: source?.mcCorrectIndex,
       hintText: source?.hintText || page?.hintText,
-      autoShowHint: source?.autoShowHint || page?.autoShowHint
+      autoShowHint: source?.autoShowHint || page?.autoShowHint,
+      wrongAnswerMessage: source?.wrongAnswerMessage || page?.wrongAnswerMessage
     };
   };
 
@@ -3208,6 +3233,7 @@ const TourPlayer = () => {
             setUnlockedPages(prev2 => new Set([...prev2, pageKey]));
             setShowUnlock(false);
             setUnlockSuccess("");
+            goNext();
           }, 1500);
           return 0;
         }
@@ -3252,6 +3278,7 @@ const TourPlayer = () => {
         setShowUnlock(false);
         setUnlockSuccess("");
         setShakeDetected(false);
+        goNext();
       }, 1500);
     }
   }, [shakeDetected]);
@@ -3301,9 +3328,12 @@ const TourPlayer = () => {
         setUnlockSuccess("");
         setSelectedMcOption(null);
         setPhotoFile(null);
+        // Auto-advance to next page
+        goNext();
       }, 1500);
     } else {
-      setUnlockError("Not quite. Take another look — you're closer than you think.");
+      const customMsg = unlockData.wrongAnswerMessage;
+      setUnlockError(customMsg || "Not quite. Take another look — you're closer than you think.");
     }
   };
 
