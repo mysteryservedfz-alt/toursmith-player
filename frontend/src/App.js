@@ -1838,6 +1838,18 @@ const StopEditor = ({ stop, onUpdate, onDelete, onDuplicate, onAddPage, onSelect
             />
             <p className="text-small">Shown when player gives wrong answer. Leave blank for default.</p>
           </div>
+          <div className="form-group">
+            <label className="form-label">Custom Correct Answer Message</label>
+            <input 
+              type="text"
+              className="input" 
+              value={stop.correctAnswerMessage || ""} 
+              onChange={(e) => onUpdate({ correctAnswerMessage: e.target.value || null })} 
+              placeholder="There it is." 
+              data-testid="stop-correct-msg-input" 
+            />
+            <p className="text-small">Shown when player gets it right. Leave blank for default.</p>
+          </div>
         </AccordionSection>
 
         {/* Verification Section */}
@@ -2567,6 +2579,18 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDu
             />
             <p className="text-small">Shown when player gives wrong answer. Leave blank for default.</p>
           </div>
+          <div className="form-group">
+            <label className="form-label">Custom Correct Answer Message</label>
+            <input 
+              type="text"
+              className="input" 
+              value={page.correctAnswerMessage || ""} 
+              onChange={(e) => onUpdate({ correctAnswerMessage: e.target.value || null })} 
+              placeholder="There it is." 
+              data-testid="page-correct-msg-input" 
+            />
+            <p className="text-small">Shown when player gets it right. Leave blank for default.</p>
+          </div>
         </AccordionSection>
 
         {/* Verification Section */}
@@ -3120,30 +3144,30 @@ const TourPlayer = () => {
 
     // Photo mode needs no answer — any upload works
     if (mode === "photo") {
-      return { mode, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint, wrongAnswerMessage: source?.wrongAnswerMessage || page?.wrongAnswerMessage };
+      return { mode, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint, wrongAnswerMessage: source?.wrongAnswerMessage || page?.wrongAnswerMessage, correctAnswerMessage: source?.correctAnswerMessage || page?.correctAnswerMessage };
     }
 
     // Ranking mode needs mcOptions
     if (mode === "ranking") {
       if (!source?.mcOptions || source.mcOptions.length < 2) return null;
-      return { mode, mcOptions: source.mcOptions, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint, wrongAnswerMessage: source?.wrongAnswerMessage || page?.wrongAnswerMessage };
+      return { mode, mcOptions: source.mcOptions, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint, wrongAnswerMessage: source?.wrongAnswerMessage || page?.wrongAnswerMessage, correctAnswerMessage: source?.correctAnswerMessage || page?.correctAnswerMessage };
     }
 
     // Timer mode — answer field stores seconds
     if (mode === "timer") {
       const seconds = parseInt(source?.answer) || 60;
-      return { mode, timerDuration: seconds, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint, wrongAnswerMessage: source?.wrongAnswerMessage || page?.wrongAnswerMessage };
+      return { mode, timerDuration: seconds, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint, wrongAnswerMessage: source?.wrongAnswerMessage || page?.wrongAnswerMessage, correctAnswerMessage: source?.correctAnswerMessage || page?.correctAnswerMessage };
     }
 
     // Checklist mode reuses mcOptions
     if (mode === "checklist") {
       if (!source?.mcOptions || source.mcOptions.length === 0) return null;
-      return { mode, mcOptions: source.mcOptions, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint, wrongAnswerMessage: source?.wrongAnswerMessage || page?.wrongAnswerMessage };
+      return { mode, mcOptions: source.mcOptions, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint, wrongAnswerMessage: source?.wrongAnswerMessage || page?.wrongAnswerMessage, correctAnswerMessage: source?.correctAnswerMessage || page?.correctAnswerMessage };
     }
 
     // Shake mode — no config needed
     if (mode === "shake") {
-      return { mode, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint, wrongAnswerMessage: source?.wrongAnswerMessage || page?.wrongAnswerMessage };
+      return { mode, hintText: source?.hintText || page?.hintText, autoShowHint: source?.autoShowHint || page?.autoShowHint, wrongAnswerMessage: source?.wrongAnswerMessage || page?.wrongAnswerMessage, correctAnswerMessage: source?.correctAnswerMessage || page?.correctAnswerMessage };
     }
     
     return {
@@ -3154,7 +3178,8 @@ const TourPlayer = () => {
       mcCorrectIndex: source?.mcCorrectIndex,
       hintText: source?.hintText || page?.hintText,
       autoShowHint: source?.autoShowHint || page?.autoShowHint,
-      wrongAnswerMessage: source?.wrongAnswerMessage || page?.wrongAnswerMessage
+      wrongAnswerMessage: source?.wrongAnswerMessage || page?.wrongAnswerMessage,
+      correctAnswerMessage: source?.correctAnswerMessage || page?.correctAnswerMessage
     };
   };
 
@@ -3272,7 +3297,7 @@ const TourPlayer = () => {
   // Auto-unlock on shake detect
   useEffect(() => {
     if (shakeDetected && unlockData?.mode === "shake" && needsUnlock) {
-      setUnlockSuccess("There it is.");
+      setUnlockSuccess(unlockData.correctAnswerMessage || "There it is.");
       setTimeout(() => {
         setUnlockedPages(prev => new Set([...prev, pageKey]));
         setShowUnlock(false);
@@ -3320,7 +3345,7 @@ const TourPlayer = () => {
     
     if (correct) {
       setUnlockError("");
-      setUnlockSuccess("There it is.");
+      setUnlockSuccess(unlockData.correctAnswerMessage || "There it is.");
       setTimeout(() => {
         setUnlockedPages(prev => new Set([...prev, pageKey]));
         setShowUnlock(false);
