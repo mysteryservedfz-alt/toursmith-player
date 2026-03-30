@@ -296,6 +296,8 @@ const ToursList = () => {
   const navigate = useNavigate();
   const api = authAxios(token);
 
+  useEffect(() => { document.title = "Dashboard"; }, []);
+
   const fetchTours = useCallback(async () => {
     try {
       const res = await api.get("/tours");
@@ -342,7 +344,7 @@ const ToursList = () => {
   const copyPlayerLink = async (tourId, e) => {
     e.stopPropagation();
     const baseUrl = process.env.REACT_APP_BACKEND_URL || window.location.origin;
-    const playerUrl = `${baseUrl}/play/${tourId}`;
+    const playerUrl = `${baseUrl}/api/share/${tourId}`;
     try {
       await navigator.clipboard.writeText(playerUrl);
       setCopiedTourId(tourId);
@@ -905,11 +907,10 @@ const ShareAssetsPanel = ({ tourId, tourStatus }) => {
   const getPlayerUrl = () => {
     const backendUrl = process.env.REACT_APP_BACKEND_URL;
     if (backendUrl) {
-      // Remove /api suffix if present, use the base domain
       const baseUrl = backendUrl.replace(/\/api\/?$/, '');
-      return `${baseUrl}/play/${tourId}`;
+      return `${baseUrl}/api/share/${tourId}`;
     }
-    return `${window.location.origin}/play/${tourId}`;
+    return `${window.location.origin}/api/share/${tourId}`;
   };
   const playerUrl = getPlayerUrl();
 
@@ -2983,6 +2984,8 @@ const TourPlayer = () => {
       try {
         const res = await axios.get(`${API}/public/tours/${tourId}`);
         setTour(res.data);
+        // Set browser tab title to tour name
+        document.title = res.data.title || "Tour Player";
         // Check if welcome screen should be shown
         const hasWelcome = res.data.welcomeTitle || res.data.welcomeBody;
         setShowWelcome(hasWelcome);

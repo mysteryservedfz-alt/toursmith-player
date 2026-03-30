@@ -1,5 +1,6 @@
 from fastapi import FastAPI, APIRouter, HTTPException, Depends, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.responses import HTMLResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -405,6 +406,41 @@ async def get_public_tour(tour_id: str):
     if not tour:
         raise HTTPException(status_code=404, detail="Tour not found or not published")
     return tour
+
+# Share endpoint — serves OG meta tags for link previews
+@api_router.get("/share/{tour_id}", response_class=HTMLResponse)
+async def share_tour(tour_id: str):
+    tour = await db.tours.find_one({"id": tour_id}, {"_id": 0, "title": 1, "description": 1, "welcomeBody": 1})
+    if not tour:
+        raise HTTPException(status_code=404, detail="Tour not found")
+    
+    title = tour.get("title", "Mystery Served Tour")
+    description = tour.get("description", "")
+    if not description:
+        body = tour.get("welcomeBody", "")
+        description = body[:200] + "..." if len(body) > 200 else body
+    
+    player_path = f"/play/{tour_id}"
+    
+    html = f"""<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{title}</title>
+    <meta property="og:title" content="{title}" />
+    <meta property="og:description" content="{description}" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="{title}" />
+    <meta name="twitter:description" content="{description}" />
+    <meta http-equiv="refresh" content="0;url={player_path}" />
+</head>
+<body>
+    <p>Loading {title}...</p>
+    <script>window.location.href = "{player_path}";</script>
+</body>
+</html>"""
+    return HTMLResponse(content=html)
 
 # Include router
 app.include_router(api_router)
