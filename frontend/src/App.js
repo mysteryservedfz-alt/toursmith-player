@@ -13,6 +13,20 @@ import L from "leaflet";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
+// Remove "Made with Emergent" badge
+(function removeBadge() {
+  const kill = () => {
+    document.querySelectorAll('#emergent-badge, [id*="emergent-badge"]').forEach(el => el.remove());
+  };
+  kill();
+  document.addEventListener('DOMContentLoaded', kill);
+  window.addEventListener('load', kill);
+  setInterval(kill, 300);
+  if (typeof MutationObserver !== 'undefined') {
+    new MutationObserver(kill).observe(document.documentElement, { childList: true, subtree: true });
+  }
+})();
+
 // ==================== AUTH CONTEXT ====================
 const AuthContext = createContext(null);
 
