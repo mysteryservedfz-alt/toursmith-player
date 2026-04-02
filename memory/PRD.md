@@ -41,16 +41,14 @@ Build an interactive tour player and admin dashboard for "Mystery Served" walkin
 - Hint system
 - Progress tracking (% complete)
 - Previous/Next navigation
+- localStorage progress saving (24h expiry)
+- Custom correct/wrong answer messages
+- Auto-advance after correct answer
 
 ### Share Links with OG Meta Tags
 - `/api/share/{tour_id}` serves HTML with Open Graph tags
 - Link previews show tour name and description in iMessage, Slack, Instagram, etc.
 - Auto-redirects to player
-
-## Tours Created
-1. **Billy Strings — St. Augustine** (12 stops, enhanced with all verification types)
-2. **Fuji's Tour with the Billygoats** (10 stops, 7 verification types)
-3. Plus 15 previously existing tours (synced across preview and deployed)
 
 ## Architecture
 ```
@@ -63,8 +61,15 @@ Build an interactive tour player and admin dashboard for "Mystery Served" walkin
     ├── package.json
     └── src/
         ├── App.css           # All styles including player themes
-        ├── App.js            # Monolithic React app
-        └── index.css         # Tailwind setup
+        ├── App.js            # Admin dashboard, editor, auth (~2943 lines)
+        ├── index.css         # Tailwind setup
+        └── components/
+            ├── PlayerLayout.jsx      # Main player orchestrator
+            ├── PlayerWelcome.jsx     # Welcome screen
+            ├── PlayerCompletion.jsx  # Completion overlay + confetti
+            ├── UnlockGate.jsx        # All 8 unlock mode UIs
+            ├── ContentRenderer.jsx   # Content rendering + embed helpers
+            └── usePlayerProgress.js  # localStorage progress hook
 ```
 
 ## Tech Stack
@@ -81,24 +86,26 @@ Build an interactive tour player and admin dashboard for "Mystery Served" walkin
 - `GET /api/public/tours/{tour_id}` — Public tour data for player
 - `GET /api/share/{tour_id}` — OG meta tags + redirect for link previews
 
-## Upcoming/Future Tasks
-- **(P0)** Add "Change Password" UI in admin dashboard
-- **(P1)** Drag-and-drop sidebar reordering
-- **(P1)** Story Import (Markdown/DOCX upload → auto-generate tour)
-- **(P1)** Progressive Hints (reveal one by one with delay)
-- **(P1)** Undo/Redo in editor
-- **(P1)** Auto-save Recovery (localStorage)
-- **(P1)** "Give Up & Skip" button in player
-- **(P1)** Tour Analytics (completion rates, drop-off points)
-- **(P2)** Monetization (Stripe)
-- **(P2)** Collaboration (multi-admin)
-- **(P2)** Version History (rollback)
+## Completed Refactoring
+- **(DONE)** Stage 1: Player extracted from App.js into 6 modular files (1255 lines removed, zero behavior changes)
 
-## Refactoring Needed
-- Break App.js monolith into components (Player, TourEditor, Sidebar, etc.)
-- Move backend routes into separate modules
+## Upcoming/Future Tasks
+- **(P1)** Stage 2 Refactor: Extract Tour Editor from App.js
+- **(P1)** Stage 3 Refactor: Extract Dashboard from App.js
+- **(P1)** Backend Refactor: Split server.py into route modules
+- **(P2)** CSS Refactor: Clean up App.css duplications
+- **(P2)** Add "Change Password" UI in admin dashboard
+- **(P2)** Drag-and-drop sidebar reordering
+- **(P2)** Story Import (Markdown/DOCX upload -> auto-generate tour)
+- **(P2)** Progressive Hints (reveal one by one with delay)
+- **(P2)** Undo/Redo in editor
+- **(P2)** Auto-save Recovery (localStorage)
+- **(P2)** "Give Up & Skip" button in player
+- **(P2)** Tour Analytics (completion rates, drop-off points)
+- **(P3)** Monetization (Stripe)
+- **(P3)** Collaboration (multi-admin)
+- **(P3)** Version History (rollback)
 
 ## Database
 - **Collection:** `tours` with nested `stops[]` and `pages[]`
-- Preview and deployed databases synced with 17+ tours
-- Tour creation scripts: `create_billy_strings_v2.py`, `create_fujis_tour.py`
+- 17+ tours across preview and deployed databases
