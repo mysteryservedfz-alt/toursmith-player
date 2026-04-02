@@ -61,15 +61,27 @@ Build an interactive tour player and admin dashboard for "Mystery Served" walkin
     ├── package.json
     └── src/
         ├── App.css           # All styles including player themes
-        ├── App.js            # Admin dashboard, editor, auth (~2943 lines)
+        ├── App.js            # Auth pages, Dashboard, routing (~457 lines)
         ├── index.css         # Tailwind setup
         └── components/
-            ├── PlayerLayout.jsx      # Main player orchestrator
-            ├── PlayerWelcome.jsx     # Welcome screen
-            ├── PlayerCompletion.jsx  # Completion overlay + confetti
-            ├── UnlockGate.jsx        # All 8 unlock mode UIs
-            ├── ContentRenderer.jsx   # Content rendering + embed helpers
-            └── usePlayerProgress.js  # localStorage progress hook
+            ├── Icons.jsx              # Shared SVG icon components
+            ├── authContext.jsx         # AuthProvider, useAuth, authAxios
+            ├── PlayerLayout.jsx        # Main player orchestrator
+            ├── PlayerWelcome.jsx       # Welcome screen
+            ├── PlayerCompletion.jsx    # Completion overlay + confetti
+            ├── UnlockGate.jsx          # All 8 unlock mode UIs
+            ├── ContentRenderer.jsx     # Content rendering + embed helpers
+            ├── usePlayerProgress.js    # localStorage progress hook
+            └── editor/
+                ├── TourEditor.jsx       # Main editor orchestrator
+                ├── StopEditor.jsx       # Stop editing panel
+                ├── PageEditor.jsx       # Page editing panel
+                ├── WelcomeEditor.jsx    # Welcome/GPS/completion editor
+                ├── ShareAssetsPanel.jsx # QR code + share links
+                ├── ClearableInput.jsx   # Input with clear button
+                ├── AccordionSection.jsx # Collapsible sections
+                ├── DeleteConfirmModal.jsx # Delete confirmation modal
+                └── GalleryUrlsEditor.jsx  # Gallery URL list editor
 ```
 
 ## Tech Stack
@@ -88,10 +100,10 @@ Build an interactive tour player and admin dashboard for "Mystery Served" walkin
 
 ## Completed Refactoring
 - **(DONE)** Stage 1: Player extracted from App.js into 6 modular files (1255 lines removed, zero behavior changes)
+- **(DONE)** Stage 2: Tour Editor extracted from App.js into 9 modular files (~2487 lines removed, zero behavior changes). authContext.jsx made single source of truth for auth.
 
 ## Upcoming/Future Tasks
-- **(P1)** Stage 2 Refactor: Extract Tour Editor from App.js
-- **(P1)** Stage 3 Refactor: Extract Dashboard from App.js
+- **(P1)** Stage 3 Refactor: Extract Dashboard (ToursList) from App.js
 - **(P1)** Backend Refactor: Split server.py into route modules
 - **(P2)** CSS Refactor: Clean up App.css duplications
 - **(P2)** Add "Change Password" UI in admin dashboard
