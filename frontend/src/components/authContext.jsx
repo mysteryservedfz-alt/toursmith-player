@@ -15,19 +15,24 @@ export const authAxios = (token) => axios.create({
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('toursmith_token'));
+  const [username, setUsername] = useState(localStorage.getItem('toursmith_username'));
 
-  const login = (newToken) => {
+  const login = (newToken, newUsername) => {
     localStorage.setItem('toursmith_token', newToken);
+    localStorage.setItem('toursmith_username', newUsername);
     setToken(newToken);
+    setUsername(newUsername);
   };
 
   const logout = () => {
     localStorage.removeItem('toursmith_token');
+    localStorage.removeItem('toursmith_username');
     setToken(null);
+    setUsername(null);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated: !!token, token, login, logout }}>
+    <AuthContext.Provider value={{ token, username, login, logout, isAuthenticated: !!token }}>
       {children}
     </AuthContext.Provider>
   );
