@@ -2928,6 +2928,38 @@ const TourPlayer = () => {
   const [currentStopIndex, setCurrentStopIndex] = useState(0);
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [unlockedPages, setUnlockedPages] = useState(new Set());
+
+  // localStorage helpers
+  const storageKey = `tour_progress_${tourId}`;
+  const saveProgress = useCallback((stopIdx, pageIdx, unlocked) => {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify({
+        stop: stopIdx, page: pageIdx, unlocked: [...unlocked], ts: Date.now()
+      }));
+    } catch (e) { /* silent fail */ }
+  }, [storageKey]);
+
+  const loadProgress = useCallback(() => {
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (!saved) return null;
+      const data = JSON.parse(saved);
+      // Expire after 24 hours
+      if (Date.now() - data.ts > 86400000) { localStorage.removeItem(storageKey); return null; }
+      return data;
+    } catch (e) { return null; }
+  }, [storageKey]);
+
+  const clearProgress = useCallback(() => {
+    try { localStorage.removeItem(storageKey); } catch (e) { /* silent */ }
+  }, [storageKey]);
+
+  // Auto-save on any navigation
+  useEffect(() => {
+    if (tour && !showWelcome) {
+      saveProgress(currentStopIndex, currentPageIndex, unlockedPages);
+    }
+  }, [currentStopIndex, currentPageIndex, unlockedPages]);
   const [showUnlock, setShowUnlock] = useState(false);
   const [unlockInput, setUnlockInput] = useState("");
   const [unlockError, setUnlockError] = useState("");
@@ -3048,9 +3080,17 @@ const TourPlayer = () => {
         setTour(res.data);
         // Set browser tab title to tour name
         document.title = res.data.title || "Tour Player";
-        // Check if welcome screen should be shown
-        const hasWelcome = res.data.welcomeTitle || res.data.welcomeBody;
-        setShowWelcome(hasWelcome);
+        // Restore saved progress or show welcome
+        const saved = loadProgress();
+        if (saved && (saved.stop > 0 || saved.page > 0)) {
+          setCurrentStopIndex(saved.stop);
+          setCurrentPageIndex(saved.page);
+          setUnlockedPages(new Set(saved.unlocked || []));
+          setShowWelcome(false);
+        } else {
+          const hasWelcome = res.data.welcomeTitle || res.data.welcomeBody;
+          setShowWelcome(hasWelcome);
+        }
       } catch (err) {
         setError("Tour not found or not published");
       } finally {
@@ -3066,6 +3106,7 @@ const TourPlayer = () => {
     setShowWelcome(false);
     setCurrentStopIndex(0);
     setCurrentPageIndex(0);
+    saveProgress(0, 0, unlockedPages);
   };
 
   const sortedStops = tour?.stops?.sort((a, b) => a.order - b.order) || [];
@@ -3384,28 +3425,32 @@ const TourPlayer = () => {
         setIsTransitioning(false);
         setCurrentStopIndex(currentStopIndex + 1);
         setCurrentPageIndex(0);
+        saveProgress(currentStopIndex + 1, 0, unlockedPages);
       }, 1500);
     } else if (currentPageIndex < sortedPages.length - 1) {
       setCurrentPageIndex(currentPageIndex + 1);
+      saveProgress(currentStopIndex, currentPageIndex + 1, unlockedPages);
     } else {
       // Tour complete!
       setTourComplete(true);
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 5000);
+      clearProgress();
     }
   };
 
   const goPrev = () => {
     if (currentPageIndex > 0) {
       setCurrentPageIndex(currentPageIndex - 1);
+      saveProgress(currentStopIndex, currentPageIndex - 1, unlockedPages);
     } else if (currentStopIndex > 0) {
       const prevStop = sortedStops[currentStopIndex - 1];
       const prevActualPages = prevStop?.pages?.sort((a, b) => a.order - b.order) || [];
       const prevStopHasIntro = prevStop && (prevStop.description || prevStop.subtitle || prevStop.taskInstructions);
-      // Calculate total pages for prev stop (intro + actual pages)
       const prevTotalPages = prevStopHasIntro ? prevActualPages.length + 1 : Math.max(prevActualPages.length, 1);
       setCurrentStopIndex(currentStopIndex - 1);
       setCurrentPageIndex(prevTotalPages - 1);
+      saveProgress(currentStopIndex - 1, prevTotalPages - 1, unlockedPages);
     }
   };
 
@@ -3550,7 +3595,7 @@ const TourPlayer = () => {
         {data.mediaUrl && data.mediaType && (
           <div className="player-media">
             {data.mediaType === 'image' && (
-              <img src={data.mediaUrl} alt="Media content" />
+              <img src={data.mediaUrl} alt="Media content" loading="lazy" />
             )}
             {data.mediaType === 'video' && (
               <video controls src={data.mediaUrl}>
@@ -3581,7 +3626,7 @@ const TourPlayer = () => {
         {/* Image */}
         {data.imageUrl && data.imageUrl.trim() && (
           <div className="player-image">
-            <img src={data.imageUrl} alt={data.imageAlt || ''} />
+            <img src={data.imageUrl} alt={data.imageAlt || ''} loading="lazy" />
           </div>
         )}
         
@@ -3589,7 +3634,7 @@ const TourPlayer = () => {
         {data.galleryUrls && data.galleryUrls.length > 0 && (
           <div className="player-gallery">
             {data.galleryUrls.filter(url => url).map((url, i) => (
-              <img key={i} src={url} alt={`Gallery image ${i + 1}`} />
+              <img key={i} src={url} alt={`Gallery image ${i + 1}`} loading="lazy" />
             ))}
           </div>
         )}

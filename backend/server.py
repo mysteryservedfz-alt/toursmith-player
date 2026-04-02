@@ -1,6 +1,6 @@
 from fastapi import FastAPI, APIRouter, HTTPException, Depends, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -411,7 +411,9 @@ async def get_public_tour(tour_id: str):
     tour = await db.tours.find_one({"id": tour_id, "status": "published"}, {"_id": 0})
     if not tour:
         raise HTTPException(status_code=404, detail="Tour not found or not published")
-    return tour
+    response = JSONResponse(content=tour)
+    response.headers["Cache-Control"] = "public, max-age=300"
+    return response
 
 # Share endpoint — serves OG meta tags for link previews
 @api_router.get("/share/{tour_id}", response_class=HTMLResponse)
