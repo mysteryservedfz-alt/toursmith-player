@@ -22,33 +22,15 @@ Build an interactive tour player and admin dashboard for "Mystery Served" walkin
 - Drag-and-drop page reordering
 
 ### 8 Verification/Unlock Types
-1. **TEXT** — Type a specific word/letter to unlock (case insensitive)
-2. **MULTIPLE CHOICE** — Pick from A/B/C/D options
-3. **WHITEBOARD** — Type anything, no wrong answer
-4. **PHOTO** — Upload any photo to proceed (accepts anything)
-5. **RANKING** — Drag items into correct order (shuffled on display)
-6. **TIMER** — Countdown auto-unlocks when it hits zero
-7. **CHECKLIST** — Check off all tasks to proceed
-8. **SHAKE** — Shake phone to unlock (tap fallback for desktop)
-9. **CONTINUE** — No gate, just tap Next
+1. TEXT, 2. MULTIPLE CHOICE, 3. WHITEBOARD, 4. PHOTO, 5. RANKING, 6. TIMER, 7. CHECKLIST, 8. SHAKE, 9. CONTINUE
 
 ### Player Features
-- Welcome screen with custom button label
-- Completion/shakedown screen
-- Inline unlock gates (clue text visible above input)
-- Themed instrument dividers (guitar, banjo, violin, music notes)
-- Dynamic browser tab title (shows tour name)
-- Hint system
-- Progress tracking (% complete)
-- Previous/Next navigation
-- localStorage progress saving (24h expiry)
-- Custom correct/wrong answer messages
-- Auto-advance after correct answer
+- Welcome screen, completion screen, inline unlock gates, themed dividers
+- Hint system, progress tracking, localStorage saving (24h expiry)
+- Custom correct/wrong messages, auto-advance
 
 ### Share Links with OG Meta Tags
-- `/api/share/{tour_id}` serves HTML with Open Graph tags
-- Link previews show tour name and description in iMessage, Slack, Instagram, etc.
-- Auto-redirects to player
+- `/api/share/{tour_id}` serves HTML with Open Graph tags + auto-redirect
 
 ## Architecture
 ```
@@ -56,20 +38,22 @@ Build an interactive tour player and admin dashboard for "Mystery Served" walkin
 ├── backend/
 │   ├── .env
 │   ├── requirements.txt
-│   └── server.py            # FastAPI (auth, CRUD, share endpoint)
+│   └── server.py            # FastAPI (auth, CRUD, share endpoint) — 466 lines
 └── frontend/
     ├── package.json
     └── src/
-        ├── App.css           # All styles including player themes
-        ├── App.js            # Auth pages, Dashboard, routing (~457 lines)
+        ├── App.css           # All styles — 3961 lines
+        ├── App.js            # Routing shell — 58 lines
         ├── index.css         # Tailwind setup
         └── components/
-            ├── Icons.jsx              # Shared SVG icon components
+            ├── AuthPages.jsx          # Login/Setup/AuthPage
+            ├── ToursList.jsx          # Dashboard
+            ├── Icons.jsx              # Shared SVG icons
             ├── authContext.jsx         # AuthProvider, useAuth, authAxios
             ├── PlayerLayout.jsx        # Main player orchestrator
             ├── PlayerWelcome.jsx       # Welcome screen
             ├── PlayerCompletion.jsx    # Completion overlay + confetti
-            ├── UnlockGate.jsx          # All 8 unlock mode UIs
+            ├── UnlockGate.jsx          # All unlock mode UIs
             ├── ContentRenderer.jsx     # Content rendering + embed helpers
             ├── usePlayerProgress.js    # localStorage progress hook
             └── editor/
@@ -99,25 +83,21 @@ Build an interactive tour player and admin dashboard for "Mystery Served" walkin
 - `GET /api/share/{tour_id}` — OG meta tags + redirect for link previews
 
 ## Completed Refactoring
-- **(DONE)** Stage 1: Player extracted from App.js into 6 modular files (1255 lines removed, zero behavior changes)
-- **(DONE)** Stage 2: Tour Editor extracted from App.js into 9 modular files (~2487 lines removed, zero behavior changes). authContext.jsx made single source of truth for auth.
+- **(DONE)** Stage 1: Player extracted from App.js into 6 modular files
+- **(DONE)** Stage 2: Tour Editor extracted from App.js into 9 modular files
+- **(DONE)** Stage 3: Dashboard (ToursList) and Auth pages extracted from App.js. App.js is now a 58-line routing shell.
 
 ## Upcoming/Future Tasks
-- **(P1)** Stage 3 Refactor: Extract Dashboard (ToursList) from App.js
 - **(P1)** Backend Refactor: Split server.py into route modules
 - **(P2)** CSS Refactor: Clean up App.css duplications
 - **(P2)** Add "Change Password" UI in admin dashboard
 - **(P2)** Drag-and-drop sidebar reordering
 - **(P2)** Story Import (Markdown/DOCX upload -> auto-generate tour)
-- **(P2)** Progressive Hints (reveal one by one with delay)
-- **(P2)** Undo/Redo in editor
-- **(P2)** Auto-save Recovery (localStorage)
+- **(P2)** Progressive Hints, Undo/Redo, Auto-save Recovery
 - **(P2)** "Give Up & Skip" button in player
 - **(P2)** Tour Analytics (completion rates, drop-off points)
-- **(P3)** Monetization (Stripe)
-- **(P3)** Collaboration (multi-admin)
-- **(P3)** Version History (rollback)
+- **(P3)** Monetization (Stripe), Collaboration, Version History
 
 ## Database
 - **Collection:** `tours` with nested `stops[]` and `pages[]`
-- 17+ tours across preview and deployed databases
+- 18+ tours across preview and deployed databases
