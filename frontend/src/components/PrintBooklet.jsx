@@ -4,81 +4,67 @@ import { useAuth, authAxios } from './authContext';
 
 const CoverCard = ({ tour }) => (
   <div className="pb-card-inner pb-cover">
-    {tour.logoUrl && (
-      <div className="pb-logo">
-        <img src={tour.logoUrl} alt="" />
-      </div>
-    )}
+    {tour.logoUrl && <div className="pb-logo"><img src={tour.logoUrl} alt="" /></div>}
     <div className="pb-cover-body">
       <h1 className="pb-cover-title">{tour.welcomeTitle || tour.title || 'Untitled Tour'}</h1>
-      <div className="pb-cover-divider" />
-      {tour.welcomeBody && <p className="pb-cover-msg">{tour.welcomeBody}</p>}
-      {!tour.welcomeBody && tour.description && <p className="pb-cover-msg">{tour.description}</p>}
+      <div className="pb-rule" />
+      {(tour.welcomeBody || tour.description) && (
+        <p className="pb-cover-msg">{tour.welcomeBody || tour.description}</p>
+      )}
     </div>
+    <div className="pb-footer">{tour.title}</div>
   </div>
 );
 
-const StopCard = ({ card, logoUrl }) => {
-  const hasAnswer = card.pages.some(p =>
-    (p.unlockMode === 'text' || p.unlockMode === 'multiple_choice') && (p.clueText || p.content)
-  );
-
-  // Filter out pages with no meaningful content
-  const visiblePages = card.pages.filter(p => p.content || p.clueText || p.mediaUrl);
-
-  return (
-    <div className="pb-card-inner pb-stop">
-      <div className="pb-stop-head">
-        <div className="pb-stop-num">STOP {card.number}</div>
-        <h2 className="pb-stop-title">{card.title || `Stop ${card.number}`}</h2>
-        {logoUrl && <img src={logoUrl} alt="" className="pb-stop-logo" />}
+const PageCard = ({ stopNumber, stopTitle, page, isFirst, tourTitle, logoUrl, showScratch }) => (
+  <div className="pb-card-inner pb-stop">
+    <div className="pb-stop-banner">
+      <div className="pb-stop-banner-inner">
+        <span className="pb-stop-label">STOP {stopNumber}</span>
+        <span className="pb-stop-name">{stopTitle}</span>
       </div>
+      {logoUrl && <img src={logoUrl} alt="" className="pb-banner-logo" />}
+    </div>
 
-      <div className="pb-stop-body">
-        {visiblePages.map((page, i) => (
-          <div key={i} className="pb-page">
-            {visiblePages.length > 1 && page.title && (
-              <div className="pb-page-heading">{page.title}</div>
-            )}
-            {page.content && (
-              <p className="pb-page-text">{page.content}</p>
-            )}
-            {page.mediaUrl && (
-              <div className="pb-page-img">
-                <img src={page.mediaUrl} alt="" />
-              </div>
-            )}
-            {page.clueText && (
-              <div className="pb-clue">
-                <div className="pb-clue-tag">CLUE</div>
-                <p className="pb-clue-text">{page.clueText}</p>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+    {!isFirst && <div className="pb-cont-tag">continued</div>}
 
-      {hasAnswer && (
-        <div className="pb-scratch-area">
-          <div className="pb-scratch-circle" />
+    <div className="pb-stop-body">
+      {page.title && (
+        <div className="pb-section-head">{page.title}</div>
+      )}
+      {page.content && (
+        <p className="pb-text">{page.content}</p>
+      )}
+      {page.mediaUrl && (
+        <div className="pb-img"><img src={page.mediaUrl} alt="" /></div>
+      )}
+      {page.clueText && (
+        <div className="pb-clue">
+          <div className="pb-clue-tag">CLUE</div>
+          <p className="pb-clue-text">{page.clueText}</p>
         </div>
       )}
     </div>
-  );
-};
+
+    {showScratch && (
+      <div className="pb-scratch-area">
+        <div className="pb-scratch-circle" />
+      </div>
+    )}
+
+    <div className="pb-footer">{tourTitle}</div>
+  </div>
+);
 
 const CompletionCard = ({ tour }) => (
   <div className="pb-card-inner pb-completion">
-    {tour.logoUrl && (
-      <div className="pb-logo">
-        <img src={tour.logoUrl} alt="" />
-      </div>
-    )}
+    {tour.logoUrl && <div className="pb-logo"><img src={tour.logoUrl} alt="" /></div>}
     <div className="pb-completion-body">
       <h2 className="pb-completion-title">{tour.completionTitle || 'Tour Complete!'}</h2>
-      <div className="pb-cover-divider" />
-      {tour.completionBody && <p className="pb-completion-msg">{tour.completionBody}</p>}
+      <div className="pb-rule" />
+      {tour.completionBody && <p className="pb-cover-msg">{tour.completionBody}</p>}
     </div>
+    <div className="pb-footer">{tour.title}</div>
   </div>
 );
 
@@ -109,23 +95,44 @@ const PrintBooklet = () => {
   if (!tour) return <div className="loading-screen">Tour not found</div>;
 
   const sortedStops = [...(tour.stops || [])].sort((a, b) => a.order - b.order);
+
+  // Build cards — one card per PAGE (not per stop) to prevent overflow
   const cards = [];
   cards.push({ type: 'cover' });
 
-  sortedStops.forEach((stop, index) => {
+  sortedStops.forEach((stop, stopIdx) => {
     const pages = [...(stop.pages || [])].sort((a, b) => a.order - b.order);
-    cards.push({
-      type: 'stop',
-      number: index + 1,
-      title: stop.title,
-      pages: pages.map(p => ({
-        title: p.title,
-        content: p.content,
-        clueText: p.clueText,
-        unlockMode: p.unlockMode,
-        mediaUrl: p.mediaUrl,
-      })),
-    });
+    const visiblePages = pages.filter(p => p.content || p.clueText || p.mediaUrl);
+
+    if (visiblePages.length === 0) {
+      // Stop with no visible content — still show it as a card
+      cards.push({
+        type: 'page',
+        stopNumber: stopIdx + 1,
+        stopTitle: stop.title || `Stop ${stopIdx + 1}`,
+        page: { title: null, content: null, clueText: null, mediaUrl: null, unlockMode: null },
+        isFirst: true,
+        showScratch: false,
+      });
+    } else {
+      visiblePages.forEach((p, pageIdx) => {
+        const isGated = (p.unlockMode === 'text' || p.unlockMode === 'multiple_choice') && (p.clueText || p.content);
+        cards.push({
+          type: 'page',
+          stopNumber: stopIdx + 1,
+          stopTitle: stop.title || `Stop ${stopIdx + 1}`,
+          page: {
+            title: visiblePages.length > 1 ? p.title : null,
+            content: p.content,
+            clueText: p.clueText,
+            mediaUrl: p.mediaUrl,
+            unlockMode: p.unlockMode,
+          },
+          isFirst: pageIdx === 0,
+          showScratch: isGated,
+        });
+      });
+    }
   });
 
   if (tour.completionTitle || tour.completionBody) {
@@ -158,7 +165,17 @@ const PrintBooklet = () => {
             {sheet.map((card, ci) => (
               <div key={ci} className="pb-card">
                 {card.type === 'cover' && <CoverCard tour={tour} />}
-                {card.type === 'stop' && <StopCard card={card} logoUrl={tour.logoUrl} />}
+                {card.type === 'page' && (
+                  <PageCard
+                    stopNumber={card.stopNumber}
+                    stopTitle={card.stopTitle}
+                    page={card.page}
+                    isFirst={card.isFirst}
+                    tourTitle={tour.title}
+                    logoUrl={tour.logoUrl}
+                    showScratch={card.showScratch}
+                  />
+                )}
                 {card.type === 'completion' && <CompletionCard tour={tour} />}
               </div>
             ))}
