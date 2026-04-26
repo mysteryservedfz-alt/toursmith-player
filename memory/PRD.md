@@ -20,8 +20,20 @@ Build an interactive tour player and admin dashboard for "Mystery Served" walkin
 - QR code generation for tours
 - GPS map editor for stops
 - Drag-and-drop page reordering
+- **Print Booklet** — generate professional B&W printable booklets from any tour
 
-### 8 Verification/Unlock Types
+### Print Booklet Feature
+- Accessed via "Print" button in tour editor header (opens in new tab)
+- Route: `/admin/tour/:tourId/print` (protected)
+- 2 cards per US Letter page, cut in half, flip-book style
+- Cover card: tour title, description, stop count, instructions
+- Stop cards: stop number, title, content, clue box, scratch-off circle (for gated stops)
+- Completion card: congratulations message
+- Scratch-off circles appear only on stops with text or multiple_choice gates
+- Professional typography (serif body, sans-serif headings)
+- Black & white, printer-friendly
+
+### 9 Verification/Unlock Types
 1. TEXT, 2. MULTIPLE CHOICE, 3. WHITEBOARD, 4. PHOTO, 5. RANKING, 6. TIMER, 7. CHECKLIST, 8. SHAKE, 9. CONTINUE
 
 ### Player Features
@@ -38,34 +50,32 @@ Build an interactive tour player and admin dashboard for "Mystery Served" walkin
 ├── backend/
 │   ├── .env
 │   ├── requirements.txt
-│   └── server.py            # FastAPI (auth, CRUD, share endpoint) — 466 lines
+│   └── server.py            # FastAPI (auth, CRUD, share) — 466 lines
 └── frontend/
     ├── package.json
     └── src/
-        ├── App.css           # All styles — 3961 lines
-        ├── App.js            # Routing shell — 58 lines
+        ├── App.css           # All styles
+        ├── App.js            # Routing shell — 60 lines
         ├── index.css         # Tailwind setup
         └── components/
             ├── AuthPages.jsx          # Login/Setup/AuthPage
             ├── ToursList.jsx          # Dashboard
+            ├── PrintBooklet.jsx       # Print booklet generator
             ├── Icons.jsx              # Shared SVG icons
             ├── authContext.jsx         # AuthProvider, useAuth, authAxios
             ├── PlayerLayout.jsx        # Main player orchestrator
             ├── PlayerWelcome.jsx       # Welcome screen
-            ├── PlayerCompletion.jsx    # Completion overlay + confetti
+            ├── PlayerCompletion.jsx    # Completion overlay
             ├── UnlockGate.jsx          # All unlock mode UIs
-            ├── ContentRenderer.jsx     # Content rendering + embed helpers
+            ├── ContentRenderer.jsx     # Content rendering
             ├── usePlayerProgress.js    # localStorage progress hook
             └── editor/
-                ├── TourEditor.jsx       # Main editor orchestrator
+                ├── TourEditor.jsx       # Editor orchestrator
                 ├── StopEditor.jsx       # Stop editing panel
                 ├── PageEditor.jsx       # Page editing panel
-                ├── WelcomeEditor.jsx    # Welcome/GPS/completion editor
+                ├── WelcomeEditor.jsx    # Welcome/GPS editor
                 ├── ShareAssetsPanel.jsx # QR code + share links
-                ├── ClearableInput.jsx   # Input with clear button
-                ├── AccordionSection.jsx # Collapsible sections
-                ├── DeleteConfirmModal.jsx # Delete confirmation modal
-                └── GalleryUrlsEditor.jsx  # Gallery URL list editor
+                ├── ClearableInput.jsx, AccordionSection.jsx, DeleteConfirmModal.jsx, GalleryUrlsEditor.jsx
 ```
 
 ## Tech Stack
@@ -74,30 +84,20 @@ Build an interactive tour player and admin dashboard for "Mystery Served" walkin
 - **Libraries:** qrcode.react, react-leaflet, leaflet, axios
 
 ## Key API Endpoints
-- `POST /api/admin/login` — Admin login
-- `GET /api/tours` — List all tours (auth required)
-- `POST /api/tours` — Create tour
-- `PUT /api/tours/{tour_id}` — Update tour
-- `DELETE /api/tours/{tour_id}` — Delete tour
-- `GET /api/public/tours/{tour_id}` — Public tour data for player
-- `GET /api/share/{tour_id}` — OG meta tags + redirect for link previews
+- `POST /api/admin/login`, `GET /api/tours`, `POST /api/tours`, `PUT /api/tours/{tour_id}`, `DELETE /api/tours/{tour_id}`
+- `GET /api/public/tours/{tour_id}`, `GET /api/share/{tour_id}`
 
-## Completed Refactoring
-- **(DONE)** Stage 1: Player extracted from App.js into 6 modular files
-- **(DONE)** Stage 2: Tour Editor extracted from App.js into 9 modular files
-- **(DONE)** Stage 3: Dashboard (ToursList) and Auth pages extracted from App.js. App.js is now a 58-line routing shell.
+## Completed
+- Stage 1-3 Frontend Refactor: App.js reduced from 2944 → 60 lines
+- Print Booklet feature: professional printable booklets from tour data
 
-## Upcoming/Future Tasks
-- **(P1)** Backend Refactor: Split server.py into route modules
-- **(P2)** CSS Refactor: Clean up App.css duplications
-- **(P2)** Add "Change Password" UI in admin dashboard
-- **(P2)** Drag-and-drop sidebar reordering
-- **(P2)** Story Import (Markdown/DOCX upload -> auto-generate tour)
-- **(P2)** Progressive Hints, Undo/Redo, Auto-save Recovery
-- **(P2)** "Give Up & Skip" button in player
-- **(P2)** Tour Analytics (completion rates, drop-off points)
+## Future Tasks
+- **(P1)** Backend Refactor: Split server.py (when needed)
+- **(P2)** CSS Refactor, Change Password UI, Drag-and-drop sidebar
+- **(P2)** Story Import, Progressive Hints, Undo/Redo, Auto-save Recovery
+- **(P2)** "Give Up & Skip" button, Tour Analytics
 - **(P3)** Monetization (Stripe), Collaboration, Version History
 
 ## Database
 - **Collection:** `tours` with nested `stops[]` and `pages[]`
-- 18+ tours across preview and deployed databases
+- 18+ tours
