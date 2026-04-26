@@ -2,107 +2,57 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth, authAxios } from './authContext';
 
-const MAX_CHARS = 1400;
-const estimateLength = (pages) => {
-  let len = 0;
-  for (const p of pages) {
-    if (p.content) len += p.content.length;
-    if (p.clueText) len += p.clueText.length + 20;
-    if (p.title) len += p.title.length + 10;
-    if (p.mediaUrl) len += 200;
+const genId = () => Math.random().toString(36).slice(2, 9);
+
+const buildCardsFromTour = (tour) => {
+  const cards = [];
+  const stops = [...(tour.stops || [])].sort((a, b) => a.order - b.order);
+
+  // Cover card
+  cards.push({
+    id: genId(),
+    type: 'cover',
+    title: tour.welcomeTitle || tour.title || '',
+    body: tour.welcomeBody || tour.description || '',
+  });
+
+  // Stop cards — one per stop, combine page content
+  stops.forEach((stop, idx) => {
+    const pages = [...(stop.pages || [])].sort((a, b) => a.order - b.order);
+    const visible = pages.filter(p => p.content || p.clueText);
+    let body = '';
+    let clue = '';
+
+    for (const p of visible) {
+      if (p.title && visible.length > 1) body += p.title.toUpperCase() + '\n';
+      if (p.content) body += p.content + '\n\n';
+      if (p.clueText && !clue) clue = p.clueText;
+    }
+
+    cards.push({
+      id: genId(),
+      type: 'stop',
+      label: `STOP ${idx + 1}`,
+      title: stop.title || `Stop ${idx + 1}`,
+      body: body.trim(),
+      clue: clue,
+      showClue: !!clue,
+      showScratch: !!clue,
+    });
+  });
+
+  // Completion
+  if (tour.completionTitle || tour.completionBody) {
+    cards.push({
+      id: genId(),
+      type: 'completion',
+      title: tour.completionTitle || 'Tour Complete!',
+      body: tour.completionBody || '',
+    });
   }
-  return len;
+
+  return cards;
 };
-
-const MagnifyingGlass = () => (
-  <svg className="pb-mg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="11" cy="11" r="7" /><line x1="16.5" y1="16.5" x2="22" y2="22" />
-  </svg>
-);
-
-const CoverCard = ({ tour }) => (
-  <div className="pb-inner pb-cover">
-    <div className="pb-cover-top">
-      {tour.logoUrl && <div className="pb-logo"><img src={tour.logoUrl} alt="" /></div>}
-    </div>
-    <div className="pb-cover-center">
-      <h1 className="pb-cover-title">{tour.welcomeTitle || tour.title || 'Untitled Tour'}</h1>
-      <div className="pb-brown-rule" />
-      {(tour.welcomeBody || tour.description) && (
-        <div className="pb-cream-box">
-          <p>{tour.welcomeBody || tour.description}</p>
-        </div>
-      )}
-      <MagnifyingGlass />
-    </div>
-    <div className="pb-card-foot">{tour.title}</div>
-  </div>
-);
-
-const StopCard = ({ stopNumber, stopTitle, pages, tourTitle, logoUrl, isContinuation }) => {
-  const hasAnswer = pages.some(p =>
-    (p.unlockMode === 'text' || p.unlockMode === 'multiple_choice') && (p.clueText || p.content)
-  );
-  const visible = pages.filter(p => p.content || p.clueText || p.mediaUrl);
-
-  return (
-    <div className="pb-inner pb-stop">
-      <div className="pb-banner">
-        <div>
-          <span className="pb-banner-label">{isContinuation ? 'CONTINUED' : `STOP ${stopNumber}`}</span>
-          <span className="pb-banner-title">{stopTitle}</span>
-        </div>
-        {logoUrl && <img src={logoUrl} alt="" className="pb-banner-logo" />}
-      </div>
-
-      <div className="pb-body">
-        {visible.map((page, i) => (
-          <div key={i} className="pb-section">
-            {visible.length > 1 && page.title && (
-              <div className="pb-section-title">{page.title}</div>
-            )}
-            {page.content && <p className="pb-text">{page.content}</p>}
-            {page.mediaUrl && <div className="pb-img"><img src={page.mediaUrl} alt="" /></div>}
-            {page.clueText && (
-              <div className="pb-clue-box">
-                <div className="pb-clue-label">CLUE</div>
-                <p className="pb-clue-text">{page.clueText}</p>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-
-      {hasAnswer && (
-        <div className="pb-scratch">
-          <div className="pb-scratch-header">SCRATCH OFF</div>
-          <div className="pb-scratch-body">
-            <div className="pb-scratch-circle" />
-          </div>
-        </div>
-      )}
-
-      <div className="pb-card-foot">{tourTitle}</div>
-    </div>
-  );
-};
-
-const CompletionCard = ({ tour }) => (
-  <div className="pb-inner pb-completion">
-    <div className="pb-cover-top">
-      {tour.logoUrl && <div className="pb-logo"><img src={tour.logoUrl} alt="" /></div>}
-    </div>
-    <div className="pb-cover-center">
-      <MagnifyingGlass />
-      <h2 className="pb-cover-title">{tour.completionTitle || 'Tour Complete!'}</h2>
-      <div className="pb-brown-rule" />
-      {tour.completionBody && (
-        <div className="pb-cream-box"><p>{tour.completionBody}</p></div>
-      )}
-    </div>
-    <div className="pb-card-foot">{tour.title}</div>
-  </div>
-);
 
 const PrintBooklet = () => {
   const { tourId } = useParams();
@@ -110,6 +60,7 @@ const PrintBooklet = () => {
   const navigate = useNavigate();
   const api = authAxios(token);
   const [tour, setTour] = useState(null);
+  const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -117,6 +68,7 @@ const PrintBooklet = () => {
       try {
         const res = await api.get(`/tours/${tourId}`);
         setTour(res.data);
+        setCards(buildCardsFromTour(res.data));
       } catch (err) {
         if (err.response?.status === 401) logout();
         else navigate('/admin');
@@ -127,44 +79,22 @@ const PrintBooklet = () => {
     fetchTour();
   }, [tourId]);
 
+  const updateCard = (id, field, value) => {
+    setCards(prev => prev.map(c => c.id === id ? { ...c, [field]: value } : c));
+  };
+
+  const removeCard = (id) => {
+    setCards(prev => prev.filter(c => c.id !== id));
+  };
+
+  const addBlankCard = () => {
+    setCards(prev => [...prev, {
+      id: genId(), type: 'stop', label: 'NEW', title: '', body: '', clue: '', showClue: false, showScratch: false,
+    }]);
+  };
+
   if (loading) return <div className="loading-screen">Loading...</div>;
   if (!tour) return <div className="loading-screen">Tour not found</div>;
-
-  const sortedStops = [...(tour.stops || [])].sort((a, b) => a.order - b.order);
-  const cards = [];
-  cards.push({ type: 'cover' });
-
-  sortedStops.forEach((stop, stopIdx) => {
-    const pages = [...(stop.pages || [])].sort((a, b) => a.order - b.order);
-    const visible = pages.filter(p => p.content || p.clueText || p.mediaUrl);
-    const stopNum = stopIdx + 1;
-    const stopTitle = stop.title || `Stop ${stopNum}`;
-
-    if (visible.length === 0) {
-      cards.push({ type: 'stop', stopNumber: stopNum, stopTitle, pages: [{}], isContinuation: false });
-      return;
-    }
-
-    const totalLen = estimateLength(visible);
-    if (totalLen <= MAX_CHARS) {
-      cards.push({ type: 'stop', stopNumber: stopNum, stopTitle, pages: visible, isContinuation: false });
-    } else {
-      let chunk = [], chunkLen = 0, isFirst = true;
-      for (const p of visible) {
-        const pLen = (p.content?.length || 0) + (p.clueText?.length || 0) + (p.title?.length || 0) + (p.mediaUrl ? 200 : 0);
-        if (chunkLen + pLen > MAX_CHARS && chunk.length > 0) {
-          cards.push({ type: 'stop', stopNumber: stopNum, stopTitle, pages: chunk, isContinuation: !isFirst });
-          chunk = []; chunkLen = 0; isFirst = false;
-        }
-        chunk.push(p); chunkLen += pLen;
-      }
-      if (chunk.length > 0) {
-        cards.push({ type: 'stop', stopNumber: stopNum, stopTitle, pages: chunk, isContinuation: !isFirst });
-      }
-    }
-  });
-
-  if (tour.completionTitle || tour.completionBody) cards.push({ type: 'completion' });
 
   const sheets = [];
   for (let i = 0; i < cards.length; i += 2) sheets.push(cards.slice(i, i + 2));
@@ -172,24 +102,103 @@ const PrintBooklet = () => {
   return (
     <div className="pb-wrapper" data-testid="print-booklet-wrapper">
       <div className="pb-toolbar">
-        <button onClick={() => navigate(`/admin/tour/${tourId}`)} className="pb-toolbar-btn" data-testid="print-back-btn">← Back to Editor</button>
+        <button onClick={() => navigate(`/admin/tour/${tourId}`)} className="pb-toolbar-btn" data-testid="print-back-btn">← Back</button>
         <div className="pb-toolbar-center">
-          <h2>{tour.title}</h2>
+          <h2>{tour.title} — Card Editor</h2>
           <span>{cards.length} cards / {sheets.length} sheet{sheets.length !== 1 ? 's' : ''}</span>
         </div>
-        <button onClick={() => window.print()} className="pb-toolbar-print" data-testid="print-btn">Print / Save PDF</button>
+        <div className="pb-toolbar-right">
+          <button onClick={addBlankCard} className="pb-toolbar-btn">+ Add Card</button>
+          <button onClick={() => window.print()} className="pb-toolbar-print" data-testid="print-btn">Print / Save PDF</button>
+        </div>
       </div>
+
       <div className="pb-preview" data-testid="print-booklet">
         {sheets.map((sheet, si) => (
           <div key={si} className="pb-sheet">
-            {sheet.map((card, ci) => (
-              <div key={ci} className="pb-card">
-                {card.type === 'cover' && <CoverCard tour={tour} />}
-                {card.type === 'stop' && <StopCard {...card} tourTitle={tour.title} logoUrl={tour.logoUrl} />}
-                {card.type === 'completion' && <CompletionCard tour={tour} />}
+            {sheet.map((card) => (
+              <div key={card.id} className="pb-card">
+                <div className="pb-inner">
+                  {/* Delete card button - hidden in print */}
+                  <button className="pb-delete-card no-print" onClick={() => removeCard(card.id)} title="Remove card">&times;</button>
+
+                  {card.type === 'cover' || card.type === 'completion' ? (
+                    <>
+                      {tour.logoUrl && <div className="pb-logo no-print-hide"><img src={tour.logoUrl} alt="" /></div>}
+                      <div className="pb-center-content">
+                        <input
+                          className="pb-edit-title-center"
+                          value={card.title}
+                          onChange={(e) => updateCard(card.id, 'title', e.target.value)}
+                          placeholder="Title"
+                        />
+                        <div className="pb-rule" />
+                        <textarea
+                          className="pb-edit-body-center"
+                          value={card.body}
+                          onChange={(e) => updateCard(card.id, 'body', e.target.value)}
+                          placeholder="Content..."
+                          rows={Math.max(3, (card.body.match(/\n/g) || []).length + 2)}
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="pb-banner">
+                        <input
+                          className="pb-edit-label"
+                          value={card.label}
+                          onChange={(e) => updateCard(card.id, 'label', e.target.value)}
+                        />
+                        <input
+                          className="pb-edit-banner-title"
+                          value={card.title}
+                          onChange={(e) => updateCard(card.id, 'title', e.target.value)}
+                          placeholder="Stop Title"
+                        />
+                      </div>
+                      <div className="pb-body">
+                        <textarea
+                          className="pb-edit-body"
+                          value={card.body}
+                          onChange={(e) => updateCard(card.id, 'body', e.target.value)}
+                          placeholder="Card content..."
+                          rows={Math.max(4, (card.body.match(/\n/g) || []).length + 2)}
+                        />
+                      </div>
+                      {card.showClue && (
+                        <div className="pb-clue-box">
+                          <div className="pb-clue-label">CLUE</div>
+                          <textarea
+                            className="pb-edit-clue"
+                            value={card.clue}
+                            onChange={(e) => updateCard(card.id, 'clue', e.target.value)}
+                            placeholder="Clue text..."
+                            rows={2}
+                          />
+                          <button className="pb-toggle-x no-print" onClick={() => updateCard(card.id, 'showClue', false)}>&times;</button>
+                        </div>
+                      )}
+                      {!card.showClue && (
+                        <button className="pb-add-section no-print" onClick={() => updateCard(card.id, 'showClue', true)}>+ Clue</button>
+                      )}
+                      {card.showScratch && (
+                        <div className="pb-scratch">
+                          <div className="pb-scratch-bar">SCRATCH OFF</div>
+                          <div className="pb-scratch-space" />
+                          <button className="pb-toggle-x no-print" onClick={() => updateCard(card.id, 'showScratch', false)}>&times;</button>
+                        </div>
+                      )}
+                      {!card.showScratch && (
+                        <button className="pb-add-section no-print" onClick={() => updateCard(card.id, 'showScratch', true)}>+ Scratch Off</button>
+                      )}
+                    </>
+                  )}
+                  <div className="pb-card-foot">{tour.title}</div>
+                </div>
               </div>
             ))}
-            {sheet.length === 1 && <div className="pb-card pb-card-empty"><div className="pb-inner" /></div>}
+            {sheet.length === 1 && <div className="pb-card"><div className="pb-inner pb-empty" /></div>}
           </div>
         ))}
       </div>
