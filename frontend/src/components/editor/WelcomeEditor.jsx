@@ -129,6 +129,36 @@ const WelcomeEditor = ({ tour, onUpdate }) => {
           )}
         </div>
 
+        <div className="form-group">
+          <label className="form-label">Logo URL <span className="text-small">(optional)</span></label>
+          <p className="text-small helper-text">Logo for print booklets and branding.</p>
+          <ClearableInput
+            type="text"
+            className="input"
+            value={tour.logoUrl || ""}
+            onChange={(eOrValue) => {
+              const value = typeof eOrValue === 'string' ? eOrValue : eOrValue?.target?.value;
+              onUpdate("logoUrl", value || null);
+            }}
+            onClear={() => onUpdate("logoUrl", null)}
+            placeholder="https://example.com/my-logo.png"
+            data-testid="logo-url-input"
+          />
+          {tour.logoUrl && (
+            <div className="skin-preview" style={{ marginTop: '0.5rem' }}>
+              <img 
+                src={tour.logoUrl} 
+                alt="Logo preview" 
+                style={{ 
+                  maxWidth: '160px', 
+                  maxHeight: '80px', 
+                  objectFit: 'contain'
+                }} 
+              />
+            </div>
+          )}
+        </div>
+
         <div className="divider" />
         <h2>Welcome Screen</h2>
         <p className="text-small helper-text">Shown before the tour starts. Leave empty to skip.</p>

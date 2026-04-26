@@ -135,6 +135,7 @@ class Tour(BaseModel):
     status: str = "draft"  # "draft" or "published"
     backgroundColor: str = "#ffffff"  # Default white background
     skinImageUrl: Optional[str] = None  # Tour-level default skin (background image)
+    logoUrl: Optional[str] = None  # Tour logo for booklet/branding
     # Welcome screen fields
     welcomeTitle: Optional[str] = None
     welcomeBody: Optional[str] = None
@@ -166,6 +167,7 @@ class TourUpdate(BaseModel):
     status: Optional[str] = None
     backgroundColor: Optional[str] = None
     skinImageUrl: Optional[str] = None  # Tour-level default skin
+    logoUrl: Optional[str] = None
     welcomeTitle: Optional[str] = None
     welcomeBody: Optional[str] = None
     welcomeImageUrl: Optional[str] = None

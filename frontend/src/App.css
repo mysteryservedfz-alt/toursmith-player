@@ -3963,7 +3963,6 @@
 
 /* ==================== PRINT BOOKLET ==================== */
 
-/* Screen controls bar */
 .print-booklet-wrapper {
   background: #e8e8e8;
   min-height: 100vh;
@@ -3982,20 +3981,9 @@
   gap: 16px;
 }
 
-.print-controls-center {
-  text-align: center;
-}
-
-.print-controls-center h2 {
-  font-size: 16px;
-  font-weight: 600;
-  margin: 0;
-}
-
-.print-page-count {
-  font-size: 12px;
-  opacity: 0.6;
-}
+.print-controls-center { text-align: center; }
+.print-controls-center h2 { font-size: 16px; font-weight: 600; margin: 0; }
+.print-page-count { font-size: 12px; opacity: 0.6; }
 
 .print-back-btn {
   background: none;
@@ -4006,10 +3994,7 @@
   cursor: pointer;
   font-size: 13px;
 }
-
-.print-back-btn:hover {
-  background: rgba(255,255,255,0.1);
-}
+.print-back-btn:hover { background: rgba(255,255,255,0.1); }
 
 .print-btn {
   background: #fff;
@@ -4021,12 +4006,8 @@
   cursor: pointer;
   font-size: 14px;
 }
+.print-btn:hover { background: #e0e0e0; }
 
-.print-btn:hover {
-  background: #e0e0e0;
-}
-
-/* Screen preview */
 .print-booklet {
   display: flex;
   flex-direction: column;
@@ -4035,35 +4016,35 @@
   gap: 32px;
 }
 
+/* Sheet = one printed page (letter landscape), holds 2 cards side by side */
 .print-sheet {
   width: 8.5in;
-  height: 11in;
+  height: 6in;
   background: #fff;
   box-shadow: 0 2px 16px rgba(0,0,0,0.15);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 }
 
+/* Each card = 4in wide x 6in tall (portrait) */
 .print-card {
-  height: 5.5in;
-  width: 100%;
+  width: 4in;
+  height: 6in;
   box-sizing: border-box;
   position: relative;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .print-card:first-child {
-  border-bottom: 2px dashed #999;
+  border-right: 2px dashed #999;
 }
 
-.print-card-blank .print-card-inner {
-  height: 100%;
-}
+.print-card-blank .print-card-inner { height: 100%; }
 
-/* Card inner shared */
 .print-card-inner {
   height: 100%;
-  padding: 0.4in 0.5in;
+  padding: 0.3in;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -4071,209 +4052,97 @@
   color: #000;
 }
 
-/* ---- COVER CARD ---- */
-.print-card-cover {
-  justify-content: space-between;
-}
+/* Logo */
+.card-logo { margin-bottom: 8px; }
+.card-logo img { max-height: 40px; max-width: 120px; object-fit: contain; }
+.card-logo-small { max-height: 18px; max-width: 60px; object-fit: contain; flex-shrink: 0; }
 
-.cover-label {
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  font-size: 11px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: #666;
-  margin-bottom: 8px;
-}
-
+/* COVER */
+.print-card-cover { justify-content: center; }
+.cover-body { flex: 1; display: flex; flex-direction: column; justify-content: center; }
 .cover-title {
-  font-size: 28px;
+  font-size: 18px;
   font-weight: 700;
   margin: 0 0 10px 0;
-  line-height: 1.15;
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-}
-
-.cover-description {
-  font-size: 13px;
-  color: #444;
-  margin: 0 0 12px 0;
-  line-height: 1.5;
-}
-
-.cover-welcome {
-  font-size: 12px;
-  color: #333;
-  margin-top: 8px;
-  padding-top: 8px;
-  border-top: 1px solid #ddd;
-  line-height: 1.5;
-}
-
-.cover-welcome p {
-  margin: 0;
-}
-
-.cover-bottom {
-  margin-top: auto;
-}
-
-.cover-stats {
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  font-size: 12px;
-  color: #666;
-  margin-bottom: 16px;
-}
-
-.instructions-title {
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  font-size: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  font-weight: 700;
-  margin-bottom: 6px;
-  color: #333;
-}
-
-.instructions-list {
-  margin: 0;
-  padding-left: 18px;
-  font-size: 11px;
-  line-height: 1.7;
-  color: #444;
-}
-
-/* ---- STOP CARD ---- */
-.print-card-stop {
-  position: relative;
-}
-
-.stop-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 6px;
-}
-
-.stop-number {
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  font-size: 10px;
-  letter-spacing: 2px;
-  font-weight: 700;
-  color: #000;
-  white-space: nowrap;
-}
-
-.stop-header-line {
-  flex: 1;
-  height: 1px;
-  background: #000;
-}
-
-.stop-title {
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  margin: 0 0 4px 0;
   line-height: 1.2;
-}
-
-.stop-subtitle {
-  font-size: 12px;
-  color: #555;
-  margin: 0 0 10px 0;
-  font-style: italic;
-}
-
-.stop-content {
-  flex: 1;
-  overflow: hidden;
-}
-
-.stop-page-content {
-  margin-bottom: 8px;
-}
-
-.page-title-inline {
   font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #555;
-  margin-bottom: 3px;
 }
-
-.page-text {
-  font-size: 12px;
-  line-height: 1.55;
-  margin: 0 0 6px 0;
-  color: #222;
+.cover-message {
+  font-size: 11px;
+  color: #333;
+  margin: 0;
+  line-height: 1.5;
   white-space: pre-wrap;
 }
 
-/* Clue box */
-.clue-box {
-  border: 2px solid #000;
-  padding: 8px 12px;
-  margin: 8px 0;
-  position: relative;
-}
-
-.clue-label {
+/* STOP CARD */
+.print-card-stop { position: relative; }
+.stop-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.stop-number {
   font-family: 'Helvetica Neue', 'Arial', sans-serif;
   font-size: 9px;
   letter-spacing: 2px;
   font-weight: 700;
-  position: absolute;
-  top: -8px;
-  left: 10px;
-  background: #fff;
-  padding: 0 4px;
+  white-space: nowrap;
 }
-
-.clue-text {
-  font-size: 13px;
-  font-weight: 600;
-  margin: 0;
-  line-height: 1.45;
-  color: #000;
-}
-
-/* Hint line */
-.hint-line {
-  font-size: 10px;
-  color: #666;
-  margin-top: 4px;
-  font-style: italic;
-}
-
-.hint-label {
+.stop-header-line { flex: 1; height: 1px; background: #000; }
+.stop-title {
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  font-size: 14px;
   font-weight: 700;
-  font-style: normal;
+  margin: 0 0 4px 0;
+  line-height: 1.2;
 }
-
-/* Scratch-off circle */
-.scratch-off-area {
-  display: flex;
-  justify-content: center;
-  padding: 10px 0 4px 0;
-  margin-top: auto;
+.stop-content { flex: 1; overflow: hidden; }
+.stop-page-content { margin-bottom: 6px; }
+.page-title-inline {
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #555;
+  margin-bottom: 2px;
 }
+.page-text {
+  font-size: 9px;
+  line-height: 1.4;
+  margin: 0 0 4px 0;
+  color: #222;
+  white-space: pre-wrap;
+}
+.page-image { margin: 4px 0; }
+.page-image img { max-width: 100%; max-height: 1.2in; object-fit: contain; }
 
+/* Clue box */
+.clue-box { border: 2px solid #000; padding: 6px 8px; margin: 6px 0; position: relative; }
+.clue-label {
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  font-size: 8px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  position: absolute;
+  top: -7px;
+  left: 8px;
+  background: #fff;
+  padding: 0 3px;
+}
+.clue-text { font-size: 10px; font-weight: 600; margin: 0; line-height: 1.35; }
+
+/* Scratch-off */
+.scratch-off-area { display: flex; justify-content: center; padding: 6px 0 2px 0; margin-top: auto; }
 .scratch-off-circle {
-  width: 80px;
-  height: 80px;
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
   border: 3px dashed #000;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
 }
-
 .scratch-off-text {
   font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 700;
   letter-spacing: 1px;
   text-align: center;
@@ -4281,98 +4150,33 @@
   color: #666;
 }
 
-/* ---- COMPLETION CARD ---- */
-.print-card-completion {
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.completion-content {
-  max-width: 5in;
-}
-
-.completion-badge {
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  font-size: 10px;
-  letter-spacing: 3px;
-  font-weight: 700;
-  margin-bottom: 16px;
-  color: #666;
-}
-
+/* COMPLETION */
+.print-card-completion { justify-content: center; align-items: center; text-align: center; }
+.completion-content { max-width: 3in; }
 .completion-title {
   font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  font-size: 26px;
+  font-size: 18px;
   font-weight: 700;
-  margin: 0 0 12px 0;
+  margin: 0 0 10px 0;
 }
+.completion-body { font-size: 11px; line-height: 1.5; color: #333; margin: 0; white-space: pre-wrap; }
 
-.completion-body {
-  font-size: 13px;
-  line-height: 1.6;
-  color: #333;
-  margin: 0 0 20px 0;
-}
-
-.completion-divider {
-  width: 60px;
-  height: 1px;
-  background: #000;
-  margin: 0 auto 20px auto;
-}
-
-.completion-thanks {
-  font-size: 12px;
-  color: #666;
-  margin: 0 0 4px 0;
-}
-
-.completion-tour-name {
-  font-size: 14px;
-  font-weight: 600;
-  color: #000;
-  margin: 0;
-}
-
-/* ==================== PRINT MEDIA ==================== */
+/* PRINT MEDIA */
 @media print {
-  /* Hide everything not booklet */
-  body {
-    margin: 0 !important;
-    padding: 0 !important;
-    background: #fff !important;
-  }
-
-  .print-booklet-wrapper {
-    background: #fff !important;
-  }
-
-  .print-controls {
-    display: none !important;
-  }
-
-  .print-booklet {
-    padding: 0;
-    gap: 0;
-  }
-
+  body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+  .print-booklet-wrapper { background: #fff !important; }
+  .print-controls { display: none !important; }
+  .print-booklet { padding: 0; gap: 0; }
   .print-sheet {
+    width: 8.5in;
+    height: 6in;
     box-shadow: none;
     page-break-after: always;
+    margin: 0 auto;
     -webkit-print-color-adjust: exact;
   }
-
-  .print-sheet:last-child {
-    page-break-after: auto;
-  }
-
-  .print-card:first-child {
-    border-bottom: 2px dashed #999;
-  }
-
-  @page {
-    size: letter;
-    margin: 0;
-  }
+  .print-sheet:last-child { page-break-after: auto; }
+  .print-card:first-child { border-right: 2px dashed #999; }
+  .page-image img { max-height: 1.2in; }
+  @page { size: letter landscape; margin: 0.25in; }
 }
