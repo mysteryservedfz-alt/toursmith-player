@@ -226,6 +226,14 @@ const TourEditor = () => {
         <div className="editor-header-actions">
           {saving && <span className="saving-indicator">Saving...</span>}
           {hasUnsavedChanges && !saving && <span className="unsaved-indicator">Unsaved changes</span>}
+          <button
+            onClick={() => window.open(`/admin/tour/${tourId}/print`, '_blank')}
+            className="btn btn-ghost btn-sm"
+            title="Print Booklet"
+            data-testid="print-booklet-btn"
+          >
+            <Icons.FileText /> Print
+          </button>
           <button 
             onClick={() => saveTour()} 
             className={`btn btn-save-draft ${hasUnsavedChanges ? 'has-changes' : ''}`}

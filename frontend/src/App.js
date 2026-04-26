@@ -9,6 +9,7 @@ import { useAuth, AuthProvider } from "./components/authContext";
 import AuthPage from "./components/AuthPages";
 import ToursList from "./components/ToursList";
 import TourEditor from "./components/editor/TourEditor";
+import PrintBooklet from "./components/PrintBooklet";
 import PlayerLayout from "./components/PlayerLayout";
 
 // Remove "Made with Emergent" badge
@@ -48,6 +49,7 @@ function App() {
           <Route path="/" element={<AuthPage />} />
           <Route path="/admin" element={<ProtectedRoute><ToursList /></ProtectedRoute>} />
           <Route path="/admin/tour/:tourId" element={<ProtectedRoute><TourEditor /></ProtectedRoute>} />
+          <Route path="/admin/tour/:tourId/print" element={<ProtectedRoute><PrintBooklet /></ProtectedRoute>} />
           <Route path="/play/:tourId" element={<PlayerLayout Icons={Icons} />} />
         </Routes>
       </BrowserRouter>
