@@ -3962,27 +3962,28 @@
 
 
 /* ==================== PRINT BOOKLET ==================== */
+/* Design family: brown headers, cream content, professional worksheet style */
 
-.pb-wrapper { background: #bbb; min-height: 100vh; }
+.pb-wrapper { background: #c4b9a8; min-height: 100vh; }
 
 .pb-toolbar {
   position: sticky; top: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 24px; background: #111; color: #fff; gap: 16px;
+  padding: 10px 24px; background: #3E2723; color: #fff; gap: 16px;
 }
 .pb-toolbar-center { text-align: center; }
 .pb-toolbar-center h2 { font-size: 15px; font-weight: 600; margin: 0; }
 .pb-toolbar-center span { font-size: 11px; opacity: 0.5; }
 .pb-toolbar-btn {
-  background: none; border: 1px solid rgba(255,255,255,0.25);
+  background: none; border: 1px solid rgba(255,255,255,0.3);
   color: #fff; padding: 5px 12px; border-radius: 3px; cursor: pointer; font-size: 12px;
 }
-.pb-toolbar-btn:hover { background: rgba(255,255,255,0.08); }
+.pb-toolbar-btn:hover { background: rgba(255,255,255,0.1); }
 .pb-toolbar-print {
-  background: #fff; color: #111; border: none;
+  background: #FDF6E3; color: #3E2723; border: none;
   padding: 7px 18px; border-radius: 3px; font-weight: 700; cursor: pointer; font-size: 13px;
 }
-.pb-toolbar-print:hover { background: #eee; }
+.pb-toolbar-print:hover { background: #f5ecd5; }
 
 .pb-preview {
   display: flex; flex-direction: column; align-items: center;
@@ -3997,133 +3998,155 @@
 
 .pb-card {
   width: 4in; height: 6in;
-  box-sizing: border-box; position: relative; overflow: hidden; flex-shrink: 0;
+  box-sizing: border-box; overflow: hidden; flex-shrink: 0;
+  background: #FFFCF7;
 }
-.pb-card:first-child { border-right: 2px dashed #aaa; }
-.pb-card-empty .pb-card-inner { height: 100%; border: none; }
+.pb-card:first-child { border-right: 2px dashed #a08060; }
 
-/* Card inner — framed */
-.pb-card-inner {
+/* Inner card frame */
+.pb-inner {
   height: 100%; box-sizing: border-box;
-  margin: 0.15in;
-  border: 1.5pt solid #000;
+  margin: 0.12in;
+  border: 2px solid #5C3D2E;
   display: flex; flex-direction: column;
-  font-family: 'Georgia', 'Times New Roman', serif;
-  color: #111;
-  position: relative;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: #2C1810;
+  background: #FFFDF8;
   overflow: hidden;
 }
 
-/* Shared elements */
-.pb-logo { padding: 10px 12px 0; }
-.pb-logo img { max-height: 32px; max-width: 90px; object-fit: contain; }
+/* Magnifying glass divider */
+.pb-mg {
+  width: 20px; height: 20px;
+  color: #8B6B4A; margin: 6px auto; display: block;
+}
 
-.pb-rule { width: 40px; height: 2px; background: #000; margin: 6px auto; }
-
-.pb-footer {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  font-size: 6.5px; letter-spacing: 1.5px; text-transform: uppercase;
-  color: #999; text-align: center;
-  padding: 4px 8px;
-  border-top: 0.5pt solid #ddd;
+/* Card footer */
+.pb-card-foot {
+  font-size: 6px; letter-spacing: 2px; text-transform: uppercase;
+  color: #8B6B4A; text-align: center;
+  padding: 3px 8px;
+  border-top: 1px solid #D4C4A8;
   margin-top: auto;
+  background: #FAF4E8;
+}
+
+/* Logo */
+.pb-logo { text-align: center; padding: 6px 0 0; }
+.pb-logo img { max-height: 30px; max-width: 90px; object-fit: contain; }
+
+/* Brown decorative rule */
+.pb-brown-rule { width: 50px; height: 2px; background: #5C3D2E; margin: 5px auto; }
+
+/* Cream instruction box */
+.pb-cream-box {
+  background: #FDF6E3; border: 1.5px solid #C4A97D;
+  border-radius: 4px; padding: 6px 10px; margin: 4px 10px;
+}
+.pb-cream-box p {
+  font-size: 8.5px; line-height: 1.5; margin: 0;
+  color: #3E2723; white-space: pre-wrap;
 }
 
 /* ---- COVER ---- */
 .pb-cover { text-align: center; }
-.pb-cover-body {
+.pb-cover-top { min-height: 10px; }
+.pb-cover-center {
   flex: 1; display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  padding: 0 0.25in;
+  padding: 0 0.15in;
 }
 .pb-cover-title {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  font-size: 18px; font-weight: 800; margin: 0; line-height: 1.2;
-  letter-spacing: -0.3px;
-}
-.pb-cover-msg {
-  font-size: 9px; color: #444; margin: 0; line-height: 1.55;
-  max-width: 2.8in; white-space: pre-wrap;
+  font-size: 17px; font-weight: 800; margin: 0; line-height: 1.2;
+  color: #3E2723; letter-spacing: -0.3px;
 }
 
-/* ---- STOP / PAGE ---- */
-.pb-stop { }
+/* ---- STOP CARD ---- */
+.pb-stop {}
 
-.pb-stop-banner {
-  background: #000; color: #fff;
-  padding: 6px 10px;
+/* Brown banner */
+.pb-banner {
+  background: #5C3D2E; color: #FDF6E3;
+  padding: 5px 10px;
   display: flex; align-items: center; justify-content: space-between;
 }
-.pb-stop-banner-inner { display: flex; flex-direction: column; }
-.pb-stop-label {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  font-size: 7px; letter-spacing: 2.5px; font-weight: 700;
-  opacity: 0.7;
+.pb-banner-label {
+  display: block; font-size: 7px; letter-spacing: 2.5px;
+  font-weight: 700; opacity: 0.75;
 }
-.pb-stop-name {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  font-size: 12px; font-weight: 800; line-height: 1.2; margin-top: 1px;
+.pb-banner-title {
+  display: block; font-size: 12px; font-weight: 800;
+  line-height: 1.2; margin-top: 1px;
 }
-.pb-banner-logo { max-height: 18px; max-width: 50px; object-fit: contain; filter: invert(1); }
-
-.pb-cont-tag {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  font-size: 7px; letter-spacing: 1px; text-transform: uppercase;
-  color: #888; padding: 3px 10px 0;
+.pb-banner-logo {
+  max-height: 16px; max-width: 45px; object-fit: contain;
+  filter: brightness(10);
 }
 
-.pb-stop-body {
+/* Body content */
+.pb-body {
   flex: 1; overflow: hidden;
   padding: 6px 10px;
 }
 
-.pb-section-head {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
+.pb-section { margin-bottom: 4px; }
+
+.pb-section-title {
   font-size: 8px; font-weight: 800; text-transform: uppercase;
-  letter-spacing: 1.5px; color: #000;
-  border-bottom: 1px solid #000; padding-bottom: 2px; margin-bottom: 4px;
+  letter-spacing: 1.5px; color: #5C3D2E;
+  border-bottom: 1.5px solid #5C3D2E;
+  padding-bottom: 1px; margin-bottom: 3px;
   display: inline-block;
 }
 
 .pb-text {
-  font-size: 8.5px; line-height: 1.5; margin: 0 0 5px 0;
-  color: #222; white-space: pre-wrap;
+  font-size: 8.5px; line-height: 1.5; margin: 0 0 3px;
+  color: #2C1810; white-space: pre-wrap;
 }
 
 .pb-img { margin: 3px 0; }
-.pb-img img { max-width: 100%; max-height: 0.9in; object-fit: contain; border: 1px solid #ddd; }
-
-/* Clue */
-.pb-clue {
-  border: 2px solid #000; padding: 5px 8px; margin: 6px 0; position: relative;
-  background: #f5f5f5;
+.pb-img img {
+  max-width: 100%; max-height: 0.9in;
+  object-fit: contain; border: 1px solid #D4C4A8; border-radius: 2px;
 }
-.pb-clue-tag {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
+
+/* Clue box */
+.pb-clue-box {
+  background: #FDF6E3; border: 2px solid #8B6B4A;
+  border-radius: 4px; padding: 5px 8px; margin: 5px 0;
+  position: relative;
+}
+.pb-clue-label {
   font-size: 7px; letter-spacing: 2px; font-weight: 800;
-  position: absolute; top: -6px; left: 6px;
-  background: #f5f5f5; padding: 0 3px;
+  position: absolute; top: -6px; left: 8px;
+  background: #FDF6E3; padding: 0 4px; color: #5C3D2E;
 }
-.pb-clue-text { font-size: 9px; font-weight: 700; margin: 0; line-height: 1.35; }
+.pb-clue-text {
+  font-size: 9px; font-weight: 700; margin: 0; line-height: 1.4;
+  color: #3E2723;
+}
 
-/* Scratch-off */
-.pb-scratch-area { display: flex; justify-content: center; padding: 4px 0; }
+/* Scratch-off hint box */
+.pb-scratch {
+  margin: 2px 10px 0; border: 1.5px solid #8B6B4A; border-radius: 4px;
+  overflow: hidden;
+}
+.pb-scratch-header {
+  background: #5C3D2E; color: #FDF6E3;
+  font-size: 7px; letter-spacing: 2px; font-weight: 800;
+  text-align: center; padding: 3px 0;
+}
+.pb-scratch-body {
+  display: flex; justify-content: center; padding: 4px 0;
+  background: #FDF6E3;
+}
 .pb-scratch-circle {
-  width: 48px; height: 48px; border-radius: 50%;
-  border: 2.5px dashed #000;
+  width: 42px; height: 42px; border-radius: 50%;
+  border: 2.5px dashed #5C3D2E;
 }
 
 /* ---- COMPLETION ---- */
 .pb-completion { text-align: center; }
-.pb-completion-body {
-  flex: 1; display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 0 0.25in;
-}
-.pb-completion-title {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  font-size: 18px; font-weight: 800; margin: 0;
-}
 
 /* ==================== PRINT MEDIA ==================== */
 @media print {
@@ -4137,7 +4160,13 @@
     -webkit-print-color-adjust: exact; print-color-adjust: exact;
   }
   .pb-sheet:last-child { page-break-after: auto; }
-  .pb-card:first-child { border-right: 2px dashed #aaa; }
-  .pb-stop-banner { background: #000 !important; color: #fff !important; }
+  .pb-card:first-child { border-right: 2px dashed #a08060; }
+  .pb-banner { background: #5C3D2E !important; color: #FDF6E3 !important; }
+  .pb-scratch-header { background: #5C3D2E !important; color: #FDF6E3 !important; }
+  .pb-card-foot { background: #FAF4E8 !important; }
+  .pb-cream-box { background: #FDF6E3 !important; }
+  .pb-clue-box { background: #FDF6E3 !important; }
+  .pb-clue-label { background: #FDF6E3 !important; }
+  .pb-scratch-body { background: #FDF6E3 !important; }
   @page { size: letter landscape; margin: 0.25in; }
 }
