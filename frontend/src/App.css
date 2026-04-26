@@ -3963,220 +3963,162 @@
 
 /* ==================== PRINT BOOKLET ==================== */
 
-.print-booklet-wrapper {
-  background: #e8e8e8;
-  min-height: 100vh;
+.pb-wrapper { background: #d0d0d0; min-height: 100vh; }
+
+/* Toolbar */
+.pb-toolbar {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 24px; background: #111; color: #fff; gap: 16px;
+}
+.pb-toolbar-center { text-align: center; }
+.pb-toolbar-center h2 { font-size: 15px; font-weight: 600; margin: 0; }
+.pb-toolbar-center span { font-size: 11px; opacity: 0.5; }
+.pb-toolbar-btn {
+  background: none; border: 1px solid rgba(255,255,255,0.25);
+  color: #fff; padding: 5px 12px; border-radius: 3px; cursor: pointer; font-size: 12px;
+}
+.pb-toolbar-btn:hover { background: rgba(255,255,255,0.08); }
+.pb-toolbar-print {
+  background: #fff; color: #111; border: none;
+  padding: 7px 18px; border-radius: 3px; font-weight: 700; cursor: pointer; font-size: 13px;
+}
+.pb-toolbar-print:hover { background: #eee; }
+
+/* Preview area */
+.pb-preview {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 28px 0; gap: 28px;
 }
 
-.print-controls {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 24px;
-  background: #1a1a1a;
-  color: #fff;
-  gap: 16px;
+/* Sheet = one printed landscape letter page */
+.pb-sheet {
+  width: 8.5in; height: 6in; background: #fff;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  display: flex; flex-direction: row;
 }
 
-.print-controls-center { text-align: center; }
-.print-controls-center h2 { font-size: 16px; font-weight: 600; margin: 0; }
-.print-page-count { font-size: 12px; opacity: 0.6; }
-
-.print-back-btn {
-  background: none;
-  border: 1px solid rgba(255,255,255,0.3);
-  color: #fff;
-  padding: 6px 14px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 13px;
+/* Card = 4x6 portrait */
+.pb-card {
+  width: 4in; height: 6in;
+  box-sizing: border-box; position: relative; overflow: hidden; flex-shrink: 0;
 }
-.print-back-btn:hover { background: rgba(255,255,255,0.1); }
+.pb-card:first-child { border-right: 2px dashed #aaa; }
+.pb-card-empty .pb-card-inner { height: 100%; }
 
-.print-btn {
-  background: #fff;
-  color: #1a1a1a;
-  border: none;
-  padding: 8px 20px;
-  border-radius: 4px;
-  font-weight: 600;
-  cursor: pointer;
-  font-size: 14px;
-}
-.print-btn:hover { background: #e0e0e0; }
-
-.print-booklet {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 32px 0;
-  gap: 32px;
-}
-
-/* Sheet = one printed page (letter landscape), holds 2 cards side by side */
-.print-sheet {
-  width: 8.5in;
-  height: 6in;
-  background: #fff;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.15);
-  display: flex;
-  flex-direction: row;
-}
-
-/* Each card = 4in wide x 6in tall (portrait) */
-.print-card {
-  width: 4in;
-  height: 6in;
-  box-sizing: border-box;
-  position: relative;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.print-card:first-child {
-  border-right: 2px dashed #999;
-}
-
-.print-card-blank .print-card-inner { height: 100%; }
-
-.print-card-inner {
-  height: 100%;
-  padding: 0.3in;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
+/* Inner frame — the actual styled card */
+.pb-card-inner {
+  height: 100%; box-sizing: border-box;
+  margin: 0.2in;
+  border: 1.5px solid #000;
+  padding: 0.2in 0.22in;
+  display: flex; flex-direction: column;
   font-family: 'Georgia', 'Times New Roman', serif;
-  color: #000;
+  color: #111;
+  position: relative;
 }
 
 /* Logo */
-.card-logo { margin-bottom: 8px; }
-.card-logo img { max-height: 40px; max-width: 120px; object-fit: contain; }
-.card-logo-small { max-height: 18px; max-width: 60px; object-fit: contain; flex-shrink: 0; }
-
-/* COVER */
-.print-card-cover { justify-content: center; }
-.cover-body { flex: 1; display: flex; flex-direction: column; justify-content: center; }
-.cover-title {
-  font-size: 18px;
-  font-weight: 700;
-  margin: 0 0 10px 0;
-  line-height: 1.2;
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-}
-.cover-message {
-  font-size: 11px;
-  color: #333;
-  margin: 0;
-  line-height: 1.5;
-  white-space: pre-wrap;
+.pb-logo { margin-bottom: 6px; }
+.pb-logo img { max-height: 36px; max-width: 100px; object-fit: contain; }
+.pb-stop-logo {
+  max-height: 16px; max-width: 50px; object-fit: contain;
+  position: absolute; top: 0.2in; right: 0.22in;
 }
 
-/* STOP CARD */
-.print-card-stop { position: relative; }
-.stop-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
-.stop-number {
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  font-size: 9px;
-  letter-spacing: 2px;
-  font-weight: 700;
-  white-space: nowrap;
+/* ---- COVER ---- */
+.pb-cover { justify-content: center; text-align: center; align-items: center; }
+.pb-cover-body { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.pb-cover-title {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 20px; font-weight: 800; margin: 0; line-height: 1.15;
+  letter-spacing: -0.3px;
 }
-.stop-header-line { flex: 1; height: 1px; background: #000; }
-.stop-title {
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  margin: 0 0 4px 0;
-  line-height: 1.2;
+.pb-cover-divider { width: 50px; height: 2px; background: #000; margin: 6px auto; }
+.pb-cover-msg {
+  font-size: 10px; color: #333; margin: 0; line-height: 1.55;
+  max-width: 2.8in; white-space: pre-wrap;
 }
-.stop-content { flex: 1; overflow: hidden; }
-.stop-page-content { margin-bottom: 6px; }
-.page-title-inline {
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  font-size: 9px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #555;
-  margin-bottom: 2px;
-}
-.page-text {
-  font-size: 9px;
-  line-height: 1.4;
-  margin: 0 0 4px 0;
-  color: #222;
-  white-space: pre-wrap;
-}
-.page-image { margin: 4px 0; }
-.page-image img { max-width: 100%; max-height: 1.2in; object-fit: contain; }
 
-/* Clue box */
-.clue-box { border: 2px solid #000; padding: 6px 8px; margin: 6px 0; position: relative; }
-.clue-label {
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  font-size: 8px;
-  letter-spacing: 2px;
-  font-weight: 700;
-  position: absolute;
-  top: -7px;
-  left: 8px;
-  background: #fff;
-  padding: 0 3px;
+/* ---- STOP ---- */
+.pb-stop { position: relative; }
+
+.pb-stop-head {
+  border-bottom: 2px solid #000;
+  padding-bottom: 6px;
+  margin-bottom: 8px;
 }
-.clue-text { font-size: 10px; font-weight: 600; margin: 0; line-height: 1.35; }
+.pb-stop-num {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 8px; letter-spacing: 2.5px; font-weight: 800;
+  color: #000; margin-bottom: 2px;
+}
+.pb-stop-title {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 13px; font-weight: 800; margin: 0; line-height: 1.2;
+}
+
+.pb-stop-body { flex: 1; overflow: hidden; }
+
+.pb-page { margin-bottom: 5px; }
+.pb-page-heading {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 8px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 1.5px; color: #000;
+  border-bottom: 1px solid #000; padding-bottom: 2px; margin-bottom: 3px;
+  display: inline-block;
+}
+.pb-page-text {
+  font-size: 8.5px; line-height: 1.45; margin: 0 0 3px 0;
+  color: #222; white-space: pre-wrap;
+}
+.pb-page-img { margin: 3px 0; }
+.pb-page-img img { max-width: 100%; max-height: 1in; object-fit: contain; border: 1px solid #ddd; }
+
+/* Clue */
+.pb-clue {
+  border: 2px solid #000; padding: 5px 7px; margin: 5px 0; position: relative;
+  background: #f8f8f8;
+}
+.pb-clue-tag {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 7px; letter-spacing: 2px; font-weight: 800;
+  position: absolute; top: -6px; left: 7px;
+  background: #f8f8f8; padding: 0 3px;
+}
+.pb-clue-text { font-size: 9px; font-weight: 700; margin: 0; line-height: 1.35; }
 
 /* Scratch-off */
-.scratch-off-area { display: flex; justify-content: center; padding: 6px 0 2px 0; margin-top: auto; }
-.scratch-off-circle {
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  border: 3px dashed #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.pb-scratch-area {
+  display: flex; justify-content: center;
+  padding: 5px 0 0 0; margin-top: auto;
 }
-.scratch-off-text {
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-align: center;
-  line-height: 1.3;
-  color: #666;
+.pb-scratch-circle {
+  width: 50px; height: 50px; border-radius: 50%;
+  border: 2.5px dashed #000;
 }
 
-/* COMPLETION */
-.print-card-completion { justify-content: center; align-items: center; text-align: center; }
-.completion-content { max-width: 3in; }
-.completion-title {
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  font-size: 18px;
-  font-weight: 700;
-  margin: 0 0 10px 0;
+/* ---- COMPLETION ---- */
+.pb-completion { justify-content: center; align-items: center; text-align: center; }
+.pb-completion-body { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.pb-completion-title {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 18px; font-weight: 800; margin: 0;
 }
-.completion-body { font-size: 11px; line-height: 1.5; color: #333; margin: 0; white-space: pre-wrap; }
+.pb-completion-msg { font-size: 10px; line-height: 1.55; color: #333; margin: 0; max-width: 2.8in; white-space: pre-wrap; }
 
-/* PRINT MEDIA */
+/* ==================== PRINT MEDIA ==================== */
 @media print {
   body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
-  .print-booklet-wrapper { background: #fff !important; }
-  .print-controls { display: none !important; }
-  .print-booklet { padding: 0; gap: 0; }
-  .print-sheet {
-    width: 8.5in;
-    height: 6in;
-    box-shadow: none;
-    page-break-after: always;
-    margin: 0 auto;
-    -webkit-print-color-adjust: exact;
+  .pb-wrapper { background: #fff !important; }
+  .pb-toolbar { display: none !important; }
+  .pb-preview { padding: 0; gap: 0; }
+  .pb-sheet {
+    width: 8.5in; height: 6in; box-shadow: none;
+    page-break-after: always; margin: 0 auto;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
   }
-  .print-sheet:last-child { page-break-after: auto; }
-  .print-card:first-child { border-right: 2px dashed #999; }
-  .page-image img { max-height: 1.2in; }
+  .pb-sheet:last-child { page-break-after: auto; }
+  .pb-card:first-child { border-right: 2px dashed #aaa; }
   @page { size: letter landscape; margin: 0.25in; }
 }

@@ -3,16 +3,17 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth, authAxios } from './authContext';
 
 const CoverCard = ({ tour }) => (
-  <div className="print-card-inner print-card-cover">
+  <div className="pb-card-inner pb-cover">
     {tour.logoUrl && (
-      <div className="card-logo">
-        <img src={tour.logoUrl} alt="Logo" />
+      <div className="pb-logo">
+        <img src={tour.logoUrl} alt="" />
       </div>
     )}
-    <div className="cover-body">
-      <h1 className="cover-title">{tour.welcomeTitle || tour.title || 'Untitled Tour'}</h1>
-      {tour.welcomeBody && <p className="cover-message">{tour.welcomeBody}</p>}
-      {!tour.welcomeBody && tour.description && <p className="cover-message">{tour.description}</p>}
+    <div className="pb-cover-body">
+      <h1 className="pb-cover-title">{tour.welcomeTitle || tour.title || 'Untitled Tour'}</h1>
+      <div className="pb-cover-divider" />
+      {tour.welcomeBody && <p className="pb-cover-msg">{tour.welcomeBody}</p>}
+      {!tour.welcomeBody && tour.description && <p className="pb-cover-msg">{tour.description}</p>}
     </div>
   </div>
 );
@@ -22,33 +23,35 @@ const StopCard = ({ card, logoUrl }) => {
     (p.unlockMode === 'text' || p.unlockMode === 'multiple_choice') && (p.clueText || p.content)
   );
 
-  return (
-    <div className="print-card-inner print-card-stop">
-      <div className="stop-header">
-        <span className="stop-number">STOP {card.number}</span>
-        <div className="stop-header-line" />
-        {logoUrl && <img src={logoUrl} alt="" className="card-logo-small" />}
-      </div>
-      <h2 className="stop-title">{card.title || `Stop ${card.number}`}</h2>
+  // Filter out pages with no meaningful content
+  const visiblePages = card.pages.filter(p => p.content || p.clueText || p.mediaUrl);
 
-      <div className="stop-content">
-        {card.pages.map((page, i) => (
-          <div key={i} className="stop-page-content">
-            {card.pages.length > 1 && page.title && (
-              <div className="page-title-inline">{page.title}</div>
+  return (
+    <div className="pb-card-inner pb-stop">
+      <div className="pb-stop-head">
+        <div className="pb-stop-num">STOP {card.number}</div>
+        <h2 className="pb-stop-title">{card.title || `Stop ${card.number}`}</h2>
+        {logoUrl && <img src={logoUrl} alt="" className="pb-stop-logo" />}
+      </div>
+
+      <div className="pb-stop-body">
+        {visiblePages.map((page, i) => (
+          <div key={i} className="pb-page">
+            {visiblePages.length > 1 && page.title && (
+              <div className="pb-page-heading">{page.title}</div>
             )}
             {page.content && (
-              <p className="page-text">{page.content}</p>
+              <p className="pb-page-text">{page.content}</p>
             )}
             {page.mediaUrl && (
-              <div className="page-image">
+              <div className="pb-page-img">
                 <img src={page.mediaUrl} alt="" />
               </div>
             )}
             {page.clueText && (
-              <div className="clue-box">
-                <div className="clue-label">CLUE</div>
-                <p className="clue-text">{page.clueText}</p>
+              <div className="pb-clue">
+                <div className="pb-clue-tag">CLUE</div>
+                <p className="pb-clue-text">{page.clueText}</p>
               </div>
             )}
           </div>
@@ -56,10 +59,8 @@ const StopCard = ({ card, logoUrl }) => {
       </div>
 
       {hasAnswer && (
-        <div className="scratch-off-area">
-          <div className="scratch-off-circle">
-            <span className="scratch-off-text">SCRATCH<br/>OFF</span>
-          </div>
+        <div className="pb-scratch-area">
+          <div className="pb-scratch-circle" />
         </div>
       )}
     </div>
@@ -67,15 +68,16 @@ const StopCard = ({ card, logoUrl }) => {
 };
 
 const CompletionCard = ({ tour }) => (
-  <div className="print-card-inner print-card-completion">
+  <div className="pb-card-inner pb-completion">
     {tour.logoUrl && (
-      <div className="card-logo">
-        <img src={tour.logoUrl} alt="Logo" />
+      <div className="pb-logo">
+        <img src={tour.logoUrl} alt="" />
       </div>
     )}
-    <div className="completion-content">
-      <h2 className="completion-title">{tour.completionTitle || 'Tour Complete!'}</h2>
-      {tour.completionBody && <p className="completion-body">{tour.completionBody}</p>}
+    <div className="pb-completion-body">
+      <h2 className="pb-completion-title">{tour.completionTitle || 'Tour Complete!'}</h2>
+      <div className="pb-cover-divider" />
+      {tour.completionBody && <p className="pb-completion-msg">{tour.completionBody}</p>}
     </div>
   </div>
 );
@@ -107,8 +109,6 @@ const PrintBooklet = () => {
   if (!tour) return <div className="loading-screen">Tour not found</div>;
 
   const sortedStops = [...(tour.stops || [])].sort((a, b) => a.order - b.order);
-
-  // Build cards
   const cards = [];
   cards.push({ type: 'cover' });
 
@@ -132,42 +132,37 @@ const PrintBooklet = () => {
     cards.push({ type: 'completion' });
   }
 
-  // Group into pairs (2 per printed sheet, side by side)
   const sheets = [];
   for (let i = 0; i < cards.length; i += 2) {
     sheets.push(cards.slice(i, i + 2));
   }
 
   return (
-    <div className="print-booklet-wrapper" data-testid="print-booklet-wrapper">
-      <div className="print-controls">
-        <button onClick={() => navigate(`/admin/tour/${tourId}`)} className="print-back-btn" data-testid="print-back-btn">
+    <div className="pb-wrapper" data-testid="print-booklet-wrapper">
+      <div className="pb-toolbar">
+        <button onClick={() => navigate(`/admin/tour/${tourId}`)} className="pb-toolbar-btn" data-testid="print-back-btn">
           ← Back to Editor
         </button>
-        <div className="print-controls-center">
+        <div className="pb-toolbar-center">
           <h2>{tour.title}</h2>
-          <span className="print-page-count">{cards.length} cards / {sheets.length} sheet{sheets.length !== 1 ? 's' : ''}</span>
+          <span>{cards.length} cards / {sheets.length} sheet{sheets.length !== 1 ? 's' : ''}</span>
         </div>
-        <button onClick={() => window.print()} className="print-btn" data-testid="print-btn">
+        <button onClick={() => window.print()} className="pb-toolbar-print" data-testid="print-btn">
           Print / Save PDF
         </button>
       </div>
 
-      <div className="print-booklet" data-testid="print-booklet">
+      <div className="pb-preview" data-testid="print-booklet">
         {sheets.map((sheet, si) => (
-          <div key={si} className="print-sheet">
+          <div key={si} className="pb-sheet">
             {sheet.map((card, ci) => (
-              <div key={ci} className="print-card">
+              <div key={ci} className="pb-card">
                 {card.type === 'cover' && <CoverCard tour={tour} />}
                 {card.type === 'stop' && <StopCard card={card} logoUrl={tour.logoUrl} />}
                 {card.type === 'completion' && <CompletionCard tour={tour} />}
               </div>
             ))}
-            {sheet.length === 1 && (
-              <div className="print-card print-card-blank">
-                <div className="print-card-inner" />
-              </div>
-            )}
+            {sheet.length === 1 && <div className="pb-card pb-card-empty"><div className="pb-card-inner" /></div>}
           </div>
         ))}
       </div>
