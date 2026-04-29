@@ -20,6 +20,11 @@ https://toursmith-admin.emergent.host/play/<tour-id>
 4. If testing on preview, do NOT ask her to go look — test yourself, then tell her where to verify on live
 5. Clicking "Preview" on Emergent's chat panel = BAD. Her workstation is ONLY the live admin URL above.
 6. **DO NOT use the screenshot tool or any tool that auto-opens the preview URL in Grace's right-side chat panel.** That panel showing `story-challenge-hub.preview...` confuses her and has cost her hours. Test silently via curl/python scripts. If visual verification is absolutely required, ask Grace first. Otherwise, rely on backend checks and tell her what to verify on LIVE.
+7. **ALWAYS end every message to Grace with her live dashboard link on its own line.** Format:
+   ```
+   🏠 https://toursmith-admin.emergent.host/admin
+   ```
+   This way she never has to hunt for it. Make it the last line, every time. No exceptions.
 
 ## Context
 Grace has repeatedly been confused and frustrated because agents sent her preview links, causing "2 dashboards" mismatches where tour edits went to the wrong database. She works exclusively on live now. Preview exists only for agents to test code safely.
