@@ -331,9 +331,9 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDu
                     <label className="toggle-label">
                       <input type="checkbox" checked={page.caseInsensitive !== false} onChange={(e) => onUpdate({ caseInsensitive: e.target.checked })} data-testid="page-case-insensitive-toggle" />
                       <span className="toggle-switch"></span>
-                      <span>Case-Insensitive</span>
+                      <span>Accept any capitalization</span>
                     </label>
-                    <p className="text-small">"PARIS" matches "paris", "Paris", etc.</p>
+                    <p className="text-small">Recommended ON. Players typing "paris", "PARIS", or "Paris" all work. Turn OFF only if letter case matters to the puzzle.</p>
                   </div>
                 </>
               )}
