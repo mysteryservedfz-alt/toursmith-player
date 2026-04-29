@@ -9,7 +9,7 @@ const UnlockGate = ({
   photoFile, setPhotoFile, rankingItems, handleRankingDragEnd,
   timerSeconds, checkedItems, setCheckedItems,
   shakeDetected, setShakeDetected,
-  handleUnlock, goPrev, setShowHintPage,
+  handleUnlock, handleSkip, goPrev, setShowHintPage,
   getBackgroundStyle, renderContent, Icons
 }) => {
   const hasPageContent = currentPage?.content || currentPage?.description || currentPage?.subtitle || currentPage?.taskInstructions;
@@ -222,6 +222,17 @@ const UnlockGate = ({
                 </button>
               )}
             </div>
+
+            {tour?.allowSkip !== false && handleSkip && (
+              <button
+                onClick={handleSkip}
+                className="btn-skip-puzzle"
+                data-testid="skip-puzzle-btn"
+                type="button"
+              >
+                Stuck? Skip this puzzle →
+              </button>
+            )}
           </div>
         </div>
       </main>

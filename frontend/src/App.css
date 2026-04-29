@@ -2759,6 +2759,24 @@
   color: #1a1a1a;
 }
 
+.btn-skip-puzzle {
+  margin-top: 1.25rem;
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 0.8125rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  align-self: center;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s;
+}
+
+.btn-skip-puzzle:hover {
+  color: #4b5563;
+}
+
 /* Hint Page */
 .hint-page-layout {
   /* Background controlled by inline style */

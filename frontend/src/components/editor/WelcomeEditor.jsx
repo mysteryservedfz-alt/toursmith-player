@@ -159,6 +159,20 @@ const WelcomeEditor = ({ tour, onUpdate }) => {
           )}
         </div>
 
+        <div className="form-group">
+          <label className="toggle-label">
+            <input
+              type="checkbox"
+              checked={tour.allowSkip !== false}
+              onChange={(e) => onUpdate("allowSkip", e.target.checked)}
+              data-testid="tour-allow-skip-toggle"
+            />
+            <span className="toggle-switch"></span>
+            <span>Show "Stuck? Skip this puzzle" button</span>
+          </label>
+          <p className="text-small helper-text">Recommended ON. Players who get stuck (or find a puzzle broken) can skip ahead instead of quitting. Turn off only for competitive / pitch runs.</p>
+        </div>
+
         <div className="divider" />
         <h2>Welcome Screen</h2>
         <p className="text-small helper-text">Shown before the tour starts. Leave empty to skip.</p>

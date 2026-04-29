@@ -136,6 +136,7 @@ class Tour(BaseModel):
     backgroundColor: str = "#ffffff"  # Default white background
     skinImageUrl: Optional[str] = None  # Tour-level default skin (background image)
     logoUrl: Optional[str] = None  # Tour logo for booklet/branding
+    allowSkip: bool = True  # Player can skip puzzles if stuck (safety valve)
     # Welcome screen fields
     welcomeTitle: Optional[str] = None
     welcomeBody: Optional[str] = None
@@ -168,6 +169,7 @@ class TourUpdate(BaseModel):
     backgroundColor: Optional[str] = None
     skinImageUrl: Optional[str] = None  # Tour-level default skin
     logoUrl: Optional[str] = None
+    allowSkip: Optional[bool] = None
     welcomeTitle: Optional[str] = None
     welcomeBody: Optional[str] = None
     welcomeImageUrl: Optional[str] = None

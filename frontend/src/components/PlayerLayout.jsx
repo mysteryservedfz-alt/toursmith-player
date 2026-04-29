@@ -457,6 +457,25 @@ const PlayerLayout = ({ Icons }) => {
     }
   };
 
+  const handleSkip = () => {
+    if (!unlockData) return;
+    const ok = window.confirm(
+      "Skip this puzzle and move on?\n\nThis unlocks the next page without solving. Use this if you're stuck or the place has changed."
+    );
+    if (!ok) return;
+    setUnlockError("");
+    setUnlockSuccess("Skipping ahead…");
+    setTimeout(() => {
+      setUnlockedPages(prev => new Set([...prev, pageKey]));
+      setShowUnlock(false);
+      setUnlockInput("");
+      setUnlockSuccess("");
+      setSelectedMcOption(null);
+      setPhotoFile(null);
+      goNext();
+    }, 600);
+  };
+
   const goNext = () => {
     if (currentPageIndex >= sortedPages.length - 1 && currentStopIndex < sortedStops.length - 1) {
       setIsTransitioning(true);
@@ -580,6 +599,7 @@ const PlayerLayout = ({ Icons }) => {
         shakeDetected={shakeDetected}
         setShakeDetected={setShakeDetected}
         handleUnlock={handleUnlock}
+        handleSkip={handleSkip}
         goPrev={goPrev}
         setShowHintPage={setShowHintPage}
         getBackgroundStyle={getBackgroundStyle}
