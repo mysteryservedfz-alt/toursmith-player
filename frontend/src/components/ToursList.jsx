@@ -54,6 +54,45 @@ const ToursList = () => {
     }
   };
 
+  const exportTour = async (id, e) => {
+    e.stopPropagation();
+    try {
+      const res = await api.get(`/tours/${id}/export`);
+      const blob = new Blob([JSON.stringify(res.data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const safeTitle = (res.data.title || 'tour').replace(/[^a-z0-9]+/gi, '_').toLowerCase();
+      a.download = `${safeTitle}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(err);
+      alert('Export failed');
+    }
+  };
+
+  const importInputRef = React.useRef(null);
+
+  const handleImportFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const json = JSON.parse(text);
+      const res = await api.post('/tours/import', json);
+      e.target.value = '';
+      fetchTours();
+      navigate(`/admin/tour/${res.data.id}`);
+    } catch (err) {
+      console.error(err);
+      alert('Import failed: ' + (err.response?.data?.detail || err.message));
+      e.target.value = '';
+    }
+  };
+
   const [copiedTourId, setCopiedTourId] = useState(null);
   
   const copyPlayerLink = async (tourId, e) => {
@@ -117,6 +156,22 @@ const ToursList = () => {
             <button onClick={createTour} className="btn btn-primary" data-testid="new-tour-btn">
               <Icons.Plus /> New Tour
             </button>
+            <button
+              onClick={() => importInputRef.current?.click()}
+              className="btn btn-secondary"
+              title="Import a tour from a JSON file (move tours between preview and live)"
+              data-testid="import-tour-btn"
+            >
+              Import JSON
+            </button>
+            <input
+              ref={importInputRef}
+              type="file"
+              accept="application/json,.json"
+              onChange={handleImportFile}
+              style={{ display: 'none' }}
+              data-testid="import-tour-input"
+            />
           </div>
         </div>
 
@@ -150,6 +205,9 @@ const ToursList = () => {
                       </button>
                     </div>
                     <div className="card-actions" onClick={(e) => e.stopPropagation()}>
+                      <button onClick={(e) => exportTour(tour.id, e)} className="btn-icon" title="Export JSON" data-testid={`export-tour-${tour.id}`}>
+                        <Icons.Download />
+                      </button>
                       <button onClick={() => duplicateTour(tour.id)} className="btn-icon" title="Duplicate">
                         <Icons.Copy />
                       </button>
@@ -208,6 +266,9 @@ const ToursList = () => {
                     </button>
                     <button onClick={() => navigate(`/admin/tour/${tour.id}`)} className="btn btn-secondary btn-sm">
                       Edit
+                    </button>
+                    <button onClick={(e) => exportTour(tour.id, e)} className="btn-icon" title="Export JSON">
+                      <Icons.Download />
                     </button>
                     <button onClick={() => duplicateTour(tour.id)} className="btn-icon" title="Duplicate">
                       <Icons.Copy />

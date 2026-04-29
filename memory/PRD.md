@@ -21,6 +21,7 @@ Build an interactive tour player and admin dashboard for "Mystery Served" walkin
 - GPS map editor for stops
 - Drag-and-drop page reordering
 - **Print Booklet** — generate professional B&W printable booklets from any tour
+- **Export / Import JSON** — download a tour as JSON; upload to any environment to recreate (preview ↔ deployed sync)
 
 ### Print Booklet Feature
 - Accessed via "Print" button in tour editor header (opens in new tab)

@@ -361,6 +361,75 @@ async def delete_tour(tour_id: str, username: str = Depends(verify_token)):
         raise HTTPException(status_code=404, detail="Tour not found")
     return {"success": True}
 
+@api_router.get("/tours/{tour_id}/export", response_model=Tour)
+async def export_tour(tour_id: str, username: str = Depends(verify_token)):
+    """Export a tour as JSON (for cross-environment transfer)"""
+    tour = await db.tours.find_one({"id": tour_id}, {"_id": 0})
+    if not tour:
+        raise HTTPException(status_code=404, detail="Tour not found")
+    return tour
+
+class TourImport(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    status: Optional[str] = "draft"
+    backgroundColor: Optional[str] = None
+    skinImageUrl: Optional[str] = None
+    logoUrl: Optional[str] = None
+    welcomeTitle: Optional[str] = None
+    welcomeBody: Optional[str] = None
+    welcomeImageUrl: Optional[str] = None
+    welcomeAudioUrl: Optional[str] = None
+    welcomeButtonLabel: Optional[str] = None
+    welcomeGpsEnabled: Optional[bool] = False
+    welcomeGpsLat: Optional[float] = None
+    welcomeGpsLng: Optional[float] = None
+    welcomeGpsRadiusMeters: Optional[int] = 100
+    completionTitle: Optional[str] = None
+    completionBody: Optional[str] = None
+    completionImageUrl: Optional[str] = None
+    completionButtonLabel: Optional[str] = None
+    completionButtonUrl: Optional[str] = None
+    stops: Optional[List[Stop]] = []
+
+@api_router.post("/tours/import", response_model=Tour)
+async def import_tour(data: TourImport, username: str = Depends(verify_token)):
+    """Import a tour from JSON (for cross-environment transfer). Always creates a new tour with fresh IDs."""
+    payload = data.model_dump()
+    # Build a fresh Tour to ensure new ID + timestamps
+    new_tour = Tour(
+        title=payload.get("title") or "Imported Tour",
+        description=payload.get("description") or "",
+    )
+    # Apply optional fields
+    for k in [
+        "status", "backgroundColor", "skinImageUrl", "logoUrl",
+        "welcomeTitle", "welcomeBody", "welcomeImageUrl", "welcomeAudioUrl",
+        "welcomeButtonLabel", "welcomeGpsEnabled", "welcomeGpsLat",
+        "welcomeGpsLng", "welcomeGpsRadiusMeters",
+        "completionTitle", "completionBody", "completionImageUrl",
+        "completionButtonLabel", "completionButtonUrl",
+    ]:
+        v = payload.get(k)
+        if v is not None:
+            setattr(new_tour, k, v)
+    # Reassign fresh IDs to stops + pages so importing twice doesn't collide
+    rebuilt_stops: List[Stop] = []
+    for s in (payload.get("stops") or []):
+        s_dict = s if isinstance(s, dict) else s.model_dump()
+        s_dict["id"] = str(uuid.uuid4())
+        new_pages = []
+        for p in s_dict.get("pages") or []:
+            p_dict = p if isinstance(p, dict) else p.model_dump()
+            p_dict["id"] = str(uuid.uuid4())
+            new_pages.append(Page(**p_dict))
+        s_dict["pages"] = [pg.model_dump() for pg in new_pages]
+        rebuilt_stops.append(Stop(**s_dict))
+    new_tour.stops = rebuilt_stops
+
+    await db.tours.insert_one(new_tour.model_dump())
+    return new_tour
+
 @api_router.post("/tours/{tour_id}/duplicate", response_model=Tour)
 async def duplicate_tour(tour_id: str, username: str = Depends(verify_token)):
     """Duplicate a tour"""
