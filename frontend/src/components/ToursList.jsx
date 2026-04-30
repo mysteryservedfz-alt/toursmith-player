@@ -201,7 +201,7 @@ const ToursList = () => {
                         data-testid={`copy-link-${tour.id}`}
                       >
                         {copiedTourId === tour.id ? <Icons.Check /> : <Icons.Link />}
-                        <span>{copiedTourId === tour.id ? 'Copied!' : 'Copy Link'}</span>
+                        <span style={{whiteSpace: 'nowrap'}}>{copiedTourId === tour.id ? 'Copied!' : 'Copy\u00A0Link'}</span>
                       </button>
                     </div>
                     <div className="card-actions" onClick={(e) => e.stopPropagation()}>
