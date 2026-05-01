@@ -103,9 +103,14 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDu
 
   return (
     <div className="content-editor" data-testid="page-editor">
-      <button onClick={onBack} className="btn btn-back-to-stop" data-testid="back-to-stop-btn">
-        <Icons.ChevronLeft /> Back to Stop
-      </button>
+      <div className="editor-top-actions">
+        <button onClick={onBack} className="btn btn-back-to-stop" data-testid="back-to-stop-btn">
+          <Icons.ChevronLeft /> Back to Stop
+        </button>
+        <button onClick={handleDelete} className="btn-delete-inline" data-testid="delete-page-inline-btn" title="Delete this page">
+          <Icons.Trash /> Delete Page
+        </button>
+      </div>
 
       <div className="editor-content-header">
         <h2>Edit Page</h2>
