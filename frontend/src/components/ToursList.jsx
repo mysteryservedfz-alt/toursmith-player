@@ -93,6 +93,41 @@ const ToursList = () => {
     }
   };
 
+  // ---- Merge state ----
+  const [showMerge, setShowMerge] = useState(false);
+  const [mergeA, setMergeA] = useState('');
+  const [mergeB, setMergeB] = useState('');
+  const [merging, setMerging] = useState(false);
+
+  const openMerge = () => {
+    setMergeA('');
+    setMergeB('');
+    setShowMerge(true);
+  };
+
+  const doMerge = async () => {
+    if (!mergeA || !mergeB) {
+      alert('Pick two tours to merge.');
+      return;
+    }
+    if (mergeA === mergeB) {
+      alert('Pick two different tours.');
+      return;
+    }
+    setMerging(true);
+    try {
+      const res = await api.post('/tours/merge', { tour_a_id: mergeA, tour_b_id: mergeB });
+      setShowMerge(false);
+      fetchTours();
+      navigate(`/admin/tour/${res.data.id}`);
+    } catch (err) {
+      console.error(err);
+      alert('Merge failed: ' + (err.response?.data?.detail || err.message));
+    } finally {
+      setMerging(false);
+    }
+  };
+
   const [copiedTourId, setCopiedTourId] = useState(null);
   
   const copyPlayerLink = async (tourId, e) => {
@@ -163,6 +198,15 @@ const ToursList = () => {
               data-testid="import-tour-btn"
             >
               Import JSON
+            </button>
+            <button
+              onClick={openMerge}
+              className="btn btn-secondary"
+              title="Combine two tours into a new merged tour"
+              data-testid="merge-tours-btn"
+              disabled={tours.length < 2}
+            >
+              Merge Tours
             </button>
             <input
               ref={importInputRef}
@@ -283,6 +327,67 @@ const ToursList = () => {
           </div>
         )}
       </main>
+
+      {showMerge && (
+        <div className="merge-modal-backdrop" onClick={() => setShowMerge(false)} data-testid="merge-modal-backdrop">
+          <div className="merge-modal" onClick={(e) => e.stopPropagation()} data-testid="merge-modal">
+            <h2>Merge Tours</h2>
+            <p className="text-small" style={{marginBottom: '1rem', color: '#6b7280'}}>
+              Pick two tours to combine into a brand-new merged tour. Originals stay untouched.
+              Stops with the same name get their pages combined; pages from Tour B get "(v2)" added so you can spot duplicates.
+            </p>
+
+            <div className="form-group">
+              <label className="form-label">Tour A (base — welcome screen, settings come from this one)</label>
+              <select
+                className="input"
+                value={mergeA}
+                onChange={(e) => setMergeA(e.target.value)}
+                data-testid="merge-tour-a-select"
+              >
+                <option value="">— Pick a tour —</option>
+                {tours.map((t) => (
+                  <option key={t.id} value={t.id}>{t.title || 'Untitled'} ({t.stopCount || 0} stops)</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Tour B (gets merged into Tour A)</label>
+              <select
+                className="input"
+                value={mergeB}
+                onChange={(e) => setMergeB(e.target.value)}
+                data-testid="merge-tour-b-select"
+              >
+                <option value="">— Pick a tour —</option>
+                {tours.filter(t => t.id !== mergeA).map((t) => (
+                  <option key={t.id} value={t.id}>{t.title || 'Untitled'} ({t.stopCount || 0} stops)</option>
+                ))}
+              </select>
+            </div>
+
+            <div style={{display: 'flex', gap: '0.75rem', justifyContent: 'flex-end', marginTop: '1.5rem'}}>
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowMerge(false)}
+                disabled={merging}
+                data-testid="merge-cancel-btn"
+              >
+                Cancel
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={doMerge}
+                disabled={!mergeA || !mergeB || merging}
+                data-testid="merge-confirm-btn"
+              >
+                {merging ? 'Merging…' : 'Merge into New Tour'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

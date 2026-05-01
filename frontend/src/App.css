@@ -2783,6 +2783,45 @@
   color: #4b5563;
 }
 
+/* Merge Modal */
+.merge-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.merge-modal {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 520px;
+  width: 100%;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+.merge-modal h2 {
+  margin: 0 0 0.5rem 0;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.25rem;
+}
+
+.merge-modal .form-group {
+  margin-bottom: 1rem;
+}
+
+.merge-modal .form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.375rem;
+  color: #374151;
+}
+
 /* Hint Page */
 .hint-page-layout {
   /* Background controlled by inline style */

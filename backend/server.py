@@ -371,6 +371,86 @@ async def export_tour(tour_id: str, username: str = Depends(verify_token)):
         raise HTTPException(status_code=404, detail="Tour not found")
     return tour
 
+class MergeRequest(BaseModel):
+    tour_a_id: str
+    tour_b_id: str
+
+@api_router.post("/tours/merge", response_model=Tour)
+async def merge_tours(data: MergeRequest, username: str = Depends(verify_token)):
+    """
+    Merge Tour B into a new copy of Tour A. Originals are kept intact.
+    - Stops with matching titles: pages combined; B's page titles get ' (v2)' suffix.
+    - New stops from B: appended at the end.
+    """
+    a = await db.tours.find_one({"id": data.tour_a_id}, {"_id": 0})
+    b = await db.tours.find_one({"id": data.tour_b_id}, {"_id": 0})
+    if not a or not b:
+        raise HTTPException(status_code=404, detail="One or both tours not found")
+
+    # Start with a deep clone of A's content into a brand new tour (fresh IDs)
+    merged = Tour(
+        title=f"{a.get('title', 'Tour A')} + {b.get('title', 'Tour B')} (Merged)",
+        description=a.get("description", ""),
+        status="draft",
+    )
+    # Copy A's tour-level fields
+    for k in [
+        "backgroundColor", "skinImageUrl", "logoUrl",
+        "welcomeTitle", "welcomeBody", "welcomeImageUrl", "welcomeAudioUrl",
+        "welcomeButtonLabel", "welcomeGpsEnabled", "welcomeGpsLat",
+        "welcomeGpsLng", "welcomeGpsRadiusMeters",
+        "completionTitle", "completionBody", "completionImageUrl",
+        "completionButtonLabel", "completionButtonUrl",
+    ]:
+        v = a.get(k)
+        if v is not None:
+            setattr(merged, k, v)
+
+    # Helper: build a fresh Stop/Page from dict, assigning new IDs
+    def new_page_from(p_dict, title_suffix=""):
+        d = dict(p_dict)
+        d["id"] = str(uuid.uuid4())
+        if title_suffix:
+            d["title"] = f"{d.get('title') or 'Page'}{title_suffix}"
+        return Page(**d)
+
+    def new_stop_from(s_dict):
+        d = dict(s_dict)
+        d["id"] = str(uuid.uuid4())
+        d["pages"] = [new_page_from(p).model_dump() for p in (d.get("pages") or [])]
+        return Stop(**d)
+
+    # Seed merged.stops with A's stops (fresh IDs)
+    merged_stops: List[Stop] = [new_stop_from(s) for s in (a.get("stops") or [])]
+
+    # Index by title for matching
+    def norm(t): return (t or "").strip().lower()
+    title_index = {norm(s.title): s for s in merged_stops}
+
+    # Now process B's stops
+    for b_stop in (b.get("stops") or []):
+        key = norm(b_stop.get("title"))
+        if key and key in title_index:
+            # Same-named stop -> append B's pages (with ' (v2)' suffix) onto A's existing stop
+            target = title_index[key]
+            existing_count = len(target.pages)
+            for p in (b_stop.get("pages") or []):
+                np = new_page_from(p, title_suffix=" (v2)")
+                np.order = existing_count
+                existing_count += 1
+                target.pages.append(np)
+        else:
+            # Different stop -> append as a brand new stop
+            merged_stops.append(new_stop_from(b_stop))
+
+    # Renumber stop order
+    for i, s in enumerate(merged_stops):
+        s.order = i
+    merged.stops = merged_stops
+
+    await db.tours.insert_one(merged.model_dump())
+    return merged
+
 class TourImport(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
