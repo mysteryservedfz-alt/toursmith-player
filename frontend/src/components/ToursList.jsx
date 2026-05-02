@@ -7,9 +7,25 @@ const ToursList = () => {
   const [tours, setTours] = useState([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
+  const [guestLinksByTour, setGuestLinksByTour] = useState({}); // { tourId: [links] }
+  const [expandedLinks, setExpandedLinks] = useState(new Set()); // tour IDs expanded
   const { token, logout, username } = useAuth();
   const navigate = useNavigate();
   const api = authAxios(token);
+
+  const fetchGuestLinks = useCallback(async () => {
+    try {
+      const res = await api.get("/guest-links");
+      const grouped = {};
+      res.data.forEach(link => {
+        if (!grouped[link.tourId]) grouped[link.tourId] = [];
+        grouped[link.tourId].push(link);
+      });
+      setGuestLinksByTour(grouped);
+    } catch (err) {
+      console.error(err);
+    }
+  }, [token]);
 
   useEffect(() => { document.title = "Dashboard"; }, []);
 
@@ -24,7 +40,7 @@ const ToursList = () => {
     }
   }, [api, logout]);
 
-  useEffect(() => { fetchTours(); }, []);
+  useEffect(() => { fetchTours(); fetchGuestLinks(); }, []);
 
   const createTour = async () => {
     try {
@@ -126,6 +142,95 @@ const ToursList = () => {
     } finally {
       setMerging(false);
     }
+  };
+
+  // ---- Guest Link modal state ----
+  const [showGuestModal, setShowGuestModal] = useState(false);
+  const [guestModalTour, setGuestModalTour] = useState(null);
+  const [guestLabel, setGuestLabel] = useState('');
+  const [guestDuration, setGuestDuration] = useState(48);
+  const [creatingLink, setCreatingLink] = useState(false);
+  const [recentLinkCopied, setRecentLinkCopied] = useState(null);
+
+  const openGuestModal = (tour, e) => {
+    e.stopPropagation();
+    setGuestModalTour(tour);
+    setGuestLabel('');
+    setGuestDuration(48);
+    setShowGuestModal(true);
+  };
+
+  const createGuestLink = async () => {
+    if (!guestLabel.trim()) {
+      alert('Give this group a name (e.g., "Smith Bachelorette")');
+      return;
+    }
+    setCreatingLink(true);
+    try {
+      const res = await api.post(`/tours/${guestModalTour.id}/guest-links`, {
+        guestLabel: guestLabel.trim(),
+        durationHours: parseInt(guestDuration) || 48,
+      });
+      const shareUrl = `${window.location.origin}/g/${res.data.shortCode}`;
+      try { await navigator.clipboard.writeText(shareUrl); } catch (e) {}
+      setRecentLinkCopied(shareUrl);
+      setGuestLabel('');
+      fetchGuestLinks();
+      setExpandedLinks(prev => new Set([...prev, guestModalTour.id]));
+    } catch (err) {
+      console.error(err);
+      alert('Could not create link: ' + (err.response?.data?.detail || err.message));
+    } finally {
+      setCreatingLink(false);
+    }
+  };
+
+  const purgeGuestLink = async (linkId, label) => {
+    if (!window.confirm(`Disable "${label}" link now?\n\nGuests with this link will see an expired message. The record stays on your dashboard for history.`)) return;
+    try {
+      await api.post(`/guest-links/${linkId}/purge`);
+      fetchGuestLinks();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const deleteGuestLink = async (linkId, label) => {
+    if (!window.confirm(`Permanently remove "${label}" from your dashboard?\n\nThis deletes the record entirely.`)) return;
+    try {
+      await api.delete(`/guest-links/${linkId}`);
+      fetchGuestLinks();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const copyGuestUrl = async (shortCode) => {
+    const url = `${window.location.origin}/g/${shortCode}`;
+    try { await navigator.clipboard.writeText(url); } catch (e) {}
+    setRecentLinkCopied(url);
+    setTimeout(() => setRecentLinkCopied(null), 2000);
+  };
+
+  const toggleExpandLinks = (tourId, e) => {
+    e.stopPropagation();
+    setExpandedLinks(prev => {
+      const next = new Set(prev);
+      if (next.has(tourId)) next.delete(tourId);
+      else next.add(tourId);
+      return next;
+    });
+  };
+
+  const getLinkStatus = (link) => {
+    if (link.purgedAt) return { label: 'DISABLED', className: 'badge-expired' };
+    if (new Date(link.expiresAt) < new Date()) return { label: 'EXPIRED', className: 'badge-expired' };
+    // Active — compute hours remaining
+    const ms = new Date(link.expiresAt) - new Date();
+    const hrs = Math.ceil(ms / 3_600_000);
+    if (hrs < 24) return { label: `${hrs}h left`, className: 'badge-soon' };
+    const days = Math.ceil(hrs / 24);
+    return { label: `${days}d left`, className: 'badge-active' };
   };
 
   const [copiedTourId, setCopiedTourId] = useState(null);
@@ -280,6 +385,77 @@ const ToursList = () => {
                       <span className="feature-tag">Media</span>
                     )}
                   </div>
+
+                  {/* Guest Link section */}
+                  <div className="guest-link-section" onClick={(e) => e.stopPropagation()}>
+                    <div className="guest-link-row">
+                      <button
+                        className="btn-guest-link-add"
+                        onClick={(e) => openGuestModal(tour, e)}
+                        data-testid={`new-guest-link-${tour.id}`}
+                      >
+                        + New Guest Link
+                      </button>
+                      {(guestLinksByTour[tour.id]?.length > 0) && (
+                        <button
+                          className="btn-guest-link-toggle"
+                          onClick={(e) => toggleExpandLinks(tour.id, e)}
+                          data-testid={`toggle-guest-links-${tour.id}`}
+                        >
+                          {expandedLinks.has(tour.id) ? '▾' : '▸'} {guestLinksByTour[tour.id].length} guest link{guestLinksByTour[tour.id].length === 1 ? '' : 's'}
+                        </button>
+                      )}
+                    </div>
+                    {expandedLinks.has(tour.id) && guestLinksByTour[tour.id]?.map((link) => {
+                      const status = getLinkStatus(link);
+                      const isActive = !link.purgedAt && new Date(link.expiresAt) >= new Date();
+                      return (
+                        <div key={link.id} className="guest-link-item" data-testid={`guest-link-${link.id}`}>
+                          <div className="guest-link-info">
+                            <div className="guest-link-label">{link.guestLabel}</div>
+                            <div className="guest-link-meta">
+                              <span className={`guest-link-badge ${status.className}`}>{status.label}</span>
+                              <span className="guest-link-date">
+                                {new Date(link.createdAt).toLocaleDateString()}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="guest-link-actions">
+                            {isActive && (
+                              <button
+                                className="btn-icon"
+                                title="Copy link"
+                                onClick={() => copyGuestUrl(link.shortCode)}
+                                data-testid={`copy-guest-${link.id}`}
+                              >
+                                <Icons.Link />
+                              </button>
+                            )}
+                            {isActive && (
+                              <button
+                                className="btn-icon danger"
+                                title="Disable link now"
+                                onClick={() => purgeGuestLink(link.id, link.guestLabel)}
+                                data-testid={`purge-guest-${link.id}`}
+                              >
+                                ×
+                              </button>
+                            )}
+                            {!isActive && (
+                              <button
+                                className="btn-icon"
+                                title="Remove from history"
+                                onClick={() => deleteGuestLink(link.id, link.guestLabel)}
+                                data-testid={`delete-guest-${link.id}`}
+                              >
+                                <Icons.Trash />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               );
             })}
@@ -383,6 +559,73 @@ const ToursList = () => {
                 data-testid="merge-confirm-btn"
               >
                 {merging ? 'Merging…' : 'Merge into New Tour'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showGuestModal && guestModalTour && (
+        <div className="merge-modal-backdrop" onClick={() => setShowGuestModal(false)} data-testid="guest-modal-backdrop">
+          <div className="merge-modal" onClick={(e) => e.stopPropagation()} data-testid="guest-modal">
+            <h2>New Guest Link</h2>
+            <p className="text-small" style={{marginBottom: '1rem', color: '#6b7280'}}>
+              For: <strong>{guestModalTour.title}</strong>
+              <br />
+              Creates a private share link that works for a limited time. After expiry, the link stops working and the record stays on your dashboard.
+            </p>
+
+            <div className="form-group">
+              <label className="form-label">Guest label (private — just for your dashboard)</label>
+              <input
+                className="input"
+                type="text"
+                placeholder="e.g., Smith Bachelorette"
+                value={guestLabel}
+                onChange={(e) => setGuestLabel(e.target.value)}
+                autoFocus
+                data-testid="guest-label-input"
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Link lifetime</label>
+              <select
+                className="input"
+                value={guestDuration}
+                onChange={(e) => setGuestDuration(parseInt(e.target.value))}
+                data-testid="guest-duration-select"
+              >
+                <option value={24}>24 hours</option>
+                <option value={48}>48 hours (recommended)</option>
+                <option value={72}>72 hours (3 days)</option>
+                <option value={168}>1 week</option>
+              </select>
+            </div>
+
+            {recentLinkCopied && (
+              <div style={{background: '#ecfdf5', color: '#065f46', padding: '0.75rem', borderRadius: '8px', marginTop: '0.5rem', fontSize: '0.875rem', wordBreak: 'break-all'}} data-testid="guest-link-result">
+                ✓ Link copied to clipboard:<br />
+                <code>{recentLinkCopied}</code>
+              </div>
+            )}
+
+            <div style={{display: 'flex', gap: '0.75rem', justifyContent: 'flex-end', marginTop: '1.5rem'}}>
+              <button
+                className="btn btn-secondary"
+                onClick={() => { setShowGuestModal(false); setRecentLinkCopied(null); }}
+                disabled={creatingLink}
+                data-testid="guest-close-btn"
+              >
+                {recentLinkCopied ? 'Done' : 'Cancel'}
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={createGuestLink}
+                disabled={!guestLabel.trim() || creatingLink}
+                data-testid="guest-create-btn"
+              >
+                {creatingLink ? 'Creating…' : 'Create & Copy Link'}
               </button>
             </div>
           </div>

@@ -2855,6 +2855,108 @@
   color: #374151;
 }
 
+/* Guest Link section on tour card */
+.guest-link-section {
+  margin-top: 0.625rem;
+  padding-top: 0.625rem;
+  border-top: 1px dashed #e5e7eb;
+}
+
+.guest-link-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-guest-link-add {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-guest-link-add:hover {
+  background: #1a1a1a;
+  color: #fff;
+  border-color: #1a1a1a;
+}
+
+.btn-guest-link-toggle {
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 0.75rem;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.btn-guest-link-toggle:hover {
+  color: #1a1a1a;
+}
+
+.guest-link-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 0.625rem;
+  margin-top: 0.375rem;
+  background: #fafafa;
+  border-radius: 6px;
+  font-size: 0.75rem;
+}
+
+.guest-link-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.guest-link-label {
+  font-weight: 600;
+  color: #1a1a1a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.guest-link-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.125rem;
+}
+
+.guest-link-badge {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  padding: 0.125rem 0.375rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.badge-active { background: #d1fae5; color: #065f46; }
+.badge-soon   { background: #fef3c7; color: #92400e; }
+.badge-expired { background: #e5e7eb; color: #6b7280; }
+
+.guest-link-date {
+  color: #9ca3af;
+  font-size: 0.6875rem;
+}
+
+.guest-link-actions {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
 /* Hint Page */
 .hint-page-layout {
   /* Background controlled by inline style */

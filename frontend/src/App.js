@@ -51,6 +51,7 @@ function App() {
           <Route path="/admin/tour/:tourId" element={<ProtectedRoute><TourEditor /></ProtectedRoute>} />
           <Route path="/admin/tour/:tourId/print" element={<ProtectedRoute><PrintBooklet /></ProtectedRoute>} />
           <Route path="/play/:tourId" element={<PlayerLayout Icons={Icons} />} />
+          <Route path="/g/:guestCode" element={<PlayerLayout Icons={Icons} guestMode />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

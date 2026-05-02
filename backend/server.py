@@ -375,6 +375,86 @@ class MergeRequest(BaseModel):
     tour_a_id: str
     tour_b_id: str
 
+# ---- Guest Links (Phase 1) ----
+class GuestLink(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    shortCode: str = Field(default_factory=lambda: uuid.uuid4().hex[:8])
+    tourId: str
+    tourTitle: str = ""  # denormalized for dashboard display
+    guestLabel: str = ""
+    createdAt: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    expiresAt: str = ""  # ISO datetime
+    purgedAt: Optional[str] = None  # set when manually killed
+
+class GuestLinkCreate(BaseModel):
+    guestLabel: str
+    durationHours: int = 48
+
+@api_router.post("/tours/{tour_id}/guest-links", response_model=GuestLink)
+async def create_guest_link(tour_id: str, data: GuestLinkCreate, username: str = Depends(verify_token)):
+    tour = await db.tours.find_one({"id": tour_id}, {"_id": 0})
+    if not tour:
+        raise HTTPException(status_code=404, detail="Tour not found")
+    hours = max(1, min(data.durationHours, 24 * 30))  # 1h to 30 days
+    expires = datetime.now(timezone.utc) + timedelta(hours=hours)
+    link = GuestLink(
+        tourId=tour_id,
+        tourTitle=tour.get("title", ""),
+        guestLabel=(data.guestLabel or "").strip() or "Unnamed Guest",
+        expiresAt=expires.isoformat(),
+    )
+    await db.guest_links.insert_one(link.model_dump())
+    return link
+
+@api_router.get("/tours/{tour_id}/guest-links", response_model=List[GuestLink])
+async def list_tour_guest_links(tour_id: str, username: str = Depends(verify_token)):
+    cursor = db.guest_links.find({"tourId": tour_id}, {"_id": 0}).sort("createdAt", -1)
+    return await cursor.to_list(length=500)
+
+@api_router.get("/guest-links", response_model=List[GuestLink])
+async def list_all_guest_links(username: str = Depends(verify_token)):
+    cursor = db.guest_links.find({}, {"_id": 0}).sort("createdAt", -1)
+    return await cursor.to_list(length=2000)
+
+@api_router.post("/guest-links/{link_id}/purge")
+async def purge_guest_link(link_id: str, username: str = Depends(verify_token)):
+    now = datetime.now(timezone.utc).isoformat()
+    result = await db.guest_links.update_one(
+        {"id": link_id}, {"$set": {"purgedAt": now}}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Guest link not found")
+    return {"success": True}
+
+@api_router.delete("/guest-links/{link_id}")
+async def delete_guest_link(link_id: str, username: str = Depends(verify_token)):
+    result = await db.guest_links.delete_one({"id": link_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Guest link not found")
+    return {"success": True}
+
+# Public endpoint guests use (no auth). Returns tour content if link is valid.
+@api_router.get("/public/guest-links/{short_code}")
+async def resolve_guest_link(short_code: str):
+    link = await db.guest_links.find_one({"shortCode": short_code}, {"_id": 0})
+    if not link:
+        raise HTTPException(status_code=404, detail="Link not found")
+    # Purged?
+    if link.get("purgedAt"):
+        raise HTTPException(status_code=410, detail="This tour link has been disabled.")
+    # Expired?
+    try:
+        expires = datetime.fromisoformat(link["expiresAt"])
+        if datetime.now(timezone.utc) > expires:
+            raise HTTPException(status_code=410, detail="This tour link has expired. Contact your host.")
+    except ValueError:
+        pass
+    tour = await db.tours.find_one({"id": link["tourId"]}, {"_id": 0})
+    if not tour or tour.get("status") != "published":
+        raise HTTPException(status_code=404, detail="Tour not available")
+    return tour
+
+
 @api_router.post("/tours/merge", response_model=Tour)
 async def merge_tours(data: MergeRequest, username: str = Depends(verify_token)):
     """

@@ -10,10 +10,13 @@ import UnlockGate from './UnlockGate';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-const PlayerLayout = ({ Icons }) => {
-  const { tourId } = useParams();
+const PlayerLayout = ({ Icons, guestMode = false }) => {
+  const params = useParams();
+  const guestCode = params.guestCode;
+  const paramTourId = params.tourId;
   const navigate = useNavigate();
   const [tour, setTour] = useState(null);
+  const [tourId, setTourId] = useState(paramTourId || null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showWelcome, setShowWelcome] = useState(true);
@@ -21,7 +24,7 @@ const PlayerLayout = ({ Icons }) => {
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [unlockedPages, setUnlockedPages] = useState(new Set());
 
-  const { saveProgress, loadProgress, clearProgress } = usePlayerProgress(tourId);
+  const { saveProgress, loadProgress, clearProgress } = usePlayerProgress(tourId || guestCode);
 
   // Auto-save on any navigation
   useEffect(() => {
@@ -144,7 +147,13 @@ const PlayerLayout = ({ Icons }) => {
   useEffect(() => {
     const fetchTour = async () => {
       try {
-        const res = await axios.get(`${API}/public/tours/${tourId}`);
+        let res;
+        if (guestMode && guestCode) {
+          res = await axios.get(`${API}/public/guest-links/${guestCode}`);
+          setTourId(res.data.id);
+        } else {
+          res = await axios.get(`${API}/public/tours/${tourId}`);
+        }
         setTour(res.data);
         document.title = res.data.title || "Tour Player";
         const saved = loadProgress();
@@ -158,13 +167,14 @@ const PlayerLayout = ({ Icons }) => {
           setShowWelcome(hasWelcome);
         }
       } catch (err) {
-        setError("Tour not found or not published");
+        const msg = err?.response?.data?.detail || "Tour not found or not published";
+        setError(msg);
       } finally {
         setLoading(false);
       }
     };
     fetchTour();
-  }, [tourId]);
+  }, [tourId, guestCode, guestMode]);
 
   const hasWelcomeScreen = tour?.welcomeTitle || tour?.welcomeBody;
 
