@@ -92,6 +92,48 @@ const ToursList = () => {
 
   const importInputRef = React.useRef(null);
 
+  const exportCRM = () => {
+    const allLinks = Object.values(guestLinksByTour).flat();
+    if (allLinks.length === 0) {
+      alert('No guest bookings yet to export.');
+      return;
+    }
+    const headers = ['Tour', 'Guest Label', 'Contact', 'Notes', 'Created', 'Expires', 'Status', 'Player Link'];
+    const escape = (v) => {
+      const s = (v ?? '').toString().replace(/"/g, '""');
+      return `"${s}"`;
+    };
+    const rows = allLinks
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .map((link) => {
+        const status = link.purgedAt
+          ? 'DISABLED'
+          : (new Date(link.expiresAt) < new Date() ? 'EXPIRED' : 'ACTIVE');
+        const playerUrl = `${window.location.origin}/g/${link.shortCode}`;
+        return [
+          link.tourTitle || '',
+          link.guestLabel || '',
+          link.contact || '',
+          link.notes || '',
+          link.createdAt ? new Date(link.createdAt).toLocaleString() : '',
+          link.expiresAt ? new Date(link.expiresAt).toLocaleString() : '',
+          status,
+          playerUrl,
+        ].map(escape).join(',');
+      });
+    const csv = [headers.map(escape).join(','), ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const today = new Date().toISOString().slice(0, 10);
+    a.download = `toursmith-bookings-${today}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   const handleImportFile = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -320,6 +362,14 @@ const ToursList = () => {
               disabled={tours.length < 2}
             >
               Merge Tours
+            </button>
+            <button
+              onClick={exportCRM}
+              className="btn btn-secondary"
+              title="Download all guest bookings as a CSV (opens in Google Sheets / Excel)"
+              data-testid="export-crm-btn"
+            >
+              Download CRM
             </button>
             <input
               ref={importInputRef}
