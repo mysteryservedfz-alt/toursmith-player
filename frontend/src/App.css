@@ -2835,6 +2835,8 @@
   max-width: 520px;
   width: 100%;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
 }
 
 .merge-modal h2 {
