@@ -2957,6 +2957,26 @@
   flex-shrink: 0;
 }
 
+.guest-link-contact {
+  display: inline-block;
+  font-size: 0.75rem;
+  color: #2563eb;
+  text-decoration: none;
+  margin-top: 0.25rem;
+  word-break: break-all;
+}
+
+.guest-link-contact:hover {
+  text-decoration: underline;
+}
+
+.guest-link-notes {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.125rem;
+  font-style: italic;
+}
+
 /* Hint Page */
 .hint-page-layout {
   /* Background controlled by inline style */

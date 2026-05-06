@@ -148,6 +148,8 @@ const ToursList = () => {
   const [showGuestModal, setShowGuestModal] = useState(false);
   const [guestModalTour, setGuestModalTour] = useState(null);
   const [guestLabel, setGuestLabel] = useState('');
+  const [guestContact, setGuestContact] = useState('');
+  const [guestNotes, setGuestNotes] = useState('');
   const [guestDuration, setGuestDuration] = useState(48);
   const [creatingLink, setCreatingLink] = useState(false);
   const [recentLinkCopied, setRecentLinkCopied] = useState(null);
@@ -156,6 +158,8 @@ const ToursList = () => {
     e.stopPropagation();
     setGuestModalTour(tour);
     setGuestLabel('');
+    setGuestContact('');
+    setGuestNotes('');
     setGuestDuration(48);
     setShowGuestModal(true);
   };
@@ -169,12 +173,16 @@ const ToursList = () => {
     try {
       const res = await api.post(`/tours/${guestModalTour.id}/guest-links`, {
         guestLabel: guestLabel.trim(),
+        contact: guestContact.trim(),
+        notes: guestNotes.trim(),
         durationHours: parseInt(guestDuration) || 48,
       });
       const shareUrl = `${window.location.origin}/g/${res.data.shortCode}`;
       try { await navigator.clipboard.writeText(shareUrl); } catch (e) {}
       setRecentLinkCopied(shareUrl);
       setGuestLabel('');
+      setGuestContact('');
+      setGuestNotes('');
       fetchGuestLinks();
       setExpandedLinks(prev => new Set([...prev, guestModalTour.id]));
     } catch (err) {
@@ -419,6 +427,26 @@ const ToursList = () => {
                                 {new Date(link.createdAt).toLocaleDateString()}
                               </span>
                             </div>
+                            {link.contact && (() => {
+                              const c = link.contact.trim();
+                              const isEmail = /@/.test(c);
+                              const isPhone = /^[\d\s+()\-.]+$/.test(c) && c.replace(/\D/g,'').length >= 7;
+                              const hrefLink = isEmail
+                                ? `mailto:${c}?subject=${encodeURIComponent(link.tourTitle)}&body=${encodeURIComponent(`Your tour link:\n${window.location.origin}/g/${link.shortCode}`)}`
+                                : isPhone
+                                  ? `sms:${c.replace(/[^\d+]/g,'')}?&body=${encodeURIComponent(`Your tour link: ${window.location.origin}/g/${link.shortCode}`)}`
+                                  : null;
+                              return hrefLink ? (
+                                <a href={hrefLink} className="guest-link-contact" data-testid={`contact-${link.id}`} onClick={(e) => e.stopPropagation()}>
+                                  {isEmail ? '📧' : '📱'} {c}
+                                </a>
+                              ) : (
+                                <div className="guest-link-contact">{c}</div>
+                              );
+                            })()}
+                            {link.notes && (
+                              <div className="guest-link-notes">📝 {link.notes}</div>
+                            )}
                           </div>
                           <div className="guest-link-actions">
                             {isActive && (
@@ -585,6 +613,30 @@ const ToursList = () => {
                 onChange={(e) => setGuestLabel(e.target.value)}
                 autoFocus
                 data-testid="guest-label-input"
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Contact (optional — phone or email)</label>
+              <input
+                className="input"
+                type="text"
+                placeholder="e.g., 727-555-1234 or smith@example.com"
+                value={guestContact}
+                onChange={(e) => setGuestContact(e.target.value)}
+                data-testid="guest-contact-input"
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Private notes (optional — allergies, occasion, etc.)</label>
+              <textarea
+                className="input"
+                rows={2}
+                placeholder="e.g., Anniversary dinner, vegan, allergic to shellfish"
+                value={guestNotes}
+                onChange={(e) => setGuestNotes(e.target.value)}
+                data-testid="guest-notes-input"
               />
             </div>
 

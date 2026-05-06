@@ -382,6 +382,8 @@ class GuestLink(BaseModel):
     tourId: str
     tourTitle: str = ""  # denormalized for dashboard display
     guestLabel: str = ""
+    contact: str = ""  # phone or email (private)
+    notes: str = ""    # private notes (allergies, anniversary, etc.)
     createdAt: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     expiresAt: str = ""  # ISO datetime
     purgedAt: Optional[str] = None  # set when manually killed
@@ -389,6 +391,13 @@ class GuestLink(BaseModel):
 class GuestLinkCreate(BaseModel):
     guestLabel: str
     durationHours: int = 48
+    contact: str = ""
+    notes: str = ""
+
+class GuestLinkUpdate(BaseModel):
+    guestLabel: Optional[str] = None
+    contact: Optional[str] = None
+    notes: Optional[str] = None
 
 @api_router.post("/tours/{tour_id}/guest-links", response_model=GuestLink)
 async def create_guest_link(tour_id: str, data: GuestLinkCreate, username: str = Depends(verify_token)):
@@ -401,9 +410,22 @@ async def create_guest_link(tour_id: str, data: GuestLinkCreate, username: str =
         tourId=tour_id,
         tourTitle=tour.get("title", ""),
         guestLabel=(data.guestLabel or "").strip() or "Unnamed Guest",
+        contact=(data.contact or "").strip(),
+        notes=(data.notes or "").strip(),
         expiresAt=expires.isoformat(),
     )
     await db.guest_links.insert_one(link.model_dump())
+    return link
+
+@api_router.patch("/guest-links/{link_id}", response_model=GuestLink)
+async def update_guest_link(link_id: str, data: GuestLinkUpdate, username: str = Depends(verify_token)):
+    update = {k: v for k, v in data.model_dump().items() if v is not None}
+    if not update:
+        raise HTTPException(status_code=400, detail="No fields to update")
+    result = await db.guest_links.update_one({"id": link_id}, {"$set": update})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Guest link not found")
+    link = await db.guest_links.find_one({"id": link_id}, {"_id": 0})
     return link
 
 @api_router.get("/tours/{tour_id}/guest-links", response_model=List[GuestLink])
