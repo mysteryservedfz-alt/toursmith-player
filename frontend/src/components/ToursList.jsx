@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icons from './Icons';
 import { useAuth, authAxios } from './authContext';
+import ImageLibrary from './ImageLibrary';
 
 const ToursList = () => {
   const [tours, setTours] = useState([]);
@@ -91,6 +92,7 @@ const ToursList = () => {
   };
 
   const importInputRef = React.useRef(null);
+  const [showLibrary, setShowLibrary] = useState(false);
 
   const exportCRM = () => {
     const allLinks = Object.values(guestLinksByTour).flat();
@@ -370,6 +372,14 @@ const ToursList = () => {
               data-testid="export-crm-btn"
             >
               Download CRM
+            </button>
+            <button
+              onClick={() => setShowLibrary(true)}
+              className="btn btn-secondary"
+              title="Upload and manage permanent image URLs for your tours"
+              data-testid="open-library-btn"
+            >
+              Image Library
             </button>
             <input
               ref={importInputRef}
@@ -733,6 +743,7 @@ const ToursList = () => {
           </div>
         </div>
       )}
+      {showLibrary && <ImageLibrary onClose={() => setShowLibrary(false)} />}
     </div>
   );
 };

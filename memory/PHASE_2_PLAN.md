@@ -55,6 +55,14 @@ On the tour editor page, add a "Stats" tab:
 - "92% completion rate, avg 1h 53min, 40% repeat-open rate"
 - Exportable as PDF or screenshot for marketing
 
+### G. Per-link iMessage / link preview (server-side meta tags)
+- Currently iMessage shows generic "Mystery Served" preview for all guest links (better than "Dashboard" but still not personalized)
+- To make it show the actual tour name ("Gulfport: The Celestial Mirror"), we need server-rendered Open Graph tags per `/g/<shortCode>` route
+- Backend: when a request to `/g/<code>` comes from a bot/scraper (Twitter, Facebook, iMessage, Slack), return small HTML with `og:title` = tour title; for real users keep returning React app
+- Detect via User-Agent header (`facebookexternalhit`, `Twitterbot`, `Slackbot`, etc.)
+- ~1-2 hours of careful backend work
+- Adds polish, no risk to existing player
+
 ---
 
 ## Build order (when Grace says go)

@@ -1,6 +1,6 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Depends, status
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, status, UploadFile, File
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, Response
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -475,6 +475,100 @@ async def resolve_guest_link(short_code: str):
     if not tour or tour.get("status") != "published":
         raise HTTPException(status_code=404, detail="Tour not available")
     return tour
+
+
+# ==================== IMAGE LIBRARY ====================
+# Images stored as binary in MongoDB. Public read (no auth). Auth required for upload/delete.
+
+ALLOWED_IMAGE_TYPES = {
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "image/gif": "gif",
+    "image/webp": "webp",
+    "image/svg+xml": "svg",
+}
+MAX_IMAGE_SIZE = 10 * 1024 * 1024  # 10 MB
+
+class LibraryImageMeta(BaseModel):
+    id: str
+    filename: str
+    contentType: str
+    size: int
+    uploadedAt: str
+    url: str  # public absolute URL is built client-side; here it's a relative path
+
+@api_router.post("/library/upload", response_model=LibraryImageMeta)
+async def library_upload(file: UploadFile = File(...), username: str = Depends(verify_token)):
+    content_type = file.content_type or ""
+    if content_type not in ALLOWED_IMAGE_TYPES:
+        raise HTTPException(status_code=400, detail=f"Unsupported image type: {content_type}. Use JPG, PNG, GIF, WebP, or SVG.")
+    data = await file.read()
+    if len(data) > MAX_IMAGE_SIZE:
+        raise HTTPException(status_code=413, detail="Image too large. Max 10 MB.")
+    if not data:
+        raise HTTPException(status_code=400, detail="Empty file")
+    image_id = uuid.uuid4().hex[:12]
+    ext = ALLOWED_IMAGE_TYPES[content_type]
+    safe_original = (file.filename or "image").rsplit("/", 1)[-1][:120]
+    doc = {
+        "id": image_id,
+        "ext": ext,
+        "filename": safe_original,
+        "contentType": content_type,
+        "size": len(data),
+        "data": data,
+        "uploadedAt": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.library_images.insert_one(doc)
+    return LibraryImageMeta(
+        id=image_id,
+        filename=safe_original,
+        contentType=content_type,
+        size=len(data),
+        uploadedAt=doc["uploadedAt"],
+        url=f"/api/library/images/{image_id}.{ext}",
+    )
+
+@api_router.get("/library/images", response_model=List[LibraryImageMeta])
+async def library_list(username: str = Depends(verify_token)):
+    cursor = db.library_images.find({}, {"_id": 0, "data": 0}).sort("uploadedAt", -1)
+    docs = await cursor.to_list(length=2000)
+    return [
+        LibraryImageMeta(
+            id=d["id"],
+            filename=d.get("filename", "image"),
+            contentType=d.get("contentType", "application/octet-stream"),
+            size=int(d.get("size", 0)),
+            uploadedAt=d.get("uploadedAt", ""),
+            url=f"/api/library/images/{d['id']}.{d.get('ext','bin')}",
+        )
+        for d in docs
+    ]
+
+@api_router.delete("/library/images/{image_id}")
+async def library_delete(image_id: str, username: str = Depends(verify_token)):
+    # accept either "abc123" or "abc123.jpg"
+    clean_id = image_id.split(".")[0]
+    result = await db.library_images.delete_one({"id": clean_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Image not found")
+    return {"success": True}
+
+# PUBLIC endpoint — serves the actual image bytes. No auth.
+@api_router.get("/library/images/{image_id_with_ext}")
+async def library_serve(image_id_with_ext: str):
+    clean_id = image_id_with_ext.split(".")[0]
+    doc = await db.library_images.find_one({"id": clean_id})
+    if not doc:
+        raise HTTPException(status_code=404, detail="Image not found")
+    return Response(
+        content=doc["data"],
+        media_type=doc.get("contentType", "application/octet-stream"),
+        headers={
+            "Cache-Control": "public, max-age=31536000, immutable",
+        },
+    )
+# ==================== END IMAGE LIBRARY ====================
 
 
 @api_router.post("/tours/merge", response_model=Tour)
