@@ -4,40 +4,86 @@ import { useAuth, authAxios } from './authContext';
 
 const genId = () => Math.random().toString(36).slice(2, 9);
 
+// Block types pulled live from tour data, mirroring the editor + player order.
+// We skip audio, video, embed entirely — print only includes story, puzzle, hint, verification, images.
+const buildBlocksForPage = (page) => {
+  const blocks = [];
+  // Story / body
+  if (page.content && page.content.trim()) {
+    blocks.push({ kind: 'story', text: page.content.trim() });
+  }
+  if (page.body2 && page.body2.trim()) {
+    blocks.push({ kind: 'story', text: page.body2.trim() });
+  }
+  // Inline image (print-safe). Skip mediaUrl/galleryUrls if mediaType is audio/video.
+  const isStaticImage = (url) => url && /\.(jpe?g|png|gif|webp|svg)(\?|#|$)/i.test(url);
+  const safeMediaUrl = isStaticImage(page.mediaUrl) ? page.mediaUrl : null;
+  if (page.imageUrl) blocks.push({ kind: 'image', url: page.imageUrl, alt: page.imageAlt || '' });
+  if (safeMediaUrl) blocks.push({ kind: 'image', url: safeMediaUrl, alt: page.imageAlt || '' });
+  // Puzzle / clue (the task)
+  if (page.taskInstructions && page.taskInstructions.trim()) {
+    blocks.push({ kind: 'puzzle', text: page.taskInstructions.trim() });
+  }
+  // Hint
+  if (page.hintText && page.hintText.trim()) {
+    blocks.push({ kind: 'hint', text: page.hintText.trim() });
+  }
+  // Verification / before-you-leave label (just the answer prompt context)
+  if (page.unlockMode && page.unlockMode !== 'continue' && page.unlockMode !== 'photo' && page.unlockMode !== 'shake' && page.unlockMode !== 'timer') {
+    if (page.unlockMode === 'multiple_choice' && page.mcOptions && page.mcOptions.length) {
+      blocks.push({ kind: 'verification', text: 'Choose one:\n' + page.mcOptions.map((o, i) => `   ${String.fromCharCode(65 + i)}. ${o}`).join('\n') });
+    } else if (page.unlockMode === 'checklist' && page.mcOptions && page.mcOptions.length) {
+      blocks.push({ kind: 'verification', text: 'Check each as you go:\n' + page.mcOptions.map((o) => `   ☐ ${o}`).join('\n') });
+    } else if (page.unlockMode === 'ranking' && page.mcOptions && page.mcOptions.length) {
+      blocks.push({ kind: 'verification', text: 'Put these in the right order:\n' + page.mcOptions.map((o) => `   ___  ${o}`).join('\n') });
+    } else if (page.unlockMode === 'whiteboard') {
+      blocks.push({ kind: 'verification', text: 'Write your answer below:' });
+    } else if (page.unlockMode === 'text') {
+      blocks.push({ kind: 'verification', text: 'Enter the password on the phone to continue.' });
+    }
+  }
+  return blocks;
+};
+
 const buildCardsFromTour = (tour) => {
   const cards = [];
-  const stops = [...(tour.stops || [])].sort((a, b) => a.order - b.order);
+  const stops = [...(tour.stops || [])].sort((a, b) => (a.order || 0) - (b.order || 0));
 
-  // Cover card
+  // Cover
   cards.push({
     id: genId(),
     type: 'cover',
     title: tour.welcomeTitle || tour.title || '',
     body: tour.welcomeBody || tour.description || '',
+    logoUrl: tour.logoUrl || null,
+    welcomeImageUrl: tour.welcomeImageUrl || null,
   });
 
-  // Stop cards — one per stop, combine page content
+  // One card per stop. We flatten all pages' printable blocks in player order.
   stops.forEach((stop, idx) => {
-    const pages = [...(stop.pages || [])].sort((a, b) => a.order - b.order);
-    const visible = pages.filter(p => p.content || p.clueText);
-    let body = '';
-    let clue = '';
-
-    for (const p of visible) {
-      if (p.title && visible.length > 1) body += p.title.toUpperCase() + '\n';
-      if (p.content) body += p.content + '\n\n';
-      if (p.clueText && !clue) clue = p.clueText;
+    const pages = [...(stop.pages || [])].sort((a, b) => (a.order || 0) - (b.order || 0));
+    const blocks = [];
+    // Stop-level intro first (description / intro2)
+    if (stop.description && stop.description.trim()) {
+      blocks.push({ kind: 'story', text: stop.description.trim() });
     }
+    if (stop.intro2 && stop.intro2.trim()) {
+      blocks.push({ kind: 'story', text: stop.intro2.trim() });
+    }
+    if (stop.taskInstructions && stop.taskInstructions.trim()) {
+      blocks.push({ kind: 'puzzle', text: stop.taskInstructions.trim() });
+    }
+    // Then every page's printable blocks
+    pages.forEach((p) => {
+      blocks.push(...buildBlocksForPage(p));
+    });
 
     cards.push({
       id: genId(),
       type: 'stop',
-      label: `STOP ${idx + 1}`,
+      label: `Stop ${idx + 1}`,
       title: stop.title || `Stop ${idx + 1}`,
-      body: body.trim(),
-      clue: clue,
-      showClue: !!clue,
-      showScratch: !!clue,
+      blocks,
     });
   });
 
@@ -46,12 +92,68 @@ const buildCardsFromTour = (tour) => {
     cards.push({
       id: genId(),
       type: 'completion',
-      title: tour.completionTitle || 'Tour Complete!',
+      title: tour.completionTitle || 'Tour Complete',
       body: tour.completionBody || '',
+      completionImageUrl: tour.completionImageUrl || null,
     });
   }
 
   return cards;
+};
+
+const SectionLabel = ({ children }) => (
+  <div className="pb-section-label">
+    <span>{children}</span>
+    <div className="pb-section-rule" />
+  </div>
+);
+
+const Block = ({ block }) => {
+  if (block.kind === 'story') {
+    return (
+      <div className="pb-block pb-block-story">
+        {block.text.split('\n').map((line, i) => (
+          <p key={i}>{line || '\u00A0'}</p>
+        ))}
+      </div>
+    );
+  }
+  if (block.kind === 'puzzle') {
+    return (
+      <div className="pb-block pb-block-puzzle">
+        <SectionLabel>The Puzzle</SectionLabel>
+        {block.text.split('\n').map((line, i) => <p key={i}>{line || '\u00A0'}</p>)}
+      </div>
+    );
+  }
+  if (block.kind === 'hint') {
+    return (
+      <div className="pb-block pb-block-hint">
+        <div className="pb-hint-box">
+          <div className="pb-hint-label">Hint</div>
+          <div className="pb-hint-text">
+            {block.text.split('\n').map((line, i) => <p key={i}>{line || '\u00A0'}</p>)}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (block.kind === 'verification') {
+    return (
+      <div className="pb-block pb-block-verify">
+        <SectionLabel>Before You Leave</SectionLabel>
+        {block.text.split('\n').map((line, i) => <p key={i}>{line || '\u00A0'}</p>)}
+      </div>
+    );
+  }
+  if (block.kind === 'image') {
+    return (
+      <div className="pb-block pb-block-image">
+        <img src={block.url} alt={block.alt} />
+      </div>
+    );
+  }
+  return null;
 };
 
 const PrintBooklet = () => {
@@ -79,127 +181,71 @@ const PrintBooklet = () => {
     fetchTour();
   }, [tourId]);
 
-  const updateCard = (id, field, value) => {
-    setCards(prev => prev.map(c => c.id === id ? { ...c, [field]: value } : c));
+  const refresh = () => {
+    if (tour) setCards(buildCardsFromTour(tour));
   };
 
-  const removeCard = (id) => {
-    setCards(prev => prev.filter(c => c.id !== id));
-  };
-
-  const addBlankCard = () => {
-    setCards(prev => [...prev, {
-      id: genId(), type: 'stop', label: 'NEW', title: '', body: '', clue: '', showClue: false, showScratch: false,
-    }]);
-  };
+  const removeCard = (id) => setCards(prev => prev.filter(c => c.id !== id));
 
   if (loading) return <div className="loading-screen">Loading...</div>;
   if (!tour) return <div className="loading-screen">Tour not found</div>;
 
-  const sheets = [];
-  for (let i = 0; i < cards.length; i += 2) sheets.push(cards.slice(i, i + 2));
-
   return (
-    <div className="pb-wrapper" data-testid="print-booklet-wrapper">
-      <div className="pb-toolbar">
+    <div className="pb-wrapper pb-parchment" data-testid="print-booklet-wrapper">
+      <div className="pb-toolbar no-print">
         <button onClick={() => navigate(`/admin/tour/${tourId}`)} className="pb-toolbar-btn" data-testid="print-back-btn">← Back</button>
         <div className="pb-toolbar-center">
-          <h2>{tour.title} — Card Editor</h2>
-          <span>{cards.length} cards / {sheets.length} sheet{sheets.length !== 1 ? 's' : ''}</span>
+          <h2>{tour.title}</h2>
+          <span>{cards.length} cards</span>
         </div>
         <div className="pb-toolbar-right">
-          <button onClick={addBlankCard} className="pb-toolbar-btn">+ Add Card</button>
+          <button onClick={refresh} className="pb-toolbar-btn" data-testid="print-refresh-btn">↻ Pull Latest from Tour</button>
           <button onClick={() => window.print()} className="pb-toolbar-print" data-testid="print-btn">Print / Save PDF</button>
         </div>
       </div>
 
       <div className="pb-preview" data-testid="print-booklet">
-        {sheets.map((sheet, si) => (
-          <div key={si} className="pb-sheet">
-            {sheet.map((card) => (
-              <div key={card.id} className="pb-card">
-                <div className="pb-inner">
-                  {/* Delete card button - hidden in print */}
-                  <button className="pb-delete-card no-print" onClick={() => removeCard(card.id)} title="Remove card">&times;</button>
+        {cards.map((card) => (
+          <article key={card.id} className={`pb-card-v2 pb-card-${card.type}`} data-testid={`pb-card-${card.id}`}>
+            <button className="pb-delete-card no-print" onClick={() => removeCard(card.id)} title="Remove from this print">×</button>
 
-                  {card.type === 'cover' || card.type === 'completion' ? (
-                    <>
-                      {tour.logoUrl && <div className="pb-logo no-print-hide"><img src={tour.logoUrl} alt="" /></div>}
-                      <div className="pb-center-content">
-                        <input
-                          className="pb-edit-title-center"
-                          value={card.title}
-                          onChange={(e) => updateCard(card.id, 'title', e.target.value)}
-                          placeholder="Title"
-                        />
-                        <div className="pb-rule" />
-                        <textarea
-                          className="pb-edit-body-center"
-                          value={card.body}
-                          onChange={(e) => updateCard(card.id, 'body', e.target.value)}
-                          placeholder="Content..."
-                          rows={Math.max(3, (card.body.match(/\n/g) || []).length + 2)}
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="pb-banner">
-                        <input
-                          className="pb-edit-label"
-                          value={card.label}
-                          onChange={(e) => updateCard(card.id, 'label', e.target.value)}
-                        />
-                        <input
-                          className="pb-edit-banner-title"
-                          value={card.title}
-                          onChange={(e) => updateCard(card.id, 'title', e.target.value)}
-                          placeholder="Stop Title"
-                        />
-                      </div>
-                      <div className="pb-body">
-                        <textarea
-                          className="pb-edit-body"
-                          value={card.body}
-                          onChange={(e) => updateCard(card.id, 'body', e.target.value)}
-                          placeholder="Card content..."
-                          rows={Math.max(4, (card.body.match(/\n/g) || []).length + 2)}
-                        />
-                      </div>
-                      {card.showClue && (
-                        <div className="pb-clue-box">
-                          <div className="pb-clue-label">CLUE</div>
-                          <textarea
-                            className="pb-edit-clue"
-                            value={card.clue}
-                            onChange={(e) => updateCard(card.id, 'clue', e.target.value)}
-                            placeholder="Clue text..."
-                            rows={2}
-                          />
-                          <button className="pb-toggle-x no-print" onClick={() => updateCard(card.id, 'showClue', false)}>&times;</button>
-                        </div>
-                      )}
-                      {!card.showClue && (
-                        <button className="pb-add-section no-print" onClick={() => updateCard(card.id, 'showClue', true)}>+ Clue</button>
-                      )}
-                      {card.showScratch && (
-                        <div className="pb-scratch">
-                          <div className="pb-scratch-bar">SCRATCH OFF</div>
-                          <div className="pb-scratch-space" />
-                          <button className="pb-toggle-x no-print" onClick={() => updateCard(card.id, 'showScratch', false)}>&times;</button>
-                        </div>
-                      )}
-                      {!card.showScratch && (
-                        <button className="pb-add-section no-print" onClick={() => updateCard(card.id, 'showScratch', true)}>+ Scratch Off</button>
-                      )}
-                    </>
-                  )}
-                  <div className="pb-card-foot">{tour.title}</div>
-                </div>
+            <header className="pb-header-v2">
+              <div className="pb-header-rule" />
+              <div className="pb-header-inner">
+                {card.type === 'stop' && <div className="pb-stop-num">{card.label}</div>}
+                <h1 className="pb-card-title">{card.title}</h1>
               </div>
-            ))}
-            {sheet.length === 1 && <div className="pb-card"><div className="pb-inner pb-empty" /></div>}
-          </div>
+              <div className="pb-header-rule" />
+            </header>
+
+            <div className="pb-body-v2">
+              {card.type === 'cover' || card.type === 'completion' ? (
+                <>
+                  {card.welcomeImageUrl && (
+                    <div className="pb-block pb-block-image">
+                      <img src={card.welcomeImageUrl} alt="" />
+                    </div>
+                  )}
+                  {card.completionImageUrl && (
+                    <div className="pb-block pb-block-image">
+                      <img src={card.completionImageUrl} alt="" />
+                    </div>
+                  )}
+                  {card.body && (
+                    <div className="pb-block pb-block-story pb-block-center">
+                      {card.body.split('\n').map((line, i) => <p key={i}>{line || '\u00A0'}</p>)}
+                    </div>
+                  )}
+                </>
+              ) : (
+                (card.blocks || []).map((b, i) => <Block key={i} block={b} />)
+              )}
+            </div>
+
+            <footer className="pb-footer-v2">
+              <span>Mystery Served</span>
+            </footer>
+          </article>
         ))}
       </div>
     </div>

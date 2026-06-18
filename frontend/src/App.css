@@ -4492,3 +4492,225 @@
 
   @page { size: letter landscape; margin: 0.25in; }
 }
+
+/* ==================== PRINT BOOKLET V2 — PARCHMENT REDESIGN ==================== */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap');
+
+.pb-parchment {
+  background: #e6dfd3;
+  min-height: 100vh;
+}
+
+.pb-parchment .pb-preview {
+  padding: 32px 16px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.pb-card-v2 {
+  position: relative;
+  width: 5.5in;
+  min-height: 8.5in;
+  background: #F5EFE6;
+  color: #2B2420;
+  padding: 32px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+  font-family: 'Lora', 'EB Garamond', Georgia, serif;
+  font-size: 13.5pt;
+  line-height: 1.55;
+  display: flex;
+  flex-direction: column;
+}
+
+.pb-delete-card {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0,0,0,0.05);
+  border: none;
+  color: #2B2420;
+  font-size: 22px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  line-height: 1;
+}
+.pb-delete-card:hover { background: #C1633D; color: #fff; }
+
+.pb-header-v2 {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.pb-header-rule {
+  height: 0;
+  border-top: 1px solid #B87333;
+  margin: 4px 0;
+  position: relative;
+}
+.pb-header-rule + .pb-header-inner + .pb-header-rule {
+  border-top: 1px solid #B87333;
+}
+
+.pb-header-inner {
+  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.pb-stop-num {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: 10pt;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #C1633D;
+}
+
+.pb-card-title {
+  font-family: 'Playfair Display', 'Cormorant', Georgia, serif;
+  font-weight: 700;
+  font-size: 24pt;
+  color: #2B2420;
+  margin: 0;
+  line-height: 1.15;
+}
+
+.pb-body-v2 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.pb-block { margin: 0; }
+.pb-block p {
+  margin: 0 0 8px 0;
+}
+.pb-block p:last-child { margin-bottom: 0; }
+
+.pb-block-center { text-align: center; }
+
+.pb-section-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.pb-section-label > span {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 9pt;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #C1633D;
+  font-weight: 600;
+}
+.pb-section-rule {
+  flex: 1;
+  height: 0;
+  border-top: 1px solid #B87333;
+  opacity: 0.6;
+}
+
+.pb-block-puzzle p {
+  font-style: italic;
+}
+
+.pb-block-verify p {
+  font-family: 'Lora', serif;
+}
+
+.pb-block-image img {
+  display: block;
+  max-width: 100%;
+  max-height: 3.2in;
+  margin: 0 auto;
+  border: 1px solid rgba(184, 115, 51, 0.3);
+  padding: 4px;
+  background: #fff;
+}
+
+/* Hint sticker box — fixed size, dashed copper border, same position on every card */
+.pb-hint-box {
+  border: 1.5px dashed #B87333;
+  border-radius: 4px;
+  padding: 14px 16px;
+  min-height: 1.4in;
+  width: 100%;
+  position: relative;
+  background: rgba(255, 255, 255, 0.35);
+}
+.pb-hint-label {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 9pt;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #C1633D;
+  margin-bottom: 6px;
+  border-bottom: 1px solid #B87333;
+  padding-bottom: 4px;
+  display: inline-block;
+}
+.pb-hint-text p {
+  margin: 0 0 6px 0;
+  font-size: 11.5pt;
+  font-style: italic;
+}
+
+.pb-footer-v2 {
+  margin-top: 32px;
+  padding-top: 12px;
+  text-align: center;
+  border-top: 1px solid rgba(184, 115, 51, 0.4);
+}
+.pb-footer-v2 span {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 9pt;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #B87333;
+  font-weight: 600;
+}
+
+/* Cover/completion centered layout */
+.pb-card-cover .pb-body-v2,
+.pb-card-completion .pb-body-v2 {
+  justify-content: center;
+  text-align: center;
+}
+.pb-card-cover .pb-card-title,
+.pb-card-completion .pb-card-title {
+  font-size: 28pt;
+}
+
+/* ===== PRINT — parchment cards ===== */
+@media print {
+  .pb-parchment { background: #fff !important; }
+  .pb-parchment .pb-preview {
+    padding: 0 !important;
+    gap: 0 !important;
+  }
+
+  .pb-card-v2 {
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    box-shadow: none !important;
+    padding: 0.5in 0.6in !important;
+    page-break-after: always;
+    page-break-inside: avoid;
+    background: #F5EFE6 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .pb-card-v2:last-child { page-break-after: auto; }
+
+  .pb-delete-card { display: none !important; }
+
+  @page { size: letter portrait; margin: 0; }
+}
