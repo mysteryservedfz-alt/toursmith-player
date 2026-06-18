@@ -45,6 +45,46 @@ const buildBlocksForPage = (page) => {
   return blocks;
 };
 
+const SOFT_LIMIT_CHARS = 1100; // soft cap per card; bucket splits beyond this
+
+const bucketBlocks = (blocks) => {
+  // Group blocks by section while preserving original order within each section
+  const story = [];
+  const clue = [];
+  const before = [];
+  for (const b of blocks) {
+    if (b.kind === 'story' || b.kind === 'image') story.push(b);
+    else if (b.kind === 'puzzle' || b.kind === 'hint') clue.push(b);
+    else if (b.kind === 'verification') before.push(b);
+  }
+  return { story, clue, before };
+};
+
+const charsOf = (blocks) =>
+  blocks.reduce((sum, b) => sum + (b.kind === 'image' ? 0 : (b.text || '').length), 0);
+
+// Split a bucket into multiple sub-buckets if it's longer than SOFT_LIMIT_CHARS.
+// Tries to split at block boundaries (paragraph-respecting).
+const splitBucket = (blocks) => {
+  if (charsOf(blocks) <= SOFT_LIMIT_CHARS) return [blocks];
+  const out = [];
+  let cur = [];
+  let curChars = 0;
+  for (const b of blocks) {
+    const bChars = b.kind === 'image' ? 0 : (b.text || '').length;
+    if (curChars > 0 && curChars + bChars > SOFT_LIMIT_CHARS) {
+      out.push(cur);
+      cur = [b];
+      curChars = bChars;
+    } else {
+      cur.push(b);
+      curChars += bChars;
+    }
+  }
+  if (cur.length) out.push(cur);
+  return out;
+};
+
 const buildCardsFromTour = (tour) => {
   const cards = [];
   const stops = [...(tour.stops || [])].sort((a, b) => (a.order || 0) - (b.order || 0));
@@ -59,21 +99,50 @@ const buildCardsFromTour = (tour) => {
     welcomeImageUrl: tour.welcomeImageUrl || null,
   });
 
-  // One card per stop. Pull content ONLY from nested pages (the sidebar blocks).
-  // Skip the stop pin's top-level Title/Story Text/Story Text 2 — those don't print.
+  // For each stop: pull blocks from nested pages, then bucket into Story / Clue / Before You Leave.
   stops.forEach((stop, idx) => {
+    const stopNum = idx + 1;
     const pages = [...(stop.pages || [])].sort((a, b) => (a.order || 0) - (b.order || 0));
-    const blocks = [];
-    pages.forEach((p) => {
-      blocks.push(...buildBlocksForPage(p));
-    });
+    const allBlocks = [];
+    pages.forEach((p) => allBlocks.push(...buildBlocksForPage(p)));
 
-    cards.push({
-      id: genId(),
-      type: 'stop',
-      label: `Stop ${idx + 1}`,
-      title: stop.title || `Stop ${idx + 1}`,
-      blocks,
+    const { story, clue, before } = bucketBlocks(allBlocks);
+
+    const sections = [
+      { section: 'Story', blocks: story },
+      { section: 'Clue', blocks: clue },
+      { section: 'Before You Leave', blocks: before },
+    ].filter(s => s.blocks.length > 0);
+
+    // If a stop has zero content, still produce one empty card (placeholder)
+    if (sections.length === 0) {
+      cards.push({
+        id: genId(),
+        type: 'stop',
+        section: 'Story',
+        label: `Stop ${stopNum}`,
+        sectionLabel: `Stop ${stopNum} · Story`,
+        title: stop.title || `Stop ${stopNum}`,
+        blocks: [],
+      });
+      return;
+    }
+
+    sections.forEach((sec) => {
+      // Split bucket if too long
+      const parts = splitBucket(sec.blocks);
+      parts.forEach((partBlocks, partIdx) => {
+        const partSuffix = parts.length > 1 ? ` (${partIdx + 1}/${parts.length})` : '';
+        cards.push({
+          id: genId(),
+          type: 'stop',
+          section: sec.section,
+          label: `Stop ${stopNum}`,
+          sectionLabel: `Stop ${stopNum} · ${sec.section}${partSuffix}`,
+          title: stop.title || `Stop ${stopNum}`,
+          blocks: partBlocks,
+        });
+      });
     });
   });
 
@@ -83,6 +152,7 @@ const buildCardsFromTour = (tour) => {
       id: genId(),
       type: 'completion',
       label: 'Finale',
+      sectionLabel: 'Finale',
       title: tour.completionTitle || 'Tour Complete',
       body: tour.completionBody || '',
       completionImageUrl: tour.completionImageUrl || null,
@@ -148,43 +218,69 @@ const Block = ({ block }) => {
 };
 
 // Auto-fit body: starts at 11pt, shrinks until content fits or hits 8pt minimum.
-// If it can't fit even at 8pt, sets overflow=true so we flag the card.
-const AutoFitBody = ({ children, onOverflowChange }) => {
+// Waits for images/fonts to load before measuring to avoid the race that caused
+// premature "fits" decisions and mid-sentence cropping at 11pt.
+const AutoFitBody = ({ children, onOverflowChange, signature }) => {
   const ref = useRef(null);
+  const overflowRef = useRef(false);
   const [fontSize, setFontSize] = useState(11);
-  const [overflow, setOverflow] = useState(false);
 
   useLayoutEffect(() => {
     if (!ref.current) return;
-    let size = 11;
     const el = ref.current;
-    el.style.fontSize = size + 'pt';
-    // Measure synchronously via requestAnimationFrame chain
-    let attempts = 0;
-    const tryFit = () => {
-      if (!ref.current) return;
-      const node = ref.current;
-      if (node.scrollHeight <= node.clientHeight + 1 || size <= 8) {
-        const overflowing = node.scrollHeight > node.clientHeight + 1;
-        setFontSize(size);
-        setOverflow(overflowing);
-        if (onOverflowChange) onOverflowChange(overflowing);
-        return;
+    let cancelled = false;
+
+    const runShrink = () => {
+      if (cancelled || !el) return;
+      let size = 11;
+      el.style.fontSize = size + 'pt';
+      // Allow layout flush
+      while (el.scrollHeight > el.clientHeight + 1 && size > 8) {
+        size = +(size - 0.5).toFixed(1);
+        el.style.fontSize = size + 'pt';
       }
-      size = Math.max(8, +(size - 0.5).toFixed(1));
-      node.style.fontSize = size + 'pt';
-      attempts += 1;
-      if (attempts < 20) requestAnimationFrame(tryFit);
+      const overflowing = el.scrollHeight > el.clientHeight + 1;
+      setFontSize(size);
+      if (overflowRef.current !== overflowing) {
+        overflowRef.current = overflowing;
+        if (onOverflowChange) onOverflowChange(overflowing);
+      }
     };
-    requestAnimationFrame(tryFit);
-  }, [children, onOverflowChange]);
+
+    // Wait for any <img> tags inside to load (fixes early-measure race)
+    const imgs = el.querySelectorAll('img');
+    if (imgs.length === 0) {
+      runShrink();
+    } else {
+      let remaining = imgs.length;
+      const onOne = () => {
+        remaining -= 1;
+        if (remaining <= 0 && !cancelled) runShrink();
+      };
+      imgs.forEach((img) => {
+        if (img.complete) onOne();
+        else {
+          img.addEventListener('load', onOne, { once: true });
+          img.addEventListener('error', onOne, { once: true });
+        }
+      });
+      // Safety fallback: shrink after 1.5s no matter what
+      setTimeout(() => { if (!cancelled) runShrink(); }, 1500);
+    }
+
+    // Also re-run when fonts load (Lora / Playfair Display)
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => { if (!cancelled) runShrink(); });
+    }
+
+    return () => { cancelled = true; };
+  }, [signature]);
 
   return (
     <div
       ref={ref}
       className="pb-body-v2"
       style={{ fontSize: fontSize + 'pt' }}
-      data-overflow={overflow ? 'true' : 'false'}
     >
       {children}
     </div>
@@ -270,14 +366,18 @@ const PrintBooklet = () => {
                 <header className="pb-header-v2">
                   <div className="pb-header-rule" />
                   <div className="pb-header-inner">
-                    {card.type === 'stop' && <div className="pb-stop-num">{card.label}</div>}
-                    {card.type === 'completion' && <div className="pb-stop-num">{card.label}</div>}
+                    {(card.type === 'stop' || card.type === 'completion') && (
+                      <div className="pb-stop-num">{card.sectionLabel || card.label}</div>
+                    )}
                     <h1 className="pb-card-title">{card.title}</h1>
                   </div>
                   <div className="pb-header-rule" />
                 </header>
 
-                <AutoFitBody onOverflowChange={(o) => markOverflow(card.id, o)}>
+                <AutoFitBody
+                  signature={card.id + ':' + (card.blocks ? card.blocks.length : 0) + ':' + (card.body ? card.body.length : 0)}
+                  onOverflowChange={(o) => markOverflow(card.id, o)}
+                >
                   {card.type === 'cover' || card.type === 'completion' ? (
                     <>
                       {card.welcomeImageUrl && (
