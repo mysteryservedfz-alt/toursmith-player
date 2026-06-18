@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth, authAxios } from './authContext';
 
@@ -59,21 +59,11 @@ const buildCardsFromTour = (tour) => {
     welcomeImageUrl: tour.welcomeImageUrl || null,
   });
 
-  // One card per stop. We flatten all pages' printable blocks in player order.
+  // One card per stop. Pull content ONLY from nested pages (the sidebar blocks).
+  // Skip the stop pin's top-level Title/Story Text/Story Text 2 — those don't print.
   stops.forEach((stop, idx) => {
     const pages = [...(stop.pages || [])].sort((a, b) => (a.order || 0) - (b.order || 0));
     const blocks = [];
-    // Stop-level intro first (description / intro2)
-    if (stop.description && stop.description.trim()) {
-      blocks.push({ kind: 'story', text: stop.description.trim() });
-    }
-    if (stop.intro2 && stop.intro2.trim()) {
-      blocks.push({ kind: 'story', text: stop.intro2.trim() });
-    }
-    if (stop.taskInstructions && stop.taskInstructions.trim()) {
-      blocks.push({ kind: 'puzzle', text: stop.taskInstructions.trim() });
-    }
-    // Then every page's printable blocks
     pages.forEach((p) => {
       blocks.push(...buildBlocksForPage(p));
     });
@@ -87,11 +77,12 @@ const buildCardsFromTour = (tour) => {
     });
   });
 
-  // Completion
+  // Completion — its own distinct final card AFTER all stops
   if (tour.completionTitle || tour.completionBody) {
     cards.push({
       id: genId(),
       type: 'completion',
+      label: 'Finale',
       title: tour.completionTitle || 'Tour Complete',
       body: tour.completionBody || '',
       completionImageUrl: tour.completionImageUrl || null,
@@ -156,6 +147,50 @@ const Block = ({ block }) => {
   return null;
 };
 
+// Auto-fit body: starts at 11pt, shrinks until content fits or hits 8pt minimum.
+// If it can't fit even at 8pt, sets overflow=true so we flag the card.
+const AutoFitBody = ({ children, onOverflowChange }) => {
+  const ref = useRef(null);
+  const [fontSize, setFontSize] = useState(11);
+  const [overflow, setOverflow] = useState(false);
+
+  useLayoutEffect(() => {
+    if (!ref.current) return;
+    let size = 11;
+    const el = ref.current;
+    el.style.fontSize = size + 'pt';
+    // Measure synchronously via requestAnimationFrame chain
+    let attempts = 0;
+    const tryFit = () => {
+      if (!ref.current) return;
+      const node = ref.current;
+      if (node.scrollHeight <= node.clientHeight + 1 || size <= 8) {
+        const overflowing = node.scrollHeight > node.clientHeight + 1;
+        setFontSize(size);
+        setOverflow(overflowing);
+        if (onOverflowChange) onOverflowChange(overflowing);
+        return;
+      }
+      size = Math.max(8, +(size - 0.5).toFixed(1));
+      node.style.fontSize = size + 'pt';
+      attempts += 1;
+      if (attempts < 20) requestAnimationFrame(tryFit);
+    };
+    requestAnimationFrame(tryFit);
+  }, [children, onOverflowChange]);
+
+  return (
+    <div
+      ref={ref}
+      className="pb-body-v2"
+      style={{ fontSize: fontSize + 'pt' }}
+      data-overflow={overflow ? 'true' : 'false'}
+    >
+      {children}
+    </div>
+  );
+};
+
 const PrintBooklet = () => {
   const { tourId } = useParams();
   const { token, logout } = useAuth();
@@ -187,6 +222,17 @@ const PrintBooklet = () => {
 
   const removeCard = (id) => setCards(prev => prev.filter(c => c.id !== id));
 
+  const [overflowCards, setOverflowCards] = useState({});
+  const markOverflow = (id, isOver) => {
+    setOverflowCards(prev => {
+      if (!!prev[id] === isOver) return prev;
+      const next = { ...prev };
+      if (isOver) next[id] = true;
+      else delete next[id];
+      return next;
+    });
+  };
+
   if (loading) return <div className="loading-screen">Loading...</div>;
   if (!tour) return <div className="loading-screen">Tour not found</div>;
 
@@ -212,19 +258,26 @@ const PrintBooklet = () => {
         {sheets.map((sheet, si) => (
           <div key={si} className="pb-sheet-v2" data-testid={`pb-sheet-${si}`}>
             {sheet.map((card) => (
-              <article key={card.id} className={`pb-card-v2 pb-card-${card.type}`} data-testid={`pb-card-${card.id}`}>
+              <article key={card.id} className={`pb-card-v2 pb-card-${card.type} ${overflowCards[card.id] ? 'pb-card-overflow' : ''}`} data-testid={`pb-card-${card.id}`}>
                 <button className="pb-delete-card no-print" onClick={() => removeCard(card.id)} title="Remove from this print">×</button>
+
+                {overflowCards[card.id] && (
+                  <div className="pb-overflow-warning no-print" data-testid={`pb-overflow-${card.id}`}>
+                    ⚠ Content too long — trim text or split this stop
+                  </div>
+                )}
 
                 <header className="pb-header-v2">
                   <div className="pb-header-rule" />
                   <div className="pb-header-inner">
                     {card.type === 'stop' && <div className="pb-stop-num">{card.label}</div>}
+                    {card.type === 'completion' && <div className="pb-stop-num">{card.label}</div>}
                     <h1 className="pb-card-title">{card.title}</h1>
                   </div>
                   <div className="pb-header-rule" />
                 </header>
 
-                <div className="pb-body-v2">
+                <AutoFitBody onOverflowChange={(o) => markOverflow(card.id, o)}>
                   {card.type === 'cover' || card.type === 'completion' ? (
                     <>
                       {card.welcomeImageUrl && (
@@ -246,7 +299,7 @@ const PrintBooklet = () => {
                   ) : (
                     (card.blocks || []).map((b, i) => <Block key={i} block={b} />)
                   )}
-                </div>
+                </AutoFitBody>
 
                 <footer className="pb-footer-v2">
                   <span>Mystery Served</span>
