@@ -4509,64 +4509,99 @@
   gap: 24px;
 }
 
+/* A sheet holds 2 cards side-by-side with a dashed cut guide between */
+.pb-sheet-v2 {
+  width: 8.5in;
+  height: 5.75in;
+  background: #ffffff;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  position: relative;
+  padding: 0.125in;
+  box-sizing: border-box;
+}
+
+.pb-sheet-v2::before {
+  content: '';
+  position: absolute;
+  top: 0.125in;
+  bottom: 0.125in;
+  left: 50%;
+  border-left: 1px dashed #9ca3af;
+  transform: translateX(-0.5px);
+  pointer-events: none;
+}
+
 .pb-card-v2 {
   position: relative;
-  width: 5.5in;
-  min-height: 8.5in;
-  background: #F5EFE6;
+  width: 4in;
+  height: 5.5in;
+  background: #ffffff;
   color: #2B2420;
-  padding: 32px;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+  padding: 0.3in 0.32in;
+  box-sizing: border-box;
   font-family: 'Lora', 'EB Garamond', Georgia, serif;
-  font-size: 13.5pt;
-  line-height: 1.55;
+  font-size: 9.5pt;
+  line-height: 1.4;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  flex: 0 0 4in;
+}
+
+.pb-card-empty {
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Cover and completion cards keep the parchment cream (printed separately in color) */
+.pb-card-cover,
+.pb-card-completion {
+  background: #F5EFE6;
 }
 
 .pb-delete-card {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  background: rgba(0,0,0,0.05);
+  top: 6px;
+  right: 6px;
+  background: rgba(0,0,0,0.06);
   border: none;
   color: #2B2420;
-  font-size: 22px;
-  width: 28px;
-  height: 28px;
+  font-size: 18px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   cursor: pointer;
   line-height: 1;
+  z-index: 2;
 }
 .pb-delete-card:hover { background: #C1633D; color: #fff; }
 
 .pb-header-v2 {
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 10px;
 }
 
 .pb-header-rule {
   height: 0;
-  border-top: 1px solid #B87333;
-  margin: 4px 0;
-  position: relative;
-}
-.pb-header-rule + .pb-header-inner + .pb-header-rule {
-  border-top: 1px solid #B87333;
+  border-top: 0.75pt solid #B87333;
+  margin: 2px 0;
 }
 
 .pb-header-inner {
-  padding: 12px 0;
+  padding: 6px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 3px;
 }
 
 .pb-stop-num {
   font-family: 'Lora', serif;
   font-style: italic;
-  font-size: 10pt;
+  font-size: 7.5pt;
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: #C1633D;
@@ -4575,7 +4610,7 @@
 .pb-card-title {
   font-family: 'Playfair Display', 'Cormorant', Georgia, serif;
   font-weight: 700;
-  font-size: 24pt;
+  font-size: 14pt;
   color: #2B2420;
   margin: 0;
   line-height: 1.15;
@@ -4585,13 +4620,12 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 10px;
+  overflow: hidden;
 }
 
 .pb-block { margin: 0; }
-.pb-block p {
-  margin: 0 0 8px 0;
-}
+.pb-block p { margin: 0 0 4px 0; }
 .pb-block p:last-child { margin-bottom: 0; }
 
 .pb-block-center { text-align: center; }
@@ -4599,12 +4633,12 @@
 .pb-section-label {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
+  gap: 6px;
+  margin-bottom: 4px;
 }
 .pb-section-label > span {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 9pt;
+  font-size: 7pt;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #C1633D;
@@ -4613,71 +4647,65 @@
 .pb-section-rule {
   flex: 1;
   height: 0;
-  border-top: 1px solid #B87333;
+  border-top: 0.5pt solid #B87333;
   opacity: 0.6;
 }
 
-.pb-block-puzzle p {
-  font-style: italic;
-}
-
-.pb-block-verify p {
-  font-family: 'Lora', serif;
-}
+.pb-block-puzzle p { font-style: italic; }
+.pb-block-verify p { font-family: 'Lora', serif; }
 
 .pb-block-image img {
   display: block;
   max-width: 100%;
-  max-height: 3.2in;
+  max-height: 1.4in;
   margin: 0 auto;
-  border: 1px solid rgba(184, 115, 51, 0.3);
-  padding: 4px;
+  border: 0.5pt solid rgba(184, 115, 51, 0.4);
+  padding: 2px;
   background: #fff;
 }
 
-/* Hint sticker box — fixed size, dashed copper border, same position on every card */
+/* Hint sticker box — fixed size, dashed copper border */
 .pb-hint-box {
-  border: 1.5px dashed #B87333;
-  border-radius: 4px;
-  padding: 14px 16px;
-  min-height: 1.4in;
+  border: 1pt dashed #B87333;
+  border-radius: 3px;
+  padding: 8px 10px;
+  min-height: 0.85in;
   width: 100%;
   position: relative;
-  background: rgba(255, 255, 255, 0.35);
+  box-sizing: border-box;
 }
 .pb-hint-label {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 9pt;
+  font-size: 7pt;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: #C1633D;
-  margin-bottom: 6px;
-  border-bottom: 1px solid #B87333;
-  padding-bottom: 4px;
+  margin-bottom: 3px;
+  border-bottom: 0.5pt solid #B87333;
+  padding-bottom: 2px;
   display: inline-block;
 }
 .pb-hint-text p {
-  margin: 0 0 6px 0;
-  font-size: 11.5pt;
+  margin: 0 0 3px 0;
+  font-size: 8.5pt;
   font-style: italic;
 }
 
 .pb-footer-v2 {
-  margin-top: 32px;
-  padding-top: 12px;
+  margin-top: 8px;
+  padding-top: 6px;
   text-align: center;
-  border-top: 1px solid rgba(184, 115, 51, 0.4);
+  border-top: 0.5pt solid rgba(184, 115, 51, 0.4);
 }
 .pb-footer-v2 span {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 9pt;
+  font-size: 7pt;
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: #B87333;
   font-weight: 600;
 }
 
-/* Cover/completion centered layout */
 .pb-card-cover .pb-body-v2,
 .pb-card-completion .pb-body-v2 {
   justify-content: center;
@@ -4685,10 +4713,10 @@
 }
 .pb-card-cover .pb-card-title,
 .pb-card-completion .pb-card-title {
-  font-size: 28pt;
+  font-size: 18pt;
 }
 
-/* ===== PRINT — parchment cards ===== */
+/* ===== PRINT — fixed sheet sizing, page break per sheet ===== */
 @media print {
   .pb-parchment { background: #fff !important; }
   .pb-parchment .pb-preview {
@@ -4696,21 +4724,43 @@
     gap: 0 !important;
   }
 
-  .pb-card-v2 {
-    width: 100% !important;
-    min-height: 0 !important;
-    height: auto !important;
+  .pb-sheet-v2 {
+    width: 8.5in !important;
+    height: 5.5in !important;
     box-shadow: none !important;
-    padding: 0.5in 0.6in !important;
+    padding: 0 !important;
     page-break-after: always;
     page-break-inside: avoid;
-    background: #F5EFE6 !important;
+    margin: 0 auto;
+    background: #fff !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
-  .pb-card-v2:last-child { page-break-after: auto; }
+  .pb-sheet-v2:last-child { page-break-after: auto; }
 
+  .pb-sheet-v2::before {
+    top: 0.25in;
+    bottom: 0.25in;
+  }
+
+  .pb-card-v2 {
+    width: 4in !important;
+    height: 5.5in !important;
+    flex: 0 0 4in !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+    background: #fff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .pb-card-cover,
+  .pb-card-completion {
+    background: #F5EFE6 !important;
+  }
+
+  .pb-card-empty { display: block; background: transparent !important; }
   .pb-delete-card { display: none !important; }
 
-  @page { size: letter portrait; margin: 0; }
+  @page { size: letter landscape; margin: 0.25in; }
 }

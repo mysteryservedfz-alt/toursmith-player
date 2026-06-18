@@ -190,13 +190,17 @@ const PrintBooklet = () => {
   if (loading) return <div className="loading-screen">Loading...</div>;
   if (!tour) return <div className="loading-screen">Tour not found</div>;
 
+  // Group into sheets of 2 cards each (side-by-side, cut down the middle)
+  const sheets = [];
+  for (let i = 0; i < cards.length; i += 2) sheets.push(cards.slice(i, i + 2));
+
   return (
     <div className="pb-wrapper pb-parchment" data-testid="print-booklet-wrapper">
       <div className="pb-toolbar no-print">
         <button onClick={() => navigate(`/admin/tour/${tourId}`)} className="pb-toolbar-btn" data-testid="print-back-btn">← Back</button>
         <div className="pb-toolbar-center">
           <h2>{tour.title}</h2>
-          <span>{cards.length} cards</span>
+          <span>{cards.length} cards / {sheets.length} sheet{sheets.length !== 1 ? 's' : ''}</span>
         </div>
         <div className="pb-toolbar-right">
           <button onClick={refresh} className="pb-toolbar-btn" data-testid="print-refresh-btn">↻ Pull Latest from Tour</button>
@@ -205,47 +209,52 @@ const PrintBooklet = () => {
       </div>
 
       <div className="pb-preview" data-testid="print-booklet">
-        {cards.map((card) => (
-          <article key={card.id} className={`pb-card-v2 pb-card-${card.type}`} data-testid={`pb-card-${card.id}`}>
-            <button className="pb-delete-card no-print" onClick={() => removeCard(card.id)} title="Remove from this print">×</button>
+        {sheets.map((sheet, si) => (
+          <div key={si} className="pb-sheet-v2" data-testid={`pb-sheet-${si}`}>
+            {sheet.map((card) => (
+              <article key={card.id} className={`pb-card-v2 pb-card-${card.type}`} data-testid={`pb-card-${card.id}`}>
+                <button className="pb-delete-card no-print" onClick={() => removeCard(card.id)} title="Remove from this print">×</button>
 
-            <header className="pb-header-v2">
-              <div className="pb-header-rule" />
-              <div className="pb-header-inner">
-                {card.type === 'stop' && <div className="pb-stop-num">{card.label}</div>}
-                <h1 className="pb-card-title">{card.title}</h1>
-              </div>
-              <div className="pb-header-rule" />
-            </header>
+                <header className="pb-header-v2">
+                  <div className="pb-header-rule" />
+                  <div className="pb-header-inner">
+                    {card.type === 'stop' && <div className="pb-stop-num">{card.label}</div>}
+                    <h1 className="pb-card-title">{card.title}</h1>
+                  </div>
+                  <div className="pb-header-rule" />
+                </header>
 
-            <div className="pb-body-v2">
-              {card.type === 'cover' || card.type === 'completion' ? (
-                <>
-                  {card.welcomeImageUrl && (
-                    <div className="pb-block pb-block-image">
-                      <img src={card.welcomeImageUrl} alt="" />
-                    </div>
+                <div className="pb-body-v2">
+                  {card.type === 'cover' || card.type === 'completion' ? (
+                    <>
+                      {card.welcomeImageUrl && (
+                        <div className="pb-block pb-block-image">
+                          <img src={card.welcomeImageUrl} alt="" />
+                        </div>
+                      )}
+                      {card.completionImageUrl && (
+                        <div className="pb-block pb-block-image">
+                          <img src={card.completionImageUrl} alt="" />
+                        </div>
+                      )}
+                      {card.body && (
+                        <div className="pb-block pb-block-story pb-block-center">
+                          {card.body.split('\n').map((line, i) => <p key={i}>{line || '\u00A0'}</p>)}
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    (card.blocks || []).map((b, i) => <Block key={i} block={b} />)
                   )}
-                  {card.completionImageUrl && (
-                    <div className="pb-block pb-block-image">
-                      <img src={card.completionImageUrl} alt="" />
-                    </div>
-                  )}
-                  {card.body && (
-                    <div className="pb-block pb-block-story pb-block-center">
-                      {card.body.split('\n').map((line, i) => <p key={i}>{line || '\u00A0'}</p>)}
-                    </div>
-                  )}
-                </>
-              ) : (
-                (card.blocks || []).map((b, i) => <Block key={i} block={b} />)
-              )}
-            </div>
+                </div>
 
-            <footer className="pb-footer-v2">
-              <span>Mystery Served</span>
-            </footer>
-          </article>
+                <footer className="pb-footer-v2">
+                  <span>Mystery Served</span>
+                </footer>
+              </article>
+            ))}
+            {sheet.length === 1 && <div className="pb-card-v2 pb-card-empty" aria-hidden="true" />}
+          </div>
         ))}
       </div>
     </div>
