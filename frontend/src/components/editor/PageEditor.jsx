@@ -4,6 +4,7 @@ import ClearableInput from './ClearableInput';
 import AccordionSection from './AccordionSection';
 import DeleteConfirmModal from './DeleteConfirmModal';
 import GalleryUrlsEditor from './GalleryUrlsEditor';
+import CharCounter from './CharCounter';
 
 const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDuplicate, onBack }) => {
   const [openSections, setOpenSections] = useState({});
@@ -147,10 +148,12 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDu
         <div className="form-group">
           <label className="form-label">Story Text</label>
           <textarea className="input body-textarea" value={page.content || ""} onChange={(e) => onUpdate({ content: e.target.value })} placeholder="The narrative shown to players..." data-testid="page-content-input" />
+          <CharCounter value={page.content} target={1200} label="content" />
         </div>
         <div className="form-group">
           <label className="form-label">Story Text 2</label>
           <textarea className="input" value={page.body2 || ""} onChange={(e) => onUpdate({ body2: e.target.value || null })} placeholder="Optional secondary text" data-testid="page-body2-input" />
+          <CharCounter value={page.body2} target={800} label="body2" />
         </div>
         <div className="form-group">
           <label className="form-label">Text Color</label>
@@ -179,6 +182,7 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDu
           <div className="form-group">
             <label className="form-label">Task Instructions</label>
             <textarea className="input body-textarea" value={page.taskInstructions || ""} onChange={(e) => onUpdate({ taskInstructions: e.target.value || null })} placeholder="e.g. 'Ask the server for the Blue Envelope'..." data-testid="page-task-input" />
+            <CharCounter value={page.taskInstructions} target={600} label="task" />
             <p className="text-small">Instructions for physical tasks at this location</p>
           </div>
         </AccordionSection>
@@ -252,6 +256,7 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDu
           <div className="form-group">
             <label className="form-label">Hint Text</label>
             <textarea className="input body-textarea" value={page.hintText || ""} onChange={(e) => onUpdate({ hintText: e.target.value || null })} placeholder="A helpful hint for players who get stuck..." data-testid="page-hint-input" />
+            <CharCounter value={page.hintText} target={300} label="hint" />
           </div>
           <div className="form-group">
             <label className="toggle-label">

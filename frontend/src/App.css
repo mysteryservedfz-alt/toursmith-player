@@ -4511,23 +4511,23 @@
 
 /* A sheet holds 2 cards side-by-side with a dashed cut guide between */
 .pb-sheet-v2 {
-  width: 8.5in;
-  height: 5.75in;
+  width: 11in;
+  height: 8.5in;
   background: #ffffff;
   box-shadow: 0 4px 20px rgba(0,0,0,0.18);
   display: flex;
   align-items: stretch;
   justify-content: center;
   position: relative;
-  padding: 0.125in;
+  padding: 0;
   box-sizing: border-box;
 }
 
 .pb-sheet-v2::before {
   content: '';
   position: absolute;
-  top: 0.125in;
-  bottom: 0.125in;
+  top: 0.3in;
+  bottom: 0.3in;
   left: 50%;
   border-left: 1px dashed #9ca3af;
   transform: translateX(-0.5px);
@@ -4536,11 +4536,11 @@
 
 .pb-card-v2 {
   position: relative;
-  width: 4in;
-  height: 5.5in;
+  width: 5.5in;
+  height: 8.5in;
   background: #ffffff;
   color: #2B2420;
-  padding: 0.3in 0.32in;
+  padding: 0.4in 0.45in;
   box-sizing: border-box;
   font-family: 'Lora', 'EB Garamond', Georgia, serif;
   font-size: 11pt;
@@ -4548,7 +4548,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  flex: 0 0 4in;
+  flex: 0 0 5.5in;
 }
 
 .pb-card-overflow {
@@ -4631,7 +4631,7 @@
 .pb-card-title {
   font-family: 'Playfair Display', 'Cormorant', Georgia, serif;
   font-weight: 700;
-  font-size: 14pt;
+  font-size: 18pt;
   color: #2B2420;
   margin: 0;
   line-height: 1.15;
@@ -4678,19 +4678,25 @@
 .pb-block-image img {
   display: block;
   max-width: 100%;
-  max-height: 1.4in;
+  max-height: 2.2in;
   margin: 0 auto;
   border: 0.5pt solid rgba(184, 115, 51, 0.4);
   padding: 2px;
   background: #fff;
 }
 
+/* On cover/completion cards, images scale to fit the remaining space */
+.pb-card-cover .pb-block-image img,
+.pb-card-completion .pb-block-image img {
+  max-height: 4in;
+}
+
 /* Hint sticker box — fixed size, dashed copper border */
 .pb-hint-box {
   border: 1pt dashed #B87333;
   border-radius: 3px;
-  padding: 8px 10px;
-  min-height: 0.85in;
+  padding: 10px 12px;
+  min-height: 1.2in;
   width: 100%;
   position: relative;
   box-sizing: border-box;
@@ -4746,8 +4752,8 @@
   }
 
   .pb-sheet-v2 {
-    width: 8.5in !important;
-    height: 5.5in !important;
+    width: 11in !important;
+    height: 8.5in !important;
     box-shadow: none !important;
     padding: 0 !important;
     page-break-after: always;
@@ -4760,14 +4766,14 @@
   .pb-sheet-v2:last-child { page-break-after: auto; }
 
   .pb-sheet-v2::before {
-    top: 0.25in;
-    bottom: 0.25in;
+    top: 0.3in;
+    bottom: 0.3in;
   }
 
   .pb-card-v2 {
-    width: 4in !important;
-    height: 5.5in !important;
-    flex: 0 0 4in !important;
+    width: 5.5in !important;
+    height: 8.5in !important;
+    flex: 0 0 5.5in !important;
     box-shadow: none !important;
     page-break-inside: avoid;
     background: #fff !important;
@@ -4783,5 +4789,5 @@
   .pb-card-empty { display: block; background: transparent !important; }
   .pb-delete-card { display: none !important; }
 
-  @page { size: letter landscape; margin: 0.25in; }
+  @page { size: letter landscape; margin: 0; }
 }

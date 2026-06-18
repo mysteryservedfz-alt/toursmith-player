@@ -45,7 +45,7 @@ const buildBlocksForPage = (page) => {
   return blocks;
 };
 
-const SOFT_LIMIT_CHARS = 1100; // soft cap per card; bucket splits beyond this
+const SOFT_LIMIT_CHARS = 1900; // soft cap per card on 5.5×8.5 layout; bucket splits beyond this
 
 const bucketBlocks = (blocks) => {
   // Group blocks by section while preserving original order within each section
@@ -234,10 +234,21 @@ const AutoFitBody = ({ children, onOverflowChange, signature }) => {
       if (cancelled || !el) return;
       let size = 11;
       el.style.fontSize = size + 'pt';
-      // Allow layout flush
+      const imgs = Array.from(el.querySelectorAll('img'));
+      // Reset image scale class first
+      imgs.forEach(img => img.style.maxHeight = '');
+      // Stage 1: shrink text font 11 → 8
       while (el.scrollHeight > el.clientHeight + 1 && size > 8) {
         size = +(size - 0.5).toFixed(1);
         el.style.fontSize = size + 'pt';
+      }
+      // Stage 2: if still overflowing, shrink images progressively from 100% → 50% of current
+      if (el.scrollHeight > el.clientHeight + 1 && imgs.length > 0) {
+        let scale = 90;
+        while (el.scrollHeight > el.clientHeight + 1 && scale >= 50) {
+          imgs.forEach(img => img.style.maxHeight = (scale * 0.01 * 4) + 'in');
+          scale -= 10;
+        }
       }
       const overflowing = el.scrollHeight > el.clientHeight + 1;
       setFontSize(size);
