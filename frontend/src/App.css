@@ -4540,9 +4540,9 @@
   height: 8.5in;
   background: #ffffff;
   color: #2B2420;
-  /* Top 0.65" = safe zone for ring-binder punch holes (flip booklets bind at top).
-     Sides + bottom keep the standard 0.4–0.45" trim safety. */
-  padding: 0.65in 0.45in 0.4in 0.45in;
+  /* Top 0.65" = ring-binder punch safe zone (flip booklets bind at top).
+     Bottom 0.5" = breathing room so footer label never clips. */
+  padding: 0.65in 0.45in 0.5in 0.45in;
   box-sizing: border-box;
   font-family: 'Lora', 'EB Garamond', Georgia, serif;
   font-size: 11pt;
@@ -4729,6 +4729,9 @@
   align-items: baseline;
   justify-content: space-between;
   gap: 8px;
+  flex-shrink: 0;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .pb-footer-v2 span {
   font-family: 'Playfair Display', Georgia, serif;
@@ -4737,6 +4740,7 @@
   text-transform: uppercase;
   color: #B87333;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .pb-card-sequence {
@@ -4747,6 +4751,8 @@
   color: #9ca3af !important;
   font-weight: 500 !important;
   font-style: italic;
+  white-space: nowrap !important;
+  flex-shrink: 0;
 }
 
 /* Light dotted perimeter cut guides around each card */

@@ -148,12 +148,12 @@ const PageEditor = ({ page, stopUnlockMode, stopAnswer, onUpdate, onDelete, onDu
         <div className="form-group">
           <label className="form-label">Story Text</label>
           <textarea className="input body-textarea" value={page.content || ""} onChange={(e) => onUpdate({ content: e.target.value })} placeholder="The narrative shown to players..." data-testid="page-content-input" />
-          <CharCounter value={page.content} target={1200} label="content" />
+          <CharCounter value={page.content} target={1000} label="content" />
         </div>
         <div className="form-group">
           <label className="form-label">Story Text 2</label>
           <textarea className="input" value={page.body2 || ""} onChange={(e) => onUpdate({ body2: e.target.value || null })} placeholder="Optional secondary text" data-testid="page-body2-input" />
-          <CharCounter value={page.body2} target={800} label="body2" />
+          <CharCounter value={page.body2} target={650} label="body2" />
         </div>
         <div className="form-group">
           <label className="form-label">Text Color</label>

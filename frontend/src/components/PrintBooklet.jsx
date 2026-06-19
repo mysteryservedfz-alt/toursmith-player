@@ -45,8 +45,8 @@ const buildBlocksForPage = (page) => {
   return blocks;
 };
 
-const SOFT_LIMIT_CHARS = 1900; // soft cap per card on 5.5×8.5 layout; bucket splits beyond this
-const BLOCK_SPLIT_THRESHOLD = 1600; // single blocks larger than this get split at paragraph boundaries
+const SOFT_LIMIT_CHARS = 1500; // recalibrated for the 0.65in top + 0.5in bottom safe zones on 5.5×8.5 cards
+const BLOCK_SPLIT_THRESHOLD = 1300; // single blocks larger than this get split at paragraph boundaries
 
 // If a single text block is bigger than what fits on one card, slice it at paragraph
 // boundaries (\n\n preferred, then \n) so build-time splitBucket can pack it across cards.
@@ -279,22 +279,23 @@ const AutoFitBody = ({ children, onOverflowChange, signature }) => {
       let size = 11;
       el.style.fontSize = size + 'pt';
       const imgs = Array.from(el.querySelectorAll('img'));
-      // Reset image scale class first
       imgs.forEach(img => img.style.maxHeight = '');
+      // Use a 6px safety tolerance so sub-pixel print rendering can't clip text
+      const TOL = 6;
       // Stage 1: shrink text font 11 → 8
-      while (el.scrollHeight > el.clientHeight + 1 && size > 8) {
+      while (el.scrollHeight > el.clientHeight + TOL && size > 8) {
         size = +(size - 0.5).toFixed(1);
         el.style.fontSize = size + 'pt';
       }
-      // Stage 2: if still overflowing, shrink images progressively from 100% → 50% of current
-      if (el.scrollHeight > el.clientHeight + 1 && imgs.length > 0) {
+      // Stage 2: shrink images progressively
+      if (el.scrollHeight > el.clientHeight + TOL && imgs.length > 0) {
         let scale = 90;
-        while (el.scrollHeight > el.clientHeight + 1 && scale >= 50) {
+        while (el.scrollHeight > el.clientHeight + TOL && scale >= 50) {
           imgs.forEach(img => img.style.maxHeight = (scale * 0.01 * 4) + 'in');
           scale -= 10;
         }
       }
-      const overflowing = el.scrollHeight > el.clientHeight + 1;
+      const overflowing = el.scrollHeight > el.clientHeight + TOL;
       setFontSize(size);
       if (overflowRef.current !== overflowing) {
         overflowRef.current = overflowing;
