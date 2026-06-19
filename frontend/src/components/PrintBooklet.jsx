@@ -76,8 +76,7 @@ const splitLongBlock = (block) => {
 };
 
 const bucketBlocks = (blocks) => {
-  // Group blocks by section. Hints attach to the Clue card ONLY if that stop has a puzzle;
-  // otherwise hints fall through onto the Story card (no standalone hint-only Clue cards).
+  // (Retained for reference; no longer used after switching to one-card-per-page model.)
   const story = [];
   const clue = [];
   const before = [];
@@ -85,14 +84,12 @@ const bucketBlocks = (blocks) => {
   for (const b of blocks) {
     if (b.kind === 'story' || b.kind === 'image') story.push(b);
     else if (b.kind === 'puzzle') clue.push(b);
-    else if (b.kind === 'hint') {
-      if (stopHasPuzzle) clue.push(b);
-      else story.push(b);
-    }
+    else if (b.kind === 'hint') (stopHasPuzzle ? clue : story).push(b);
     else if (b.kind === 'verification') before.push(b);
   }
   return { story, clue, before };
 };
+// (Retained `bucketBlocks` above for reference; current build uses one-card-per-page.)
 
 const charsOf = (blocks) =>
   blocks.reduce((sum, b) => sum + (b.kind === 'image' ? 0 : (b.text || '').length), 0);
@@ -133,48 +130,43 @@ const buildCardsFromTour = (tour) => {
     welcomeImageUrl: tour.welcomeImageUrl || null,
   });
 
-  // For each stop: pull blocks from nested pages, then bucket into Story / Clue / Before You Leave.
+  // One card per PAGE per stop — mirrors the player flow.
+  // If a single page's content overflows the soft limit, split into continuation cards
+  // ("(1/2)", "(2/2)") that keep the same stop name AND page title.
   stops.forEach((stop, idx) => {
     const stopNum = idx + 1;
     const pages = [...(stop.pages || [])].sort((a, b) => (a.order || 0) - (b.order || 0));
-    let allBlocks = [];
-    pages.forEach((p) => allBlocks.push(...buildBlocksForPage(p)));
-    // Slice oversized text blocks before bucketing so they can be paginated across cards
-    allBlocks = allBlocks.flatMap(splitLongBlock);
 
-    const { story, clue, before } = bucketBlocks(allBlocks);
-
-    const sections = [
-      { section: 'Story', blocks: story },
-      { section: 'Clue', blocks: clue },
-      { section: 'Before You Leave', blocks: before },
-    ].filter(s => s.blocks.length > 0);
-
-    // If a stop has zero content, still produce one empty card (placeholder)
-    if (sections.length === 0) {
+    if (pages.length === 0) {
       cards.push({
         id: genId(),
         type: 'stop',
-        section: 'Story',
+        section: 'Page 1',
         label: `Stop ${stopNum}`,
-        sectionLabel: `Stop ${stopNum} · Story`,
+        sectionLabel: `Stop ${stopNum} · ${stop.title || `Stop ${stopNum}`}`,
         title: stop.title || `Stop ${stopNum}`,
         blocks: [],
       });
       return;
     }
 
-    sections.forEach((sec) => {
-      // Split bucket if too long
-      const parts = splitBucket(sec.blocks);
+    pages.forEach((p, pIdx) => {
+      // Build blocks for this single page, then slice oversized text blocks
+      let pageBlocksRaw = buildBlocksForPage(p);
+      pageBlocksRaw = pageBlocksRaw.flatMap(splitLongBlock);
+
+      // Pack page blocks into card-sized parts (handles overflow → continuation cards)
+      const parts = splitBucket(pageBlocksRaw);
+
+      const pageTitle = (p.title && p.title.trim()) || `Page ${pIdx + 1}`;
       parts.forEach((partBlocks, partIdx) => {
         const partSuffix = parts.length > 1 ? ` (${partIdx + 1}/${parts.length})` : '';
         cards.push({
           id: genId(),
           type: 'stop',
-          section: sec.section,
+          section: pageTitle,
           label: `Stop ${stopNum}`,
-          sectionLabel: `Stop ${stopNum} · ${sec.section}${partSuffix}`,
+          sectionLabel: `Stop ${stopNum} · ${pageTitle}${partSuffix}`,
           title: stop.title || `Stop ${stopNum}`,
           blocks: partBlocks,
         });
