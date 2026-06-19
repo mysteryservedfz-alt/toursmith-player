@@ -46,15 +46,49 @@ const buildBlocksForPage = (page) => {
 };
 
 const SOFT_LIMIT_CHARS = 1900; // soft cap per card on 5.5×8.5 layout; bucket splits beyond this
+const BLOCK_SPLIT_THRESHOLD = 1600; // single blocks larger than this get split at paragraph boundaries
+
+// If a single text block is bigger than what fits on one card, slice it at paragraph
+// boundaries (\n\n preferred, then \n) so build-time splitBucket can pack it across cards.
+const splitLongBlock = (block) => {
+  if (block.kind === 'image') return [block];
+  const text = block.text || '';
+  if (text.length <= BLOCK_SPLIT_THRESHOLD) return [block];
+
+  // Prefer double-newline (paragraph) splits, fall back to single newline if needed
+  let units = text.split(/\n{2,}/);
+  if (units.length === 1) units = text.split(/\n/);
+
+  const out = [];
+  let cur = '';
+  for (const u of units) {
+    const sep = cur ? '\n\n' : '';
+    const next = cur + sep + u;
+    if (next.length > BLOCK_SPLIT_THRESHOLD && cur.length > 0) {
+      out.push({ ...block, text: cur.trim() });
+      cur = u;
+    } else {
+      cur = next;
+    }
+  }
+  if (cur.trim()) out.push({ ...block, text: cur.trim() });
+  return out.length > 0 ? out : [block];
+};
 
 const bucketBlocks = (blocks) => {
-  // Group blocks by section while preserving original order within each section
+  // Group blocks by section. Hints attach to the Clue card ONLY if that stop has a puzzle;
+  // otherwise hints fall through onto the Story card (no standalone hint-only Clue cards).
   const story = [];
   const clue = [];
   const before = [];
+  const stopHasPuzzle = blocks.some((b) => b.kind === 'puzzle');
   for (const b of blocks) {
     if (b.kind === 'story' || b.kind === 'image') story.push(b);
-    else if (b.kind === 'puzzle' || b.kind === 'hint') clue.push(b);
+    else if (b.kind === 'puzzle') clue.push(b);
+    else if (b.kind === 'hint') {
+      if (stopHasPuzzle) clue.push(b);
+      else story.push(b);
+    }
     else if (b.kind === 'verification') before.push(b);
   }
   return { story, clue, before };
@@ -103,8 +137,10 @@ const buildCardsFromTour = (tour) => {
   stops.forEach((stop, idx) => {
     const stopNum = idx + 1;
     const pages = [...(stop.pages || [])].sort((a, b) => (a.order || 0) - (b.order || 0));
-    const allBlocks = [];
+    let allBlocks = [];
     pages.forEach((p) => allBlocks.push(...buildBlocksForPage(p)));
+    // Slice oversized text blocks before bucketing so they can be paginated across cards
+    allBlocks = allBlocks.flatMap(splitLongBlock);
 
     const { story, clue, before } = bucketBlocks(allBlocks);
 
