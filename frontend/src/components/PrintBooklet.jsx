@@ -187,6 +187,22 @@ const buildCardsFromTour = (tour) => {
     });
   }
 
+  // Post-pass: assign "Card X of Y" per stop so each stop's cards know their group size
+  const stopGroups = {};
+  cards.forEach((c) => {
+    if (c.type !== 'stop') return;
+    const key = c.label || '?';
+    if (!stopGroups[key]) stopGroups[key] = [];
+    stopGroups[key].push(c);
+  });
+  Object.values(stopGroups).forEach((group) => {
+    group.forEach((c, i) => {
+      c.cardIndex = i + 1;
+      c.cardTotal = group.length;
+      c.sequenceLabel = `${c.label} · Card ${c.cardIndex} of ${c.cardTotal}`;
+    });
+  });
+
   return cards;
 };
 
@@ -442,6 +458,9 @@ const PrintBooklet = () => {
 
                 <footer className="pb-footer-v2">
                   <span>Mystery Served</span>
+                  {card.sequenceLabel && (
+                    <span className="pb-card-sequence">{card.sequenceLabel}</span>
+                  )}
                 </footer>
               </article>
             ))}

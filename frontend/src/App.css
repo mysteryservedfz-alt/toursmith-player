@@ -4723,6 +4723,10 @@
   padding-top: 6px;
   text-align: center;
   border-top: 0.5pt solid rgba(184, 115, 51, 0.4);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
 }
 .pb-footer-v2 span {
   font-family: 'Playfair Display', Georgia, serif;
@@ -4731,6 +4735,22 @@
   text-transform: uppercase;
   color: #B87333;
   font-weight: 600;
+}
+
+.pb-card-sequence {
+  font-family: 'Lora', Georgia, serif !important;
+  font-size: 6.5pt !important;
+  letter-spacing: 0.08em !important;
+  text-transform: none !important;
+  color: #9ca3af !important;
+  font-weight: 500 !important;
+  font-style: italic;
+}
+
+/* Light dotted perimeter cut guides around each card */
+.pb-card-v2 {
+  outline: 0.75pt dotted #d1d5db;
+  outline-offset: -1px;
 }
 
 .pb-card-cover .pb-body-v2,
@@ -4777,6 +4797,8 @@
     box-shadow: none !important;
     page-break-inside: avoid;
     background: #fff !important;
+    outline: 0.75pt dotted #d1d5db !important;
+    outline-offset: -1px !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
