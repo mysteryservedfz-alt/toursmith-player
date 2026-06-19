@@ -391,6 +391,8 @@ const PrintBooklet = () => {
   const sheets = [];
   for (let i = 0; i < cards.length; i += 2) sheets.push(cards.slice(i, i + 2));
 
+  const printDate = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+
   return (
     <div className="pb-wrapper pb-parchment" data-testid="print-booklet-wrapper">
       <div className="pb-toolbar no-print">
@@ -408,8 +410,18 @@ const PrintBooklet = () => {
       <div className="pb-preview" data-testid="print-booklet">
         {sheets.map((sheet, si) => (
           <div key={si} className="pb-sheet-v2" data-testid={`pb-sheet-${si}`}>
+            <div className="pb-sheet-header">
+              <span className="pb-sheet-title">{tour.title}</span>
+              <span className="pb-sheet-meta">Sheet {si + 1} of {sheets.length} · {printDate}</span>
+            </div>
             {sheet.map((card) => (
               <article key={card.id} className={`pb-card-v2 pb-card-${card.type} ${overflowCards[card.id] ? 'pb-card-overflow' : ''}`} data-testid={`pb-card-${card.id}`}>
+                {/* Corner crop marks — light gray Ls just inside each corner, guide cuts only */}
+                <span className="pb-crop pb-crop-tl" aria-hidden="true" />
+                <span className="pb-crop pb-crop-tr" aria-hidden="true" />
+                <span className="pb-crop pb-crop-bl" aria-hidden="true" />
+                <span className="pb-crop pb-crop-br" aria-hidden="true" />
+
                 <button className="pb-delete-card no-print" onClick={() => removeCard(card.id)} title="Remove from this print">×</button>
 
                 {overflowCards[card.id] && (

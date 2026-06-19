@@ -4753,6 +4753,58 @@
   outline-offset: -1px;
 }
 
+/* Corner crop marks — small light gray Ls at each corner of every card */
+.pb-crop {
+  position: absolute;
+  width: 0.18in;
+  height: 0.18in;
+  pointer-events: none;
+}
+.pb-crop-tl { top: 0; left: 0; border-top: 0.75pt solid #9ca3af; border-left: 0.75pt solid #9ca3af; }
+.pb-crop-tr { top: 0; right: 0; border-top: 0.75pt solid #9ca3af; border-right: 0.75pt solid #9ca3af; }
+.pb-crop-bl { bottom: 0; left: 0; border-bottom: 0.75pt solid #9ca3af; border-left: 0.75pt solid #9ca3af; }
+.pb-crop-br { bottom: 0; right: 0; border-bottom: 0.75pt solid #9ca3af; border-right: 0.75pt solid #9ca3af; }
+
+/* Bleed: cover/finale cream parchment extends slightly past the trim line so
+   a slightly-off cut doesn't reveal a white edge */
+.pb-card-cover,
+.pb-card-completion {
+  background-clip: padding-box;
+}
+.pb-card-cover::before,
+.pb-card-completion::before {
+  content: '';
+  position: absolute;
+  inset: -0.05in;
+  background: #F5EFE6;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Sheet identifier: tour title + sheet count + print date,
+   shown at top edge — useful both on screen and on the printed sheet */
+.pb-sheet-header {
+  position: absolute;
+  top: 0.05in;
+  left: 0.25in;
+  right: 0.25in;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: 'Lora', Georgia, serif;
+  font-size: 6.5pt;
+  letter-spacing: 0.05em;
+  color: #9ca3af;
+  pointer-events: none;
+  z-index: 10;
+}
+.pb-sheet-title {
+  font-style: italic;
+}
+.pb-sheet-meta {
+  font-variant-numeric: tabular-nums;
+}
+
 .pb-card-cover .pb-body-v2,
 .pb-card-completion .pb-body-v2 {
   justify-content: center;
@@ -4810,6 +4862,13 @@
 
   .pb-card-empty { display: block; background: transparent !important; }
   .pb-delete-card { display: none !important; }
+
+  /* Show sheet identifier strip when printing */
+  .pb-sheet-header {
+    display: flex !important;
+    top: 0.05in !important;
+    height: auto !important;
+  }
 
   @page { size: letter landscape; margin: 0; }
 }
